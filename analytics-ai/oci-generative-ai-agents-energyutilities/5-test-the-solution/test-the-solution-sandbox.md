@@ -32,7 +32,7 @@ This lab assumes you have:
 
 2. Once the agent is showing as **Active**, click the **grid operations agent** in the **Agents** list.
 
-    ![Screenshot showing the active agent in the agents list](./images/click-agent-from-table-sandbox.png)
+    ![Screenshot showing the active agent in the agents list](./images/click-agent-from-table.png)
 
 3. In the agent details page, click the **Launch chat** button.
 
