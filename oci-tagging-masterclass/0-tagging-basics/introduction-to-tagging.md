@@ -52,4 +52,5 @@ In this workshop, you will learn how to:
 ## Acknowledgements
 
 - **Author** - Eli Schilling
-- **Contributors** - 
+- **Contributors** - Daniel Hart, Deion Locklear, Wynne Yang
+- **Last Updated By/Date** - Published February, 2025

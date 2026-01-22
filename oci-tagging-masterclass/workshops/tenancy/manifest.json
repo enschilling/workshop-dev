@@ -19,8 +19,12 @@
             "filename": "../../2-making-bulk-changes/bulk-changes-with-cli.md"
         },
         {
-            "title": "Lab 3: Cost management tags",
-            "filename": "../../3-cost-management/cost-management-tags.md"
+            "title": "Lab 3a (Tech): Cost management tags",
+            "filename": "../../3-cost-management/a-cost-management-tags-tech.md"
+        },
+        {
+            "title": "Lab 3b (Business): Cost management strategies",
+            "filename": "../../3-cost-management/b-cost-management-tags-biz.md"
         },
         {
             "title": "Lab 4: Tag-based access control in IAM",
