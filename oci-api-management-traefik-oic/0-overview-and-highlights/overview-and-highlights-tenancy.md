@@ -16,17 +16,18 @@ In this workshop you will learn how to build APIs with Oracle Integration Cloud 
 
 ## Workshop Agenda (working notes)
 
-	- (E) Introduction and overview: Recommended pre-learning for OIC, architecture diagrams, etc.
-	    - Procure Traefik trial license / access to Traefik Hub
-        - Validate Access to Traefik Hub
-	- (E) Lab 1: Set up OKE and deploy Traefik
-    - (E or V) Lab 2: Deploy Traefik's sample API (basic key auth) with catalog and portal. Test in portal.
-    - (V) Lab 3: Create OIC API - Convert Docs Tutorial to Lab
-	- Lab 4: Create OIDC app / OAuth config in IAM, setup SSO Auth in Traefik Hub
-        - <NOTE> Wondering if we can generate API key in OCI instead of configuring JWT ???
-	- Lab 6: Expose OIC API with Traefik; validate JWT / OAuth.
-	- Lab 7: [Optional] Working with Plans, Catalog Items, Bundles, etc.
-	- Lab 8: Clean up resources.
+- (E) Introduction and overview: Recommended pre-learning for OIC, architecture diagrams, etc.
+    - Procure Traefik trial license / access to Traefik Hub
+    - Validate Access to Traefik Hub
+- (E) Lab 1: Set up OKE and deploy Traefik
+- (E or V) Lab 2: Deploy Traefik's sample API (basic key auth) with catalog and portal. Test in portal.
+- (V) Lab 3: Create OIC API - Convert Docs Tutorial to Lab
+- Lab 4: Create OIDC app / OAuth config in IAM, setup SSO Auth in Traefik Hub
+- Lab 5: Expose OIC API with Traefik
+- Lab 6: Testing OIC API with Traefik; validate JWT / OAuth.
+    - >NOTE Wondering if we can generate API key in OCI instead of configuring JWT ???
+- Lab 7: [Optional] Traefik features: Working with Plans, Catalog Items, Bundles, etc.
+- Lab 8: Clean up resources.
 
 
 **Estimated Workshop Time:** 1 hour 30 minutes

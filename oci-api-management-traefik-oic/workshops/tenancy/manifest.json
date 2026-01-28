@@ -12,23 +12,35 @@
         },
         {
             "title": "Lab 1: Initial setup",
-            "filename": "../../1-setup/setup-tenancy.md"
+            "filename": "../../1-setup/setup.md"
         },
         {
             "title": "Lab 2: Create your first API",
-            "filename": "../../2-create-api/create-new-api.md"
+            "filename": "../../2-create-sample-api/create-sample-api.md"
         },
         {
-            "title": "Lab 3: Deploy the API to Traefik Hub",
-            "filename": "../../3-deploy-api/deploy-api-oke.md"
+            "title": "Lab 3: Create a new OIC API",
+            "filename": "../../3-create-oic-api/create-oic-api.md"
         },
         {
-            "title": "Lab 4: Test the solution",
-            "filename": "../../4-test-the-solution/test-the-solution-tenancy.md"
+            "title": "Lab 4: Configure OCI Integrated Authentication",
+            "filename": "../../4-configure-integrated-auth/configure-integrated-auth.md"
         },
         {
-            "title": "Lab 5: Clean Up",
-            "filename": "../../5-cleanup/clean-up-resources.md"
+            "title": "Lab 5: Expose the OIC API in Traefik",
+            "filename": "../../5-expose-oic-api/expose-oic-api.md"
+        },
+        {
+            "title": "Lab 6: Test the solution",
+            "filename": "../../6-test-the-solution/test-the-solution.md"
+        },
+        {
+            "title": "Lab 7: [Optiona] Working with Traefik features",
+            "filename": "../../7-traefik-features/traefik-features.md"
+        },
+        {
+            "title": "Lab 8: Clean Up",
+            "filename": "../../8-cleanup/clean-up-resources.md"
         },
         {
             "title": "Need Help?",
