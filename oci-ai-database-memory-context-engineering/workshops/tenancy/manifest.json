@@ -15,11 +15,11 @@
             "filename": "../../1-setup/setup-tenancy.md"
         },
         {
-            "title": "Lab 2: Create your first API",
+            "title": "Lab 2: Setup the database",
             "filename": "../../2-screate-api/create-new-api.md"
         },
         {
-            "title": "Lab 3: Deploy the API to Traefik Hub",
+            "title": "Lab 3: Create the Agent",
             "filename": "../../3-deploy-api/deploy-api-oke.md"
         },
         {
