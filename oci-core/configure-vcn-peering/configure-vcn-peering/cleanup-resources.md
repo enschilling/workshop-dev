@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This is an optional lab. If you'd like guidance for deleting all resources created as part of this workshop, you can proceed with the following tasks.
+This is an optional lab. If you'd like guidance for deleting all of the resources created as part of this workshop, you can proceed with the following tasks.
 
 Estimated Time: 10 minutes
 
