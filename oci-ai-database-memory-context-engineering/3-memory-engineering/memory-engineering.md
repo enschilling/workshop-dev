@@ -1,4 +1,4 @@
-# Lab 3: Deploy the API with Kubernetes
+# Lab 3: Memory Engineering and Agent Memory
 
 ## Introduction
 
