@@ -1,19 +1,18 @@
-# Lab 3: Deploy the API with Kubernetes
+# Lab 5: Create the Agent Toolbox
 
 ## Introduction
 
-In this lab you will deploy your API and API portal to Traefik Hub via Kubernetes
+Agent Toolbox
 
 
 
-**Estimated Time:** 25 minutes
+**Estimated Time:** 15 minutes
 
 ### Objectives
 
 In this lab, you will:
 
-- Create YAML
-- kubectl apply YAML files
+- Do stuff
 
 
 ### Prerequisites
@@ -23,7 +22,7 @@ This lab assumes you have:
 - Completed the previous labs.
 - ...
 
-## Task 1: Delete stuff
+## Task 1: Do more stuff
 
 
 
@@ -35,6 +34,6 @@ You may now proceed to the next lab.
 
 ## Acknowledgements
 
-- **Author** - Eli Schilling & Vijaya Vishwanath
+- **Author** - 
 - **Contributors** - 
 - **Last Updated By/Date** - Published February, 2026

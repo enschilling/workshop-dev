@@ -1,5 +1,5 @@
 {
-    "workshoptitle": "Manage Oracle Integration Cloud APIs with Traefik Hub in OCI",
+    "workshoptitle": "Memory and Context Engineering for AI Agents with Oracle AI Database",
     "help": "livelabs-help-oci_us@oracle.com",
     "tutorials": [
         {
@@ -11,24 +11,28 @@
             "filename": "https://oracle-livelabs.github.io/common/labs/cloud-login/cloud-login.md"
         },
         {
-            "title": "Lab 1: Initial setup",
-            "filename": "../../1-setup/setup-tenancy.md"
+            "title": "Lab 1: Deploy and prepare the database",
+            "filename": "../../1-prepare/prepare-db.md"
         },
         {
-            "title": "Lab 2: Setup the database",
-            "filename": "../../2-screate-api/create-new-api.md"
+            "title": "Lab 2: Dive into Vector Search",
+            "filename": "../../2-vector-search/vector-search-with-langchain.md"
         },
         {
-            "title": "Lab 3: Create the Agent",
-            "filename": "../../3-deploy-api/deploy-api-oke.md"
+            "title": "Lab 3: Memory Engineering & Agent Memory",
+            "filename": "../../3-memory-engineering/memory-engineering.md"
         },
         {
-            "title": "Lab 4: Test the solution",
+            "title": "Lab 4: Memory Manager Installation",
             "filename": "../../4-test-the-solution/test-the-solution-tenancy.md"
         },
         {
-            "title": "Lab 5: Clean Up",
-            "filename": "../../5-cleanup/clean-up-resources.md"
+            "title": "Lab 5: Create agent's toolbox",
+            "filename": "../../5-agent-toolbox/create-agent-toolbox.md"
+        },
+        {
+            "title": "Lab 6: Context engineering Techniques",
+            "filename": "../../6-context-engineering/context-engineering-techniques.md"
         },
         {
             "title": "Need Help?",

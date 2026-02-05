@@ -1,19 +1,18 @@
-# Lab 2: Create new API in OIC
+# Lab 4: Memory Manager Implementation
 
 ## Introduction
 
-In this lab you will create an OIC API
+This content all moves up into the above lab...
 
 
 
-**Estimated Time:** 25 minutes
+**Estimated Time:** 15 minutes
 
 ### Objectives
 
 In this lab, you will:
 
-- Create OIC Project
-- Create new REST API
+- 
 
 
 ### Prerequisites
@@ -23,7 +22,7 @@ This lab assumes you have:
 - Completed the previous labs.
 - ...
 
-## Task 1: Delete stuff
+## Task 1: Do stuff
 
 
 
@@ -35,6 +34,6 @@ You may now proceed to the next lab.
 
 ## Acknowledgements
 
-- **Author** - Eli Schilling & Vijaya Vishwanath
+- **Author** - 
 - **Contributors** - 
 - **Last Updated By/Date** - Published February, 2026
