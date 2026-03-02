@@ -4,15 +4,15 @@
 
 --------
 
-## Objective
+### Objectives
 
 In this activity, you'll learn how to store and search documents using **semantic similarity** — finding results based on meaning rather than exact keyword matches. This is the foundation that powers every memory type we'll build in later activities.
 
 You'll work with **NovaTech Solutions' IT knowledge base**: internal documentation, runbooks, and incident reports that our AI support agent "Atlas" will use to resolve tickets.
 
-## What You'll Learn
+### What You'll Learn
 
-| Step | Description |
+| Task | Description |
 |------|-------------|
 | **1. Initialize Embeddings** | Load a HuggingFace embedding model to convert text into vectors |
 | **2. Create Vector-Enabled Table** | Set up an Oracle-backed vector store with cosine distance via `OracleVS` |
@@ -21,7 +21,7 @@ You'll work with **NovaTech Solutions' IT knowledge base**: internal documentati
 | **5. Query** | Search for similar documents using natural language |
 | **6. Filter Results** | Use metadata filters to narrow down search results |
 
-## Key Components
+### Key Components
 
 - **`OracleVS`**: LangChain abstraction over Oracle vector-enabled SQL tables
 - **`HuggingFaceEmbeddings`**: Converts text to 768-dimensional vectors
@@ -30,7 +30,7 @@ You'll work with **NovaTech Solutions' IT knowledge base**: internal documentati
 
 --------
 
-## Step 1: Connect to Oracle AI Database
+## Task 1: Connect to Oracle AI Database
 
 Your environment has been pre-configured with Oracle AI Database 26ai running locally. The `VECTOR` user and connection details are ready to use.
 
@@ -88,7 +88,7 @@ print("Using user:", vector_conn.username)
 
 --------
 
-## Step 2: Initialize Embeddings and Create a Vector-Enabled Table
+## Task 2: Initialize Embeddings and Create a Vector-Enabled Table
 
 We'll use the `sentence-transformers/paraphrase-mpnet-base-v2` model to convert text into 768-dimensional vectors. OracleVS handles the table creation, embedding storage, and similarity search under the hood.
 
@@ -141,7 +141,7 @@ safe_create_index(vector_conn, vector_store, "oravs_hnsw")
 
 --------
 
-## Step 3: Ingest NovaTech IT Knowledge Base
+## Task 3: Ingest NovaTech IT Knowledge Base
 
 In a real deployment, this data would come from Confluence, ServiceNow, or internal wikis. Here we'll seed the knowledge base with representative IT support articles that Atlas will use to resolve tickets.
 
@@ -309,7 +309,7 @@ print(f"✅ Ingested {len(texts)} NovaTech KB articles into VECTOR_SEARCH_DEMO")
 
 --------
 
-## Step 4: Querying with Natural Language
+## Task 4: Querying with Natural Language
 
 Now let's see the power of semantic search. Unlike keyword search, vector similarity finds documents based on *meaning*. A query about "login problems" will match articles about AUTH-SVC and SSO — even if those exact words don't appear in the query.
 
@@ -348,7 +348,7 @@ for doc, score in results:
 
 --------
 
-## Step 5: Filtered Search with Metadata
+## Task 5: Filtered Search with Metadata
 
 In a real IT support system, Atlas needs to narrow results by category, severity, or owning team. OracleVS supports metadata filters that combine with vector similarity.
 
