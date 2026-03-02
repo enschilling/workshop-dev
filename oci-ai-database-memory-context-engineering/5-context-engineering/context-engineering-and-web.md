@@ -1,4 +1,4 @@
-# Activity 4: Context Engineering & Web Integration
+# Lab 5: Context Engineering & Web Integration
 
 ## Context Window Management, Summarization, and Tavily Search
 

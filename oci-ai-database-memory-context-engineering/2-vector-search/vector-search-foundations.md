@@ -1,4 +1,4 @@
-# Activity 1: Vector Search Foundations
+# Lab 2: Vector Search Foundations
 
 ## with Oracle AI Database 26ai and LangChain OracleVS
 

@@ -1,4 +1,4 @@
-# Activity 2: Designing the Memory Architecture
+# Lab 3: Designing the Memory Architecture
 
 ## Memory Types, Design Decisions, and Storage Setup
 

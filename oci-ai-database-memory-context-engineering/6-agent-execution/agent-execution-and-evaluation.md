@@ -1,4 +1,4 @@
-# Activity 5: Agent Execution & Evaluation
+# Lab 6: Agent Execution & Evaluation
 
 ## Running Atlas Through IT Support Scenarios
 

@@ -1,4 +1,4 @@
-# Activity 3: Building the Memory Manager & Toolbox
+# Lab 4: Building the Memory Manager & Toolbox
 
 ## The MemoryManager Class and Semantic Tool Discovery
 
