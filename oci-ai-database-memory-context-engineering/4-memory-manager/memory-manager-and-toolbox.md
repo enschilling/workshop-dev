@@ -6,7 +6,7 @@
 
 ### Objective
 
-In this activity, you'll implement the two core abstractions that power Atlas:
+In this activity, you'll implement the two core abstractions that power Proteus:
 
 1. **MemoryManager** — a unified class with read/write methods for all six memory types
 2. **Toolbox** — a semantic tool registry where tools are discovered by meaning, not by name
@@ -595,7 +595,7 @@ class Toolbox:
     """
     Toolbox for registering, storing, and retrieving tools with LLM-powered augmentation.
 
-    Tools are stored with embeddings for semantic retrieval, allowing Atlas to
+    Tools are stored with embeddings for semantic retrieval, allowing Proteus to
     find relevant diagnostic tools based on natural language ticket descriptions.
     """
 
@@ -780,7 +780,7 @@ Let's register a simple diagnostic tool and verify semantic retrieval works:
 ```python
 @toolbox.register_tool(augment=True)
 def check_service_status(service_name: str) -> str:
-    """Check if a NovaTech internal service is running and return its status."""
+    """Check if a SeerGroup internal service is running and return its status."""
     # In production, this would call a real monitoring API
     mock_statuses = {
         "auth-svc": "✅ Running (3 pods, 0 restarts)",

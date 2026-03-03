@@ -6,7 +6,7 @@
 
 ### Objective
 
-While memory engineering focuses on *what to store and retrieve*, context engineering focuses on *how to manage what's in the context window right now*. In this activity, you'll build the techniques that keep Atlas's context lean and effective, plus integrate web search so Atlas can find information beyond the internal knowledge base.
+While memory engineering focuses on *what to store and retrieve*, context engineering focuses on *how to manage what's in the context window right now*. In this activity, you'll build the techniques that keep Proteus's context lean and effective, plus integrate web search so Proteus can find information beyond the internal knowledge base.
 
 > **Context engineering** refers to the set of strategies for curating and maintaining the optimal set of tokens (information) during LLM inference, including all the other information that may land there outside of the prompts.
 
@@ -19,18 +19,18 @@ While memory engineering focuses on *what to store and retrieve*, context engine
 | **1. Calculate Usage** | `calculate_context_usage()` | Monitor what % of the context window is used |
 | **2. Summarize** | `summarise_context_window()` | Compress long content into summaries using LLM |
 | **3. Compact** | `summarize_conversation()` / `summarize_and_store()` | Agent-triggered compaction when context gets long |
-| **4. Just-in-Time Retrieval** | `expand_summary()` tool | Let Atlas expand summaries on demand |
+| **4. Just-in-Time Retrieval** | `expand_summary()` tool | Let Proteus expand summaries on demand |
 | **5. Web Search** | `search_tavily()` tool | External retrieval with automatic knowledge base persistence |
 
 ### The Context Management Flow
 
 ```
-Context built → Check usage % → Atlas may compact (summarize) → Store summary with ID
+Context built → Check usage % → Proteus may compact (summarize) → Store summary with ID
                                                                ↓
-Atlas sees: [Summary ID: abc123] Brief description ← Atlas calls expand_summary("abc123") if needed
+Proteus sees: [Summary ID: abc123] Brief description ← Proteus calls expand_summary("abc123") if needed
 ```
 
-This approach keeps the context lean while giving Atlas access to full details when required.
+This approach keeps the context lean while giving Proteus access to full details when required.
 
 --------
 
@@ -40,16 +40,16 @@ This approach keeps the context lean while giving Atlas access to full details w
 
 In the context of agent memory, JIT is a retrieval-control strategy where memory access is triggered by the agent's current goal. Rather than preloading large histories or the full knowledge base, the system dynamically filters, ranks, and injects only the information that materially influences the next token. This reduces context saturation, improves attention allocation, and increases reasoning fidelity.
 
-For Atlas, this means:
+For Proteus, this means:
 - Summary pointers (ID + description) are always loaded — cheap, a few tokens each
-- Full summary content is only retrieved when Atlas decides it's relevant to the current ticket
+- Full summary content is only retrieved when Proteus decides it's relevant to the current ticket
 - This avoids wasting thousands of context tokens on summaries of unrelated troubleshooting sessions
 
 --------
 
 ## Task 1: Context Window Usage Calculator
 
-This simple utility estimates how much of the context window is being used. Atlas can check this to decide whether compaction is needed.
+This simple utility estimates how much of the context window is being used. Proteus can check this to decide whether compaction is needed.
 
 ```python
 def calculate_context_usage(context: str, model: str = "gpt-4o") -> dict:
@@ -149,7 +149,7 @@ def offload_to_summary(
 
 ## Task 4: Register Summary Tools for the Agent
 
-These are **agent-triggered** tools — Atlas decides when to call them based on the current context. We register them with `augment=True` for better semantic retrieval.
+These are **agent-triggered** tools — Proteus decides when to call them based on the current context. We register them with `augment=True` for better semantic retrieval.
 
 ### Design Decision: Mark Instead of Delete
 
@@ -224,16 +224,16 @@ def summarize_conversation(thread_id: str) -> str:
 
 ## Task 5: Web Search with Tavily
 
-Atlas needs to search external sources when the internal knowledge base doesn't have the answer — for example, looking up a new Kubernetes CVE, a vendor advisory, or an unfamiliar error message.
+Proteus needs to search external sources when the internal knowledge base doesn't have the answer — for example, looking up a new Kubernetes CVE, a vendor advisory, or an unfamiliar error message.
 
 We use [Tavily](https://tavily.com/), an AI-optimized search API designed for LLM applications.
 
 ### The Search-and-Store Pattern
 
-When Atlas calls `search_tavily()`, it doesn't just return results — it **persists them to the knowledge base**:
+When Proteus calls `search_tavily()`, it doesn't just return results — it **persists them to the knowledge base**:
 
 ```
-Atlas calls search_tavily("CrowdStrike Falcon sensor error 0x80070005")
+Proteus calls search_tavily("CrowdStrike Falcon sensor error 0x80070005")
        ↓
 Tavily API returns results
        ↓
@@ -242,7 +242,7 @@ Each result is written to knowledge_base_vs with metadata (title, URL, timestamp
 Future tickets can retrieve this information without searching again
 ```
 
-This pattern means Atlas **learns** from its searches. Information discovered once becomes part of the agent's long-term memory.
+This pattern means Proteus **learns** from its searches. Information discovered once becomes part of the agent's long-term memory.
 
 ```python
 set_env_securely("TAVILY_API_KEY", "Tavily API Key: ")
@@ -287,7 +287,7 @@ def search_tavily(query: str, max_results: int = 5):
 
 ### Verify Tool Retrieval
 
-Let's confirm that Atlas can find the search tool when needed:
+Let's confirm that Proteus can find the search tool when needed:
 
 ```python
 import pprint
@@ -305,13 +305,13 @@ pprint.pprint(retrieved_tools)
 | `calculate_context_usage()` | Monitor context consumption and trigger compaction proactively |
 | `summarise_context_window()` | LLM-powered compression that preserves key diagnostic details |
 | `offload_to_summary()` | Automatic threshold-based context offloading |
-| `expand_summary()` tool | JIT retrieval — Atlas expands only the summaries it needs |
+| `expand_summary()` tool | JIT retrieval — Proteus expands only the summaries it needs |
 | `summarize_conversation()` tool | Log compaction for long troubleshooting threads |
 | `search_tavily()` tool | External search with automatic knowledge base persistence |
 
-**Key Insight**: The search-and-store pattern means Atlas builds institutional knowledge over time. The first time a NovaTech employee asks about a specific error, Atlas searches externally. The second time, Atlas finds the answer in its own knowledge base — no external call needed, faster and cheaper.
+**Key Insight**: The search-and-store pattern means Proteus builds institutional knowledge over time. The first time a SeerGroup employee asks about a specific error, Proteus searches externally. The second time, Proteus finds the answer in its own knowledge base — no external call needed, faster and cheaper.
 
-**Next up**: In Activity 5, we'll wire everything together into the `call_agent` harness, run Atlas through real IT support scenarios, and compare the engineered approach against a naive baseline.
+**Next up**: In Activity 5, we'll wire everything together into the `call_agent` harness, run Proteus through real IT support scenarios, and compare the engineered approach against a naive baseline.
 
 ## Learn More
 

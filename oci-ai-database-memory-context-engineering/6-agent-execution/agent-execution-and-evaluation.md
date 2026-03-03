@@ -1,18 +1,18 @@
 # Lab 6: Agent Execution & Evaluation
 
-## Running Atlas Through IT Support Scenarios
+## Running Proteus Through IT Support Scenarios
 
 --------
 
 ### Objective
 
-This is where everything comes together. You'll build the **turn-level agent harness** that integrates all memory types, context engineering, and tool calling — then run Atlas through realistic IT support scenarios and compare the engineered approach against a naive baseline.
+This is where everything comes together. You'll build the **turn-level agent harness** that integrates all memory types, context engineering, and tool calling — then run Proteus through realistic IT support scenarios and compare the engineered approach against a naive baseline.
 
 --------
 
 ## Task 1: The Agent System Prompt
 
-The system prompt tells Atlas how to use its memory systems and tools. Notice it establishes a **priority order** for memory types — this is critical for reliable behavior.
+The system prompt tells Proteus how to use its memory systems and tools. Notice it establishes a **priority order** for memory types — this is critical for reliable behavior.
 
 ```python
 import json as json_lib
@@ -26,7 +26,7 @@ context_size_history = []  # list of (run_label, iteration, estimated_tokens)
 
 AGENT_SYSTEM_PROMPT = """
 # System Instructions
-You are Atlas, NovaTech Solutions' AI IT Support Agent. You have access to memory systems and
+You are Proteus, SeerGroup Solutions' AI IT Support Agent. You have access to memory systems and
 diagnostic tools to help resolve internal support tickets.
 
 IMPORTANT: The user's input contains CONTEXT retrieved from multiple memory systems.
@@ -54,7 +54,7 @@ When answering:
 1. FIRST, use the context provided in the input
 2. Expand summary IDs just-in-time when needed
 3. Use external search tools only if memory context is insufficient
-4. Keep responses evidence-based and aligned with NovaTech's internal documentation
+4. Keep responses evidence-based and aligned with SeerGroup's internal documentation
 5. Always mention the relevant team to escalate to when appropriate
 """
 ```
@@ -84,7 +84,7 @@ def call_openai_chat(messages: list, tools: list = None, model: str = "gpt-4o"):
 
 ## Task 3: The Turn-Level Agent Harness
 
-This is the core of Atlas. Each call to `call_agent()` represents one **agent run** (one user turn handled). Within a run, the **tool-call loop** repeats: model reasoning → optional tool calls → harness executes tools → model observes results → repeat until a final answer.
+This is the core of Proteus. Each call to `call_agent()` represents one **agent run** (one user turn handled). Within a run, the **tool-call loop** repeats: model reasoning → optional tool calls → harness executes tools → model observes results → repeat until a final answer.
 
 ### The Flow
 
@@ -163,7 +163,7 @@ def call_agent(
     print(f"📊 Context: {usage['percent']}% ({usage['tokens']}/{usage['max']} tokens)")
     if usage["percent"] > 80:
         print(
-            "⚠️ Context >80% — Atlas may call summarize_conversation(thread_id) for compaction."
+            "⚠️ Context >80% — Proteus may call summarize_conversation(thread_id) for compaction."
         )
 
     # ── 3. Get tools ──
@@ -354,7 +354,7 @@ def call_agent(
 
 --------
 
-## Task 4: Run Atlas Through IT Support Scenarios
+## Task 4: Run Proteus Through IT Support Scenarios
 
 ### Scenario 1: Simple Ticket — "I can't log in"
 
@@ -368,7 +368,7 @@ call_agent(
 
 ### Scenario 2: Follow-up on the Same Ticket
 
-Watch how Atlas uses conversational memory from the previous turn:
+Watch how Proteus uses conversational memory from the previous turn:
 
 ```python
 call_agent(
@@ -390,7 +390,7 @@ call_agent(
 
 ### Scenario 4: Cross-Referencing Past Incidents
 
-Atlas should recognize the AUTH-SVC pattern from its knowledge base:
+Proteus should recognize the AUTH-SVC pattern from its knowledge base:
 
 ```python
 call_agent(
@@ -652,7 +652,7 @@ An **agent harness** is the runtime scaffolding around that loop. In this worksh
 
 ### What Makes the Difference
 
-| Aspect | Naive Agent | Atlas (Engineered) |
+| Aspect | Naive Agent | Proteus (Engineered) |
 |--------|-------------|-------------------|
 | **Context growth** | Unbounded — every tool output accumulates | Managed — tool outputs offloaded, conversations compacted |
 | **Memory** | None — only raw message history | 6 specialized types with semantic search |
@@ -675,14 +675,14 @@ You've built a complete memory-powered AI agent from the ground up:
 
 | Activity | What You Built |
 |----------|---------------|
-| **1** | Provision and prepare the Autonomous Oracle AI Database 26ai instance |
-| **2** | Vector search foundations with OracleVS and NovaTech KB data |
+| **1** | Provision and prepare the Autonomous Oracle AI Database 26ai instance|
+| **2** | Vector search foundations with OracleVS and SeerGroup KB data |
 | **3** | Memory architecture — 6 types, SQL + vector stores, design principles |
 | **4** | MemoryManager class and semantic Toolbox with LLM augmentation |
 | **5** | Context engineering — usage tracking, summarization, JIT retrieval, web search |
 | **6** | Agent harness, IT support scenarios, and engineered vs. naive comparison |
 
-Atlas now demonstrates how modern AI agents maintain context, learn from interactions, and manage information across sessions — all backed by Oracle AI Database 26ai as the converged storage layer for relational, vector, and semantic data.
+Proteus now demonstrates how modern AI agents maintain context, learn from interactions, and manage information across sessions — all backed by Oracle AI Database 26ai as the converged storage layer for relational, vector, and semantic data.
 
 ## Learn More
 

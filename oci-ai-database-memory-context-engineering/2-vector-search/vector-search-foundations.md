@@ -8,7 +8,7 @@
 
 In this activity, you'll learn how to store and search documents using **semantic similarity** — finding results based on meaning rather than exact keyword matches. This is the foundation that powers every memory type we'll build in later activities.
 
-You'll work with **NovaTech Solutions' IT knowledge base**: internal documentation, runbooks, and incident reports that our AI support agent "Atlas" will use to resolve tickets.
+You'll work with **SeerGroup Solutions' IT knowledge base**: internal documentation, runbooks, and incident reports that our AI support agent "Proteus" will use to resolve tickets.
 
 ### What You'll Learn
 
@@ -17,7 +17,7 @@ You'll work with **NovaTech Solutions' IT knowledge base**: internal documentati
 | **1. Initialize Embeddings** | Load a HuggingFace embedding model to convert text into vectors |
 | **2. Create Vector-Enabled Table** | Set up an Oracle-backed vector store with cosine distance via `OracleVS` |
 | **3. Create Index** | Build an HNSW (Hierarchical Navigable Small World) index for fast similarity search |
-| **4. Add Documents** | Store NovaTech IT knowledge base articles with metadata |
+| **4. Add Documents** | Store SeerGroup IT knowledge base articles with metadata |
 | **5. Query** | Search for similar documents using natural language |
 | **6. Filter Results** | Use metadata filters to narrow down search results |
 
@@ -45,7 +45,7 @@ def connect_to_oracle(
     user="VECTOR",
     password="VectorPwd_2025",
     dsn="127.0.0.1:1521/FREEPDB1",
-    program="novatech.atlas.workshop",
+    program="seergroup.proteus.workshop",
 ):
     """
     Connect to Oracle database with retry logic and helpful error messages.
@@ -141,13 +141,13 @@ safe_create_index(vector_conn, vector_store, "oravs_hnsw")
 
 --------
 
-## Task 3: Ingest NovaTech IT Knowledge Base
+## Task 3: Ingest SeerGroup IT Knowledge Base
 
-In a real deployment, this data would come from Confluence, ServiceNow, or internal wikis. Here we'll seed the knowledge base with representative IT support articles that Atlas will use to resolve tickets.
+In a real deployment, this data would come from Confluence, ServiceNow, or internal wikis. Here we'll seed the knowledge base with representative IT support articles that Proteus will use to resolve tickets.
 
 ```python
-# NovaTech IT Knowledge Base — internal docs, runbooks, and incident reports
-novatech_kb_articles = [
+# SeerGroup IT Knowledge Base — internal docs, runbooks, and incident reports
+seergroup_kb_articles = [
     {
         "title": "VPN Connectivity Troubleshooting Guide",
         "content": "When users report VPN connectivity issues, first verify they are running "
@@ -155,7 +155,7 @@ novatech_kb_articles = [
                    "certificate by running 'certutil -viewstore My' on Windows. Common causes "
                    "include expired certificates (renew via InternalCA portal), split-tunnel "
                    "misconfiguration (verify route table with 'route print'), and DNS resolution "
-                   "failures (test with 'nslookup auth-svc.novatech.internal'). Escalate to "
+                   "failures (test with 'nslookup auth-svc.seergroup.internal'). Escalate to "
                    "Network Ops if the issue persists beyond basic troubleshooting.",
         "category": "networking",
         "severity": "medium",
@@ -163,7 +163,7 @@ novatech_kb_articles = [
     },
     {
         "title": "AUTH-SVC Service Recovery Runbook",
-        "content": "AUTH-SVC is NovaTech's central authentication service running on "
+        "content": "AUTH-SVC is SeerGroup's central authentication service running on "
                    "prod-cluster-3 (Kubernetes). If AUTH-SVC is unresponsive: 1) Check pod "
                    "status: 'kubectl get pods -n auth -l app=auth-svc'. 2) Review logs: "
                    "'kubectl logs -n auth -l app=auth-svc --tail=200'. 3) If OOMKilled, "
@@ -176,8 +176,8 @@ novatech_kb_articles = [
     },
     {
         "title": "New Employee Laptop Provisioning",
-        "content": "Standard provisioning for new NovaTech employees: 1) Image laptop with "
-                   "NovaTech-Win11-Enterprise or NovaTech-macOS-14 base image. 2) Enroll in "
+        "content": "Standard provisioning for new SeerGroup employees: 1) Image laptop with "
+                   "SeerGroup-Win11-Enterprise or SeerGroup-macOS-14 base image. 2) Enroll in "
                    "Intune MDM. 3) Install standard software bundle: GlobalProtect VPN, "
                    "Microsoft 365, Slack, Zoom, CrowdStrike Falcon. 4) Create AD account and "
                    "add to department security group. 5) Provision Okta SSO with MFA (require "
@@ -203,7 +203,7 @@ novatech_kb_articles = [
     },
     {
         "title": "Slack Integration Bot Failures",
-        "content": "NovaTech's internal Slack bots (TicketBot, DeployBot, AlertBot) run on "
+        "content": "SeerGroup's internal Slack bots (TicketBot, DeployBot, AlertBot) run on "
                    "the automation-cluster in the 'bots' namespace. Common failure modes: "
                    "1) Token expiration — Slack bot tokens expire every 12 hours; check if "
                    "token refresh cron job is running. 2) Rate limiting — Slack API limits to "
@@ -220,7 +220,7 @@ novatech_kb_articles = [
                    "1) Verify service is running: 'sc query csfalconservice' (Windows) or "
                    "'sudo systemctl status falcon-sensor' (Linux). 2) Check proxy settings — "
                    "sensor needs outbound access to ts01-b.cloudsink.net on port 443. "
-                   "3) Verify Customer ID (CID) matches NovaTech's tenant: check "
+                   "3) Verify Customer ID (CID) matches SeerGroup's tenant: check "
                    "'HKLM\\SYSTEM\\CrowdStrike\\{9b03c1d9-3138}\\CU'. 4) If reinstall needed, "
                    "use the latest installer from the Falcon console — never use cached "
                    "installers as they embed the old CID. Escalation: Security Ops.",
@@ -230,7 +230,7 @@ novatech_kb_articles = [
     },
     {
         "title": "Kubernetes Pod Scheduling Failures",
-        "content": "When pods are stuck in Pending state on NovaTech clusters: 1) Check events: "
+        "content": "When pods are stuck in Pending state on SeerGroup clusters: 1) Check events: "
                    "'kubectl describe pod <pod> -n <ns>' — look for 'Insufficient cpu' or "
                    "'Insufficient memory'. 2) Review node capacity: 'kubectl top nodes'. "
                    "3) Check for taints blocking scheduling: 'kubectl describe node <node> | "
@@ -244,10 +244,10 @@ novatech_kb_articles = [
     },
     {
         "title": "Email Delivery Delays and Bounces",
-        "content": "NovaTech uses Microsoft 365 for email with a custom transport rule for DLP. "
+        "content": "SeerGroup uses Microsoft 365 for email with a custom transport rule for DLP. "
                    "If users report delivery delays: 1) Check message trace in Exchange Admin "
                    "Center (admin.microsoft.com). 2) Verify SPF/DKIM/DMARC records are current: "
-                   "'nslookup -type=txt novatech.com'. 3) Common cause: DLP policy scan adds "
+                   "'nslookup -type=txt seergroup.com'. 3) Common cause: DLP policy scan adds "
                    "2-5min delay for messages with attachments over 10MB. 4) For bounces, check "
                    "if recipient domain is on the block list (maintained by Security Ops). "
                    "5) External relay issues — check Mimecast dashboard for queue depth. "
@@ -259,7 +259,7 @@ novatech_kb_articles = [
     {
         "title": "Incident Report: AUTH-SVC Outage 2025-01-15",
         "content": "Duration: 47 minutes (08:12 - 08:59 UTC). Impact: All SSO logins failed "
-                   "across NovaTech. Root cause: A config map update pushed an invalid OIDC "
+                   "across SeerGroup. Root cause: A config map update pushed an invalid OIDC "
                    "issuer URL, causing AUTH-SVC pods to crash on startup (CrashLoopBackOff). "
                    "Detection: AlertBot triggered P1 alert at 08:14 via Slack #incidents. "
                    "Resolution: Platform Team rolled back the config map change, pods recovered "
@@ -273,11 +273,11 @@ novatech_kb_articles = [
     },
     {
         "title": "Printer and Peripheral Setup Guide",
-        "content": "NovaTech offices use HP LaserJet Enterprise printers managed via HP Web "
-                   "Jetadmin. To add a printer: 1) Connect to 'novatech-corp' WiFi or wired "
+        "content": "SeerGroup offices use HP LaserJet Enterprise printers managed via HP Web "
+                   "Jetadmin. To add a printer: 1) Connect to 'seergroup-corp' WiFi or wired "
                    "LAN. 2) Open Settings > Printers > Add via IP. 3) Floor 1: 10.20.1.50, "
                    "Floor 2: 10.20.2.50, Floor 3: 10.20.3.50. 4) Use driver 'HP Universal "
-                   "Print Driver' (pre-installed on NovaTech images). For USB peripherals "
+                   "Print Driver' (pre-installed on SeerGroup images). For USB peripherals "
                    "(monitors, docks): Intune policy auto-installs drivers. If a dock isn't "
                    "recognized, run 'devmgmt.msc' and scan for hardware changes. For persistent "
                    "issues, check that USB-C port supports DisplayPort Alt Mode.",
@@ -291,7 +291,7 @@ novatech_kb_articles = [
 texts = []
 metadata_list = []
 
-for article in novatech_kb_articles:
+for article in seergroup_kb_articles:
     text = f"Title: {article['title']}\nContent: {article['content']}"
     texts.append(text)
     metadata_list.append({
@@ -304,7 +304,7 @@ for article in novatech_kb_articles:
 
 # Ingest into the vector-enabled table
 vector_store.add_texts(texts=texts, metadatas=metadata_list)
-print(f"✅ Ingested {len(texts)} NovaTech KB articles into VECTOR_SEARCH_DEMO")
+print(f"✅ Ingested {len(texts)} SeerGroup KB articles into VECTOR_SEARCH_DEMO")
 ```
 
 --------
@@ -332,7 +332,7 @@ for i, doc in enumerate(results, start=1):
 
 ### Search with Relevance Scores
 
-Scores let Atlas gauge confidence. A score close to 0 means high similarity (cosine distance); a score near 1 means low relevance.
+Scores let Proteus gauge confidence. A score close to 0 means high similarity (cosine distance); a score near 1 means low relevance.
 
 ```python
 query = "The VPN keeps disconnecting on my laptop"
@@ -350,7 +350,7 @@ for doc, score in results:
 
 ## Task 5: Filtered Search with Metadata
 
-In a real IT support system, Atlas needs to narrow results by category, severity, or owning team. OracleVS supports metadata filters that combine with vector similarity.
+In a real IT support system, Proteus needs to narrow results by category, severity, or owning team. OracleVS supports metadata filters that combine with vector similarity.
 
 ### Filter by Category
 
@@ -408,17 +408,17 @@ for doc in docs:
 
 ## Lab 2 Recap
 
-You've now built the search foundation that Atlas will rely on:
+You've now built the search foundation that Proteus will rely on:
 
 | What You Did | Why It Matters |
 |-------------|----------------|
 | Created a vector-enabled SQL table | Documents stored with embeddings for semantic retrieval |
 | Built an HNSW index | Fast approximate nearest-neighbor search at scale |
-| Ingested NovaTech KB articles | Real IT support data with rich metadata |
+| Ingested SeerGroup KB articles | Real IT support data with rich metadata |
 | Queried with natural language | "Users can't log in" finds AUTH-SVC articles without keyword matching |
 | Applied metadata filters | Narrow results by category, severity, or team |
 
-**Next up**: In Activity 2, we'll design the complete memory architecture that gives Atlas six distinct types of memory — each with a specific purpose and storage strategy.
+**Next up**: In Activity 2, we'll design the complete memory architecture that gives Proteus six distinct types of memory — each with a specific purpose and storage strategy.
 
 ## Learn More
 

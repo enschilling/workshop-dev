@@ -6,7 +6,7 @@
 
 ### Objective
 
-In this activity, you'll understand *why* Atlas needs six distinct memory types, learn the design principles behind each one, and create all the database tables and vector stores that will power the Memory Manager in Activity 3.
+In this activity, you'll understand *why* Proteus needs six distinct memory types, learn the design principles behind each one, and create all the database tables and vector stores that will power the Memory Manager in Activity 3.
 
 This is the **architecture** activity — we focus on design decisions before writing implementation code.
 
@@ -14,13 +14,13 @@ This is the **architecture** activity — we focus on design decisions before wr
 
 ### Why Memory Engineering Matters
 
-Without memory, an IT support agent like Atlas:
+Without memory, an IT support agent like Proteus:
 - Forgets that the user already said they're on VPN
 - Can't recall that AUTH-SVC crashed last week for the same reason
 - Repeats the same diagnostic steps it already tried
 - Loses track of which servers, services, and people have been mentioned
 
-With proper memory engineering, Atlas can:
+With proper memory engineering, Proteus can:
 - Maintain context across long troubleshooting sessions
 - Reuse proven resolution patterns from past incidents
 - Track infrastructure entities and their relationships
@@ -36,9 +36,9 @@ With proper memory engineering, Atlas can:
 
 ### The Six Memory Types
 
-Just like humans have different types of memory (short-term, long-term, procedural), AI agents benefit from specialized memory systems. Here's what we'll build for Atlas:
+Just like humans have different types of memory (short-term, long-term, procedural), AI agents benefit from specialized memory systems. Here's what we'll build for Proteus:
 
-| Memory Type | Human Analogy | NovaTech Use Case | Storage |
+| Memory Type | Human Analogy | SeerGroup Use Case | Storage |
 |-------------|---------------|-------------------|---------|
 | **Conversational** | Short-term memory | "The user said they're on Floor 2 with a MacBook" | SQL Table |
 | **Knowledge Base** | Long-term semantic memory | KB articles, runbooks, vendor docs, search results | Vector-Enabled SQL Table |
@@ -56,7 +56,7 @@ Just like humans have different types of memory (short-term, long-term, procedur
 
 A key design decision in memory engineering is deciding which operations run **programmatically** (always executed by the harness code) versus **agent-triggered** (the LLM chooses to invoke them during reasoning).
 
-In Atlas's design, the harness is intentionally opinionated: memory loading and persistence are automatic, while external retrieval and context compaction are chosen by the agent.
+In Proteus's design, the harness is intentionally opinionated: memory loading and persistence are automatic, while external retrieval and context compaction are chosen by the agent.
 
 | Operation | Programmatic | Agent-Triggered | Notes |
 |-----------|:------------:|:---------------:|-------|
@@ -195,7 +195,7 @@ CONVERSATION_HISTORY_TABLE = create_conversational_history_table(
 
 Tool call outputs during agent execution can **bloat the context window** quickly — a single web search might return thousands of tokens that are only needed once.
 
-The `TOOL_LOG` table acts as an **experimental memory**: full tool outputs are persisted to the database and replaced in the context window with a compact one-line reference. Atlas can retrieve full outputs later if needed.
+The `TOOL_LOG` table acts as an **experimental memory**: full tool outputs are persisted to the database and replaced in the context window with a compact one-line reference. Proteus can retrieve full outputs later if needed.
 
 This is a form of **context offloading** — keeping the working memory lean while preserving full fidelity in durable storage.
 
@@ -295,15 +295,15 @@ print("✅ All indexes created!")
 
 --------
 
-## Step 5: Seed the Knowledge Base with NovaTech Data
+## Step 5: Seed the Knowledge Base with SeerGroup Data
 
-We'll reuse the NovaTech KB articles from Activity 1 to populate the knowledge base memory. In production, this would be a continuous ingestion pipeline from your documentation systems.
+We'll reuse the SeerGroup KB articles from Activity 1 to populate the knowledge base memory. In production, this would be a continuous ingestion pipeline from your documentation systems.
 
 ```python
-# Seed knowledge base memory with NovaTech KB articles
-if "novatech_kb_articles" in globals() and novatech_kb_articles:
+# Seed knowledge base memory with SeerGroup KB articles
+if "seergroup_kb_articles" in globals() and seergroup_kb_articles:
     kb_texts = [
-        f"Title: {a['title']}\nContent: {a['content']}" for a in novatech_kb_articles
+        f"Title: {a['title']}\nContent: {a['content']}" for a in seergroup_kb_articles
     ]
     kb_meta = [
         {
@@ -313,17 +313,17 @@ if "novatech_kb_articles" in globals() and novatech_kb_articles:
             "team": a["team"],
             "source_type": "internal_kb",
         }
-        for a in novatech_kb_articles
+        for a in seergroup_kb_articles
     ]
     knowledge_base_vs.add_texts(kb_texts, kb_meta)
-    print(f"✅ Seeded knowledge base memory with {len(kb_texts)} NovaTech KB articles")
+    print(f"✅ Seeded knowledge base memory with {len(kb_texts)} SeerGroup KB articles")
 ```
 
 --------
 
 ## Lab 3 Recap
 
-You've designed and created the complete memory infrastructure for Atlas:
+You've designed and created the complete memory infrastructure for Proteus:
 
 | What You Did | Why It Matters |
 |-------------|----------------|
@@ -333,7 +333,7 @@ You've designed and created the complete memory infrastructure for Atlas:
 | Created conversational memory table | Thread-based chat history with summary linkage |
 | Created tool log table | Context offloading for lean working memory |
 | Created 5 vector-enabled tables | Semantic search across knowledge, workflows, tools, entities, summaries |
-| Seeded the knowledge base | NovaTech KB articles ready for Atlas to search |
+| Seeded the knowledge base | SeerGroup KB articles ready for Proteus to search |
 
 **Key Insight**: The `summary_id` column in conversational memory enables **log compaction** — a pattern borrowed from databases where old entries are compressed but not lost. Messages are *marked* as summarized, not deleted, preserving full audit history.
 
