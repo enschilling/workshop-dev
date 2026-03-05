@@ -4,7 +4,7 @@
 
 In this lab, we are going to explain how to use cost-tracking tags, create a budget and budget alert rule, build and export a cost analysis report, and explain what FOCUS cost reports cover. 
 
-**Estimated Time:** TBD minutes
+**Estimated Time:** 20 minutes
 
 ### Objectives
 
@@ -144,7 +144,7 @@ In this task, we are going to generate a cost analysis report using filters and 
 
    ![Screenshot showing how to navigate to cost and usage reports](./images/navigate-to-cost-and-usage-reports.png)
 
-10. Navigate to **FOCUS Reports** and click the arrow to expand it.
+10. Navigate to FOCUS Reports and click the arrow to expand it.
 
    ![Screenshot showing how to view FOCUS Reports](./images/cost-report-page.png)
 
