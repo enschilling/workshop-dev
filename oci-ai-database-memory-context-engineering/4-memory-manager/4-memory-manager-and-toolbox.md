@@ -31,12 +31,16 @@ The `MemoryManager` is the central abstraction that unifies all memory operation
 
 There are existing frameworks that abstract memory management for AI agents:
 
+<div style="margin-left: 20px;">
+
 | Framework | Description |
 |-----------|-------------|
 | **LangChain Memory** | Built-in memory classes (ConversationBufferMemory, VectorStoreRetrieverMemory) |
 | **Mem0** | Dedicated memory layer for AI agents with automatic memory management |
 | **LlamaIndex** | Document-based memory with various storage backends |
 | **Zep** | Long-term memory service for AI assistants |
+
+</div>
 
 For learning purposes, building your own memory manager (as we do here) gives you a deep understanding of how memory engineering works. For production, you might consider using or extending an existing framework. Note that this workshop only illustrates reads and writes — a production system would also need deletion, updates, and TTL-based expiry.
 
@@ -480,43 +484,39 @@ If none: []'''
         ]
 ```
 
---------
-
 ## Step 2: Initialize the Memory Manager
 
-```python
-memory_manager = MemoryManager(
-    conn=vector_conn,
-    conversation_table=CONVERSATION_HISTORY_TABLE,
-    knowledge_base_vs=knowledge_base_vs,
-    workflow_vs=workflow_vs,
-    toolbox_vs=toolbox_vs,
-    entity_vs=entity_vs,
-    summary_vs=summary_vs,
-    tool_log_table=TOOL_LOG_TABLE_NAME,
-)
-```
+    ```python
+    memory_manager = MemoryManager(
+        conn=vector_conn,
+        conversation_table=CONVERSATION_HISTORY_TABLE,
+        knowledge_base_vs=knowledge_base_vs,
+        workflow_vs=workflow_vs,
+        toolbox_vs=toolbox_vs,
+        entity_vs=entity_vs,
+        summary_vs=summary_vs,
+        tool_log_table=TOOL_LOG_TABLE_NAME,
+    )
+    ```
 
 ### Quick Smoke Test
 
 Let's verify the memory manager works by writing and reading a test conversation:
 
-```python
-# Write a test conversation
-test_thread = "TICKET-TEST-001"
-memory_manager.write_conversational_memory("I can't log in to Jira this morning", "user", test_thread)
-memory_manager.write_conversational_memory("Let me check AUTH-SVC status for you.", "assistant", test_thread)
+    ```python
+    # Write a test conversation
+    test_thread = "TICKET-TEST-001"
+    memory_manager.write_conversational_memory("I can't log in to Jira this morning", "user", test_thread)
+    memory_manager.write_conversational_memory("Let me check AUTH-SVC status for you.", "assistant", test_thread)
 
-# Read it back
-print(memory_manager.read_conversational_memory(test_thread))
-```
+    # Read it back
+    print(memory_manager.read_conversational_memory(test_thread))
+    ```
 
-```python
-# Test knowledge base search
-print(memory_manager.read_knowledge_base("VPN keeps disconnecting"))
-```
-
---------
+    ```python
+    # Test knowledge base search
+    print(memory_manager.read_knowledge_base("VPN keeps disconnecting"))
+    ```
 
 ## Step 3: The Semantic Toolbox
 
@@ -524,12 +524,16 @@ print(memory_manager.read_knowledge_base("VPN keeps disconnecting"))
 
 As your AI system grows, you might have **hundreds of tools** available — diagnostic scripts, API calls, database queries, search endpoints. Passing all tools to the LLM at inference time creates serious problems:
 
+<div style="margin-left: 20px;">
+
 | Problem | Impact |
 |---------|--------|
 | **Context bloat** | Tool definitions consume tokens, leaving less room for actual content |
 | **Tool selection failure** | LLMs struggle to choose the right tool when presented with too many options |
 | **Increased latency** | More tokens = slower inference |
 | **Higher costs** | More tokens = higher API costs |
+
+</div>
 
 Model providers typically recommend limiting tools to 10-20 max for reliable selection.
 
@@ -545,9 +549,9 @@ This means your system can **scale to hundreds of tools** while the LLM only see
 
 ### How It Works
 
-```
-User Query → Embed Query → Vector Search → Find tools with similar docstrings → Return relevant tools
-```
+    ```
+    User Query → Embed Query → Vector Search → Find tools with similar docstrings → Return relevant tools
+    ```
 
 The `augment=True` flag triggers LLM-powered enhancement:
 
@@ -559,6 +563,8 @@ This means a simple docstring like `"Search the web"` becomes a rich description
 
 ### Three Engineering Disciplines in One
 
+<div style="margin-left: 20px;">
+
 | Discipline | Technique Used | How It Helps |
 |------------|----------------|--------------|
 | **Memory Engineering** | Toolbox as procedural memory | Tools are stored and retrieved like learned skills |
@@ -566,245 +572,241 @@ This means a simple docstring like `"Search the web"` becomes a rich description
 | **Context Engineering** | Selective tool retrieval | Only relevant tools enter the context window |
 | **Prompt Engineering** | Role setting | "You are a technical writer" improves docstring quality |
 
---------
+</div>
 
 ### The Implementation
 
-```python
-import inspect
-import uuid
-from typing import Callable, Optional, Union
-from pydantic import BaseModel
+    ```python
+    import inspect
+    import uuid
+    from typing import Callable, Optional, Union
+    from pydantic import BaseModel
 
 
-def get_embedding(text: str) -> list[float]:
-    """Get the embedding for a text using the configured embedding model."""
-    return embedding_model.embed_query(text)
+    def get_embedding(text: str) -> list[float]:
+        """Get the embedding for a text using the configured embedding model."""
+        return embedding_model.embed_query(text)
 
 
-class ToolMetadata(BaseModel):
-    """Metadata for a registered tool."""
-    name: str
-    description: str
-    signature: str
-    parameters: dict
-    return_type: str
+    class ToolMetadata(BaseModel):
+        """Metadata for a registered tool."""
+        name: str
+        description: str
+        signature: str
+        parameters: dict
+        return_type: str
 
 
-class Toolbox:
-    """
-    Toolbox for registering, storing, and retrieving tools with LLM-powered augmentation.
+    class Toolbox:
+        """
+        Toolbox for registering, storing, and retrieving tools with LLM-powered augmentation.
 
-    Tools are stored with embeddings for semantic retrieval, allowing Proteus to
-    find relevant diagnostic tools based on natural language ticket descriptions.
-    """
-
-    def __init__(self, memory_manager, llm_client, model: str = "gpt-4o"):
-        self.memory_manager = memory_manager
-        self.llm_client = llm_client
-        self.model = model
-        self._tools: dict[str, Callable] = {}
-        self._tools_by_name: dict[str, Callable] = {}
-
-    def _augment_docstring(self, docstring: str) -> str:
-        """Use LLM to improve and expand a tool's docstring for better retrieval."""
-        if not docstring.strip():
-            return "No description provided."
-
-        prompt = f"""You are a technical writer. Improve the following function docstring to be more clear,
-            comprehensive, and useful. Include:
-            1. A clear concise summary
-            2. Detailed description of what the function does
-            3. When to use this function
-            4. Any important notes or caveats
-
-            Original docstring:
-            {docstring}
-
-            Return ONLY the improved docstring, no other text.
+        Tools are stored with embeddings for semantic retrieval, allowing Proteus to
+        find relevant diagnostic tools based on natural language ticket descriptions.
         """
 
-        response = self.llm_client.chat.completions.create(
-            model=self.model,
-            messages=[{"role": "user", "content": prompt}],
-            max_completion_tokens=500,
-        )
-        return response.choices[0].message.content.strip()
+        def __init__(self, memory_manager, llm_client, model: str = "gpt-4o"):
+            self.memory_manager = memory_manager
+            self.llm_client = llm_client
+            self.model = model
+            self._tools: dict[str, Callable] = {}
+            self._tools_by_name: dict[str, Callable] = {}
 
-    def _generate_queries(self, docstring: str, num_queries: int = 5) -> list[str]:
-        """Generate synthetic example queries that would lead to using this tool."""
-        prompt = f"""Based on the following tool description, generate {num_queries} diverse example queries
-            that a user might ask when they need this tool. Make them natural and varied.
+        def _augment_docstring(self, docstring: str) -> str:
+            """Use LLM to improve and expand a tool's docstring for better retrieval."""
+            if not docstring.strip():
+                return "No description provided."
 
-            Tool description:
-            {docstring}
+            prompt = f"""You are a technical writer. Improve the following function docstring to be more clear,
+                comprehensive, and useful. Include:
+                1. A clear concise summary
+                2. Detailed description of what the function does
+                3. When to use this function
+                4. Any important notes or caveats
 
-            Return ONLY a JSON array of strings, like: ["query1", "query2", ...]
-        """
+                Original docstring:
+                {docstring}
 
-        response = self.llm_client.chat.completions.create(
-            model=self.model,
-            messages=[{"role": "user", "content": prompt}],
-            max_completion_tokens=300,
-        )
+                Return ONLY the improved docstring, no other text.
+            """
 
-        try:
-            import json
-            queries = json.loads(response.choices[0].message.content.strip())
-            return queries if isinstance(queries, list) else []
-        except json.JSONDecodeError:
-            return [response.choices[0].message.content.strip()]
+            response = self.llm_client.chat.completions.create(
+                model=self.model,
+                messages=[{"role": "user", "content": prompt}],
+                max_completion_tokens=500,
+            )
+            return response.choices[0].message.content.strip()
 
-    def _get_tool_metadata(self, func: Callable) -> ToolMetadata:
-        """Extract metadata from a function for storage and retrieval."""
-        sig = inspect.signature(func)
+        def _generate_queries(self, docstring: str, num_queries: int = 5) -> list[str]:
+            """Generate synthetic example queries that would lead to using this tool."""
+            prompt = f"""Based on the following tool description, generate {num_queries} diverse example queries
+                that a user might ask when they need this tool. Make them natural and varied.
 
-        parameters = {}
-        for name, param in sig.parameters.items():
-            param_info = {"name": name}
-            if param.annotation != inspect.Parameter.empty:
-                param_info["type"] = str(param.annotation)
-            if param.default != inspect.Parameter.empty:
-                param_info["default"] = str(param.default)
-            parameters[name] = param_info
+                Tool description:
+                {docstring}
 
-        return_type = "Any"
-        if sig.return_annotation != inspect.Signature.empty:
-            return_type = str(sig.return_annotation)
+                Return ONLY a JSON array of strings, like: ["query1", "query2", ...]
+            """
 
-        return ToolMetadata(
-            name=func.__name__,
-            description=func.__doc__ or "No description",
-            signature=str(sig),
-            parameters=parameters,
-            return_type=return_type,
-        )
-
-    def register_tool(
-        self, func: Optional[Callable] = None, augment: bool = False
-    ) -> Union[str, Callable]:
-        """
-        Register a function as a tool in the toolbox.
-
-        Can be used as a decorator or called directly:
-
-            @toolbox.register_tool
-            def my_tool(): ...
-
-            @toolbox.register_tool(augment=True)
-            def my_enhanced_tool(): ...
-        """
-
-        def decorator(f: Callable) -> str:
-            docstring = f.__doc__ or ""
-            signature = str(inspect.signature(f))
-            object_id = uuid.uuid4()
-            object_id_str = str(object_id)
-
-            if augment:
-                augmented_docstring = self._augment_docstring(docstring)
-                queries = self._generate_queries(augmented_docstring)
-
-                embedding_text = (
-                    f"{f.__name__} {augmented_docstring} {signature} {' '.join(queries)}"
-                )
-                embedding = get_embedding(embedding_text)
-
-                tool_data = self._get_tool_metadata(f)
-                tool_data.description = augmented_docstring
-
-                tool_dict = {
-                    "_id": object_id_str,
-                    "embedding": embedding,
-                    "queries": queries,
-                    "augmented": True,
-                    **tool_data.model_dump(),
-                }
-            else:
-                embedding = get_embedding(f"{f.__name__} {docstring} {signature}")
-                tool_data = self._get_tool_metadata(f)
-
-                tool_dict = {
-                    "_id": object_id_str,
-                    "embedding": embedding,
-                    "augmented": False,
-                    **tool_data.model_dump(),
-                }
-
-            self.memory_manager.write_toolbox(
-                f"{f.__name__} {docstring} {signature}", tool_dict
+            response = self.llm_client.chat.completions.create(
+                model=self.model,
+                messages=[{"role": "user", "content": prompt}],
+                max_completion_tokens=300,
             )
 
-            self._tools[object_id_str] = f
-            self._tools_by_name[f.__name__] = f
-            return object_id_str
+            try:
+                import json
+                queries = json.loads(response.choices[0].message.content.strip())
+                return queries if isinstance(queries, list) else []
+            except json.JSONDecodeError:
+                return [response.choices[0].message.content.strip()]
 
-        if func is None:
-            return decorator
-        return decorator(func)
-```
+        def _get_tool_metadata(self, func: Callable) -> ToolMetadata:
+            """Extract metadata from a function for storage and retrieval."""
+            sig = inspect.signature(func)
 
---------
+            parameters = {}
+            for name, param in sig.parameters.items():
+                param_info = {"name": name}
+                if param.annotation != inspect.Parameter.empty:
+                    param_info["type"] = str(param.annotation)
+                if param.default != inspect.Parameter.empty:
+                    param_info["default"] = str(param.default)
+                parameters[name] = param_info
+
+            return_type = "Any"
+            if sig.return_annotation != inspect.Signature.empty:
+                return_type = str(sig.return_annotation)
+
+            return ToolMetadata(
+                name=func.__name__,
+                description=func.__doc__ or "No description",
+                signature=str(sig),
+                parameters=parameters,
+                return_type=return_type,
+            )
+
+        def register_tool(
+            self, func: Optional[Callable] = None, augment: bool = False
+        ) -> Union[str, Callable]:
+            """
+            Register a function as a tool in the toolbox.
+
+            Can be used as a decorator or called directly:
+
+                @toolbox.register_tool
+                def my_tool(): ...
+
+                @toolbox.register_tool(augment=True)
+                def my_enhanced_tool(): ...
+            """
+
+            def decorator(f: Callable) -> str:
+                docstring = f.__doc__ or ""
+                signature = str(inspect.signature(f))
+                object_id = uuid.uuid4()
+                object_id_str = str(object_id)
+
+                if augment:
+                    augmented_docstring = self._augment_docstring(docstring)
+                    queries = self._generate_queries(augmented_docstring)
+
+                    embedding_text = (
+                        f"{f.__name__} {augmented_docstring} {signature} {' '.join(queries)}"
+                    )
+                    embedding = get_embedding(embedding_text)
+
+                    tool_data = self._get_tool_metadata(f)
+                    tool_data.description = augmented_docstring
+
+                    tool_dict = {
+                        "_id": object_id_str,
+                        "embedding": embedding,
+                        "queries": queries,
+                        "augmented": True,
+                        **tool_data.model_dump(),
+                    }
+                else:
+                    embedding = get_embedding(f"{f.__name__} {docstring} {signature}")
+                    tool_data = self._get_tool_metadata(f)
+
+                    tool_dict = {
+                        "_id": object_id_str,
+                        "embedding": embedding,
+                        "augmented": False,
+                        **tool_data.model_dump(),
+                    }
+
+                self.memory_manager.write_toolbox(
+                    f"{f.__name__} {docstring} {signature}", tool_dict
+                )
+
+                self._tools[object_id_str] = f
+                self._tools_by_name[f.__name__] = f
+                return object_id_str
+
+            if func is None:
+                return decorator
+            return decorator(func)
+    ```
 
 ## Step 4: Initialize the Toolbox and Set Up API Keys
 
-```python
-import os
-import getpass
+    ```python
+    import os
+    import getpass
 
 
-def set_env_securely(var_name, prompt):
-    value = getpass.getpass(prompt)
-    os.environ[var_name] = value
-```
+    def set_env_securely(var_name, prompt):
+        value = getpass.getpass(prompt)
+        os.environ[var_name] = value
+    ```
 
-```python
-set_env_securely("OPENAI_API_KEY", "OpenAI API Key: ")
-```
+    ```python
+    set_env_securely("OPENAI_API_KEY", "OpenAI API Key: ")
+    ```
 
-```python
-from openai import OpenAI
+    ```python
+    from openai import OpenAI
 
-client = OpenAI()
+    client = OpenAI()
 
-# Initialize the Toolbox
-toolbox = Toolbox(memory_manager=memory_manager, llm_client=client)
-```
-
---------
+    # Initialize the Toolbox
+    toolbox = Toolbox(memory_manager=memory_manager, llm_client=client)
+    ```
 
 ## Step 5: Test Tool Registration and Retrieval
 
 Let's register a simple diagnostic tool and verify semantic retrieval works:
 
-```python
-@toolbox.register_tool(augment=True)
-def check_service_status(service_name: str) -> str:
-    """Check if a SeerGroup internal service is running and return its status."""
-    # In production, this would call a real monitoring API
-    mock_statuses = {
-        "auth-svc": "✅ Running (3 pods, 0 restarts)",
-        "deploy-bot": "⚠️ Degraded (1/3 pods ready)",
-        "ticket-bot": "✅ Running (2 pods, 0 restarts)",
-    }
-    return mock_statuses.get(
-        service_name.lower(), f"❓ Unknown service: {service_name}"
-    )
-```
+    ```python
+    @toolbox.register_tool(augment=True)
+    def check_service_status(service_name: str) -> str:
+        """Check if a SeerGroup internal service is running and return its status."""
+        # In production, this would call a real monitoring API
+        mock_statuses = {
+            "auth-svc": "✅ Running (3 pods, 0 restarts)",
+            "deploy-bot": "⚠️ Degraded (1/3 pods ready)",
+            "ticket-bot": "✅ Running (2 pods, 0 restarts)",
+        }
+        return mock_statuses.get(
+            service_name.lower(), f"❓ Unknown service: {service_name}"
+        )
+    ```
 
-```python
-# Test semantic retrieval — does the toolbox find this tool for a related query?
-import pprint
+    ```python
+    # Test semantic retrieval — does the toolbox find this tool for a related query?
+    import pprint
 
-retrieved_tools = memory_manager.read_toolbox("is the authentication service down?")
-pprint.pprint(retrieved_tools)
-```
+    retrieved_tools = memory_manager.read_toolbox("is the authentication service down?")
+    pprint.pprint(retrieved_tools)
+    ```
 
 > **🔍 Try it**: Change the query to something different — "check if deploy-bot is working" or "what services are having issues" — and see if the tool is still retrieved. This is semantic retrieval in action.
 
---------
-
 ## Lab 4 Recap
+
+<div style="margin-left: 20px;">
 
 | What You Built | Why It Matters |
 |---------------|----------------|
@@ -814,6 +816,8 @@ pprint.pprint(retrieved_tools)
 | Entity extraction via LLM | Automatic recognition of servers, services, people from conversation |
 | `Toolbox` class with semantic retrieval | Scale to hundreds of tools while LLM only sees relevant ones |
 | LLM-augmented tool registration | Better retrieval through enhanced descriptions and synthetic queries |
+
+</div>
 
 **Key Insight**: The Toolbox sits at the intersection of three disciplines: *memory engineering* (tools as procedural memory), *context engineering* (only relevant tools in context), and *prompt engineering* (role-setting for better docstring augmentation).
 

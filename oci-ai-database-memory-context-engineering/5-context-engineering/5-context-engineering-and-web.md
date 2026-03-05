@@ -14,6 +14,8 @@ While memory engineering focuses on *what to store and retrieve*, context engine
 
 ### What This Lab Covers
 
+<div style="margin-left: 20px;">
+
 | Step | Function | Purpose |
 |------|----------|---------|
 | **1. Calculate Usage** | `calculate_context_usage()` | Monitor what % of the context window is used |
@@ -21,6 +23,8 @@ While memory engineering focuses on *what to store and retrieve*, context engine
 | **3. Compact** | `summarize_conversation()` / `summarize_and_store()` | Agent-triggered compaction when context gets long |
 | **4. Just-in-Time Retrieval** | `expand_summary()` tool | Let Proteus expand summaries on demand |
 | **5. Web Search** | `search_tavily()` tool | External retrieval with automatic knowledge base persistence |
+
+</div>
 
 ### The Context Management Flow
 
@@ -51,101 +55,95 @@ For Proteus, this means:
 
 This simple utility estimates how much of the context window is being used. Proteus can check this to decide whether compaction is needed.
 
-```python
-def calculate_context_usage(context: str, model: str = "gpt-4o") -> dict:
-    """Calculate context window usage as percentage."""
-    estimated_tokens = len(context) // 4  # ~4 chars per token
-    max_tokens = MODEL_TOKEN_LIMITS.get(model, 128000)
-    percentage = (estimated_tokens / max_tokens) * 100
-    return {
-        "tokens": estimated_tokens,
-        "max": max_tokens,
-        "percent": round(percentage, 1),
-    }
-```
-
---------
+    ```python
+    def calculate_context_usage(context: str, model: str = "gpt-4o") -> dict:
+        """Calculate context window usage as percentage."""
+        estimated_tokens = len(context) // 4  # ~4 chars per token
+        max_tokens = MODEL_TOKEN_LIMITS.get(model, 128000)
+        percentage = (estimated_tokens / max_tokens) * 100
+        return {
+            "tokens": estimated_tokens,
+            "max": max_tokens,
+            "percent": round(percentage, 1),
+        }
+    ```
 
 ## Step 2: Context Summarizer
 
 When the context window grows large — after several tool calls, long conversations, or large search results — we can compress it into a summary. The full content is stored in Summary Memory, and the context window gets a compact pointer.
 
-```python
-import uuid
+    ```python
+    import uuid
 
 
-def summarise_context_window(
-    content: str, memory_manager, llm_client, model: str = "gpt-4o"
-) -> dict:
-    """Summarise context window using LLM and store in summary memory."""
-    summary_prompt = f"""
-You are compressing an AI IT support agent's context window for later retrieval.
-The content may include conversation memory, KB articles, entities, workflows, and prior summaries.
+    def summarise_context_window(
+        content: str, memory_manager, llm_client, model: str = "gpt-4o"
+    ) -> dict:
+        """Summarise context window using LLM and store in summary memory."""
+        summary_prompt = f"""
+    You are compressing an AI IT support agent's context window for later retrieval.
+    The content may include conversation memory, KB articles, entities, workflows, and prior summaries.
 
-Produce a compact summary that preserves:
-- user's reported issue and constraints
-- key diagnostic findings already established
-- important entities (server names, service names, team names, ticket IDs)
-- unresolved questions and next actions
+    Produce a compact summary that preserves:
+    - user's reported issue and constraints
+    - key diagnostic findings already established
+    - important entities (server names, service names, team names, ticket IDs)
+    - unresolved questions and next actions
 
-Output 4-7 short bullet points.
-Be faithful to the source, and do not add new facts.
+    Output 4-7 short bullet points.
+    Be faithful to the source, and do not add new facts.
 
-Context window content:
-{content[:3000]}
-""".strip()
+    Context window content:
+    {content[:3000]}
+    """.strip()
 
-    response = llm_client.chat.completions.create(
-        model=model,
-        messages=[{"role": "user", "content": summary_prompt}],
-        max_completion_tokens=220,
-    )
-    summary = response.choices[0].message.content
+        response = llm_client.chat.completions.create(
+            model=model,
+            messages=[{"role": "user", "content": summary_prompt}],
+            max_completion_tokens=220,
+        )
+        summary = response.choices[0].message.content
 
-    desc_response = llm_client.chat.completions.create(
-        model=model,
-        messages=[
-            {
-                "role": "user",
-                "content": f"Write a short label (max 12 words) for this summary:\n{summary}",
-            }
-        ],
-        max_completion_tokens=40,
-    )
-    description = desc_response.choices[0].message.content.strip()
+        desc_response = llm_client.chat.completions.create(
+            model=model,
+            messages=[
+                {
+                    "role": "user",
+                    "content": f"Write a short label (max 12 words) for this summary:\n{summary}",
+                }
+            ],
+            max_completion_tokens=40,
+        )
+        description = desc_response.choices[0].message.content.strip()
 
-    summary_id = str(uuid.uuid4())[:8]
-    memory_manager.write_summary(summary_id, content, summary, description)
+        summary_id = str(uuid.uuid4())[:8]
+        memory_manager.write_summary(summary_id, content, summary, description)
 
-    return {"id": summary_id, "description": description, "summary": summary}
-```
-
---------
+        return {"id": summary_id, "description": description, "summary": summary}
+    ```
 
 ## Step 3: Context Offloader
 
 This utility checks whether the context exceeds a threshold and, if so, automatically summarizes and replaces the content with a compact reference.
 
-```python
-def offload_to_summary(
-    context: str,
-    memory_manager,
-    llm_client,
-    threshold_percent: float = 80.0,
-) -> tuple:
-    """If context exceeds threshold, summarise and return compacted version."""
-    usage = calculate_context_usage(context)
+    ```python
+    def offload_to_summary(
+        context: str,
+        memory_manager,
+        llm_client,
+        threshold_percent: float = 80.0,
+    ) -> tuple:
+        """If context exceeds threshold, summarise and return compacted version."""
+        usage = calculate_context_usage(context)
 
-    if usage["percent"] < threshold_percent:
-        return context, []  # No offload needed
+        if usage["percent"] < threshold_percent:
+            return context, []  # No offload needed
 
-    result = summarise_context_window(context, memory_manager, llm_client)
+        result = summarise_context_window(context, memory_manager, llm_client)
 
-    compact = f"[Summary ID: {result['id']}] {result['description']}"
-    return compact, [result]
-```
-
---------
+        compact = f"[Summary ID: {result['id']}] {result['description']}"
+        return compact, [result]
+    ```
 
 ## Step 4: Register Summary Tools for the Agent
 
@@ -155,72 +153,74 @@ These are **agent-triggered** tools — Proteus decides when to call them based 
 
 When conversation history grows large, we need to reduce context. We chose to **mark messages as summarized** rather than delete them:
 
+<div style="margin-left: 20px;">
+
 | Approach | Pros | Cons |
 |----------|------|------|
 | **Delete summarized messages** | Simple, immediate space savings | Permanent data loss, can't audit or recover |
 | **Mark as summarized (our choice)** | Preserves history, reversible, auditable | Slightly more complex queries |
 
+</div>
+
 Memory should be *compressed* or *forgotten*, not *erased*. The original messages remain for auditing, debugging, or reprocessing.
 
 ### The Compaction Flow
 
-```
-Ticket thread has 50 messages → Context too large → summarize_conversation(thread_id)
-                                                          ↓
-                               1. Read unsummarized messages
-                               2. LLM summarizes them
-                               3. Store summary with unique ID
-                               4. UPDATE messages SET summary_id = 'abc123'
-                                                          ↓
-                               Next read: Only new messages appear + Summary ID reference
-```
+    ```
+    Ticket thread has 50 messages → Context too large → summarize_conversation(thread_id)
+                                                            ↓
+                                1. Read unsummarized messages
+                                2. LLM summarizes them
+                                3. Store summary with unique ID
+                                4. UPDATE messages SET summary_id = 'abc123'
+                                                            ↓
+                                Next read: Only new messages appear + Summary ID reference
+    ```
 
-```python
-@toolbox.register_tool(augment=True)
-def expand_summary(summary_id: str) -> str:
-    """Expand a summary reference to full content, including the original conversation
-    messages that were compacted into it. Use when you need more details from a
-    [Summary ID: xxx] reference during troubleshooting."""
-    summary_text = memory_manager.read_summary_memory(summary_id)
+    ```python
+    @toolbox.register_tool(augment=True)
+    def expand_summary(summary_id: str) -> str:
+        """Expand a summary reference to full content, including the original conversation
+        messages that were compacted into it. Use when you need more details from a
+        [Summary ID: xxx] reference during troubleshooting."""
+        summary_text = memory_manager.read_summary_memory(summary_id)
 
-    original_msgs = memory_manager.get_messages_by_summary_id(summary_id)
-    if original_msgs:
-        lines = [f"[{m['role']}] {m['content']}" for m in original_msgs]
-        return (
-            f"Summary:\n{summary_text}\n\n"
-            f"Original messages ({len(original_msgs)}):\n" + "\n".join(lines)
-        )
-    return summary_text
-
-
-@toolbox.register_tool(augment=True)
-def summarize_and_store(text: str) -> str:
-    """Summarize a long text block and store it. Returns [Summary ID: ...] for later expansion."""
-    result = summarise_context_window(text, memory_manager, client)
-    return f"Stored as [Summary ID: {result['id']}] {result['description']}"
+        original_msgs = memory_manager.get_messages_by_summary_id(summary_id)
+        if original_msgs:
+            lines = [f"[{m['role']}] {m['content']}" for m in original_msgs]
+            return (
+                f"Summary:\n{summary_text}\n\n"
+                f"Original messages ({len(original_msgs)}):\n" + "\n".join(lines)
+            )
+        return summary_text
 
 
-@toolbox.register_tool(augment=True)
-def summarize_conversation(thread_id: str) -> str:
-    """
-    Summarize unsummarized conversation turns for a ticket thread and mark those
-    turns with a summary_id. Use this when conversation memory becomes long and
-    you need context compaction during a troubleshooting session.
-    """
-    unsummarized = memory_manager.get_unsummarized_messages(thread_id, limit=200)
-    if not unsummarized:
-        return "No unsummarized conversation turns found."
+    @toolbox.register_tool(augment=True)
+    def summarize_and_store(text: str) -> str:
+        """Summarize a long text block and store it. Returns [Summary ID: ...] for later expansion."""
+        result = summarise_context_window(text, memory_manager, client)
+        return f"Stored as [Summary ID: {result['id']}] {result['description']}"
 
-    full_text = "\n".join([f"[{m['role']}] {m['content']}" for m in unsummarized])
-    result = summarise_context_window(full_text, memory_manager, client)
 
-    message_ids = [m["id"] for m in unsummarized]
-    memory_manager.mark_as_summarized(thread_id, result["id"], message_ids=message_ids)
+    @toolbox.register_tool(augment=True)
+    def summarize_conversation(thread_id: str) -> str:
+        """
+        Summarize unsummarized conversation turns for a ticket thread and mark those
+        turns with a summary_id. Use this when conversation memory becomes long and
+        you need context compaction during a troubleshooting session.
+        """
+        unsummarized = memory_manager.get_unsummarized_messages(thread_id, limit=200)
+        if not unsummarized:
+            return "No unsummarized conversation turns found."
 
-    return f"Conversation summarized as [Summary ID: {result['id']}] {result['description']}"
-```
+        full_text = "\n".join([f"[{m['role']}] {m['content']}" for m in unsummarized])
+        result = summarise_context_window(full_text, memory_manager, client)
 
---------
+        message_ids = [m["id"] for m in unsummarized]
+        memory_manager.mark_as_summarized(thread_id, result["id"], message_ids=message_ids)
+
+        return f"Conversation summarized as [Summary ID: {result['id']}] {result['description']}"
+    ```
 
 ## Step 5: Web Search with Tavily
 
@@ -232,73 +232,73 @@ We use [Tavily](https://tavily.com/), an AI-optimized search API designed for LL
 
 When Proteus calls `search_tavily()`, it doesn't just return results — it **persists them to the knowledge base**:
 
-```
-Proteus calls search_tavily("CrowdStrike Falcon sensor error 0x80070005")
-       ↓
-Tavily API returns results
-       ↓
-Each result is written to knowledge_base_vs with metadata (title, URL, timestamp)
-       ↓
-Future tickets can retrieve this information without searching again
-```
+    ```
+    Proteus calls search_tavily("CrowdStrike Falcon sensor error 0x80070005")
+        ↓
+    Tavily API returns results
+        ↓
+    Each result is written to knowledge_base_vs with metadata (title, URL, timestamp)
+        ↓
+    Future tickets can retrieve this information without searching again
+    ```
 
 This pattern means Proteus **learns** from its searches. Information discovered once becomes part of the agent's long-term memory.
 
-```python
-set_env_securely("TAVILY_API_KEY", "Tavily API Key: ")
-```
+    ```python
+    set_env_securely("TAVILY_API_KEY", "Tavily API Key: ")
+    ```
 
-```python
-from tavily import TavilyClient
+    ```python
+    from tavily import TavilyClient
 
-tavily_client = TavilyClient(api_key=os.environ["TAVILY_API_KEY"])
+    tavily_client = TavilyClient(api_key=os.environ["TAVILY_API_KEY"])
 
 
-@toolbox.register_tool(augment=True)
-def search_tavily(query: str, max_results: int = 5):
-    """
-    Search the web for information not available in the internal knowledge base.
-    Results are automatically stored in the knowledge base for future reference.
-    Use for vendor advisories, CVEs, error messages, and external documentation.
-    """
-    response = tavily_client.search(query=query, max_results=max_results)
-    results = response.get("results", [])
+    @toolbox.register_tool(augment=True)
+    def search_tavily(query: str, max_results: int = 5):
+        """
+        Search the web for information not available in the internal knowledge base.
+        Results are automatically stored in the knowledge base for future reference.
+        Use for vendor advisories, CVEs, error messages, and external documentation.
+        """
+        response = tavily_client.search(query=query, max_results=max_results)
+        results = response.get("results", [])
 
-    for result in results:
-        text = (
-            f"Title: {result.get('title', '')}\n"
-            f"Content: {result.get('content', '')}\n"
-            f"URL: {result.get('url', '')}"
-        )
+        for result in results:
+            text = (
+                f"Title: {result.get('title', '')}\n"
+                f"Content: {result.get('content', '')}\n"
+                f"URL: {result.get('url', '')}"
+            )
 
-        metadata = {
-            "title": result.get("title", ""),
-            "url": result.get("url", ""),
-            "score": result.get("score", 0),
-            "source_type": "tavily_search",
-            "query": query,
-            "timestamp": datetime.now().isoformat(),
-        }
+            metadata = {
+                "title": result.get("title", ""),
+                "url": result.get("url", ""),
+                "score": result.get("score", 0),
+                "source_type": "tavily_search",
+                "query": query,
+                "timestamp": datetime.now().isoformat(),
+            }
 
-        memory_manager.write_knowledge_base(text, metadata)
+            memory_manager.write_knowledge_base(text, metadata)
 
-    return results
-```
+        return results
+    ```
 
 ### Verify Tool Retrieval
 
 Let's confirm that Proteus can find the search tool when needed:
 
-```python
-import pprint
+    ```python
+    import pprint
 
-retrieved_tools = memory_manager.read_toolbox("Search the internet for vendor documentation")
-pprint.pprint(retrieved_tools)
-```
-
---------
+    retrieved_tools = memory_manager.read_toolbox("Search the internet for vendor documentation")
+    pprint.pprint(retrieved_tools)
+    ```
 
 ## Lab 5 Recap
+
+<div style="margin-left: 20px;">
 
 | What You Built | Why It Matters |
 |---------------|----------------|
@@ -308,6 +308,8 @@ pprint.pprint(retrieved_tools)
 | `expand_summary()` tool | JIT retrieval — Proteus expands only the summaries it needs |
 | `summarize_conversation()` tool | Log compaction for long troubleshooting threads |
 | `search_tavily()` tool | External search with automatic knowledge base persistence |
+
+</div>
 
 **Key Insight**: The search-and-store pattern means Proteus builds institutional knowledge over time. The first time a SeerGroup employee asks about a specific error, Proteus searches externally. The second time, Proteus finds the answer in its own knowledge base — no external call needed, faster and cheaper.
 

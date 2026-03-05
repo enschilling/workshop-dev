@@ -12,14 +12,18 @@ You'll work with **SeerGroup Solutions' IT knowledge base**: internal documentat
 
 #### What You'll Learn
 
-    | Step | Description |
-    |------|-------------|
-    | **1. Initialize Embeddings** | Load a HuggingFace embedding model to convert text into vectors |
-    | **2. Create Vector-Enabled Table** | Set up an Oracle-backed vector store with cosine distance via `OracleVS` |
-    | **3. Create Index** | Build an HNSW (Hierarchical Navigable Small World) index for fast similarity search |
-    | **4. Add Documents** | Store SeerGroup IT knowledge base articles with metadata |
-    | **5. Query** | Search for similar documents using natural language |
-    | **6. Filter Results** | Use metadata filters to narrow down search results |
+<div style="margin-left: 20px;">
+
+| Step | Description |
+|------|-------------|
+| **1. Initialize Embeddings** | Load a HuggingFace embedding model to convert text into vectors |
+| **2. Create Vector-Enabled Table** | Set up an Oracle-backed vector store with cosine distance via `OracleVS` |
+| **3. Create Index** | Build an HNSW (Hierarchical Navigable Small World) index for fast similarity search |
+| **4. Add Documents** | Store SeerGroup IT knowledge base articles with metadata |
+| **5. Query** | Search for similar documents using natural language |
+| **6. Filter Results** | Use metadata filters to narrow down search results |
+
+</div>
 
 #### Key Components
 
@@ -35,8 +39,6 @@ You'll work with **SeerGroup Solutions' IT knowledge base**: internal documentat
 The following notebook contains all the code for the remainder of the workshop. Download it and open with VS Code.
 
 [Download the notebook](https://github.com/enschilling/workshop-dev/blob/main/oci-ai-database-memory-context-engineering/files/workshop-complete.ipynb)
-
-
 
 
 ## Step 2: Connect to Oracle AI Database and Initialize Embeddings
@@ -147,8 +149,6 @@ HNSW (Hierarchical Navigable Small World) is a graph-based approximate nearest-n
 
     safe_create_index(vector_conn, vector_store, "oravs_hnsw")
     ```
-
---------
 
 ## Step 2: Ingest SeerGroup IT Knowledge Base
 
@@ -316,8 +316,6 @@ In a real deployment, this data would come from Confluence, ServiceNow, or inter
     print(f"✅ Ingested {len(texts)} SeerGroup KB articles into VECTOR_SEARCH_DEMO")
     ```
 
---------
-
 ## Step 4: Querying with Natural Language
 
 Now let's see the power of semantic search. Unlike keyword search, vector similarity finds documents based on *meaning*. A query about "login problems" will match articles about AUTH-SVC and SSO — even if those exact words don't appear in the query.
@@ -354,8 +352,6 @@ Scores let Proteus gauge confidence. A score close to 0 means high similarity (c
         print(f"Team:  {doc.metadata.get('team', 'N/A')}")
         print("------")
     ```
-
---------
 
 ## Step 5: Filtered Search with Metadata
 
@@ -413,11 +409,11 @@ In a real IT support system, Proteus needs to narrow results by category, severi
         print("------")
     ```
 
---------
-
 ## Lab 2 Recap
 
 You've now built the search foundation that Proteus will rely on:
+
+<div style="margin-left: 20px;">
 
 | What You Did | Why It Matters |
 |-------------|----------------|
@@ -426,6 +422,8 @@ You've now built the search foundation that Proteus will rely on:
 | Ingested SeerGroup KB articles | Real IT support data with rich metadata |
 | Queried with natural language | "Users can't log in" finds AUTH-SVC articles without keyword matching |
 | Applied metadata filters | Narrow results by category, severity, or team |
+
+</div>
 
 **Next up**: In Lab 3, we'll design the complete memory architecture that gives Proteus six distinct types of memory — each with a specific purpose and storage strategy.
 
