@@ -60,11 +60,13 @@ For this lab, you will create a new `.ipynb` file and copy in the code to prep t
 
     SCREENSHOT
 
-4. 
+4. Once the folder is selected, click **[Select folder]**
 
-Press `Ctrl+Shift+P` and begin typing "Jupyter". It should auto-populate the option to `Create: New Jupyter Notebook`. Select this option.
+5. Be sure to save all Jupyter notebooks (`.ipynb` files) into this folder for the duration of the workshop.
 
-2. Paste the following and press the Run arrow on the left side of the code block:
+6. Press `Ctrl+Shift+P` and begin typing "Jupyter". It should auto-populate the option to `Create: New Jupyter Notebook`. Select this option.
+
+7. Paste the following and press the Run arrow on the left side of the code block:
 
     ```
     <copy>
@@ -76,7 +78,7 @@ Press `Ctrl+Shift+P` and begin typing "Jupyter". It should auto-populate the opt
 
     ```
     <copy>
-    pip install -qU oracledb langchain-oracledb langchain langchain-openai langchain-huggingface ipywidgets tavily-python sentence-transformers
+    pip install -qU oracledb langchain-oracledb langchain langchain-openai langchain-huggingface ipywidgets tavily-python sentence-transformers ipykernel jupyter numpy 
     </copy>
     ```
 
@@ -95,7 +97,13 @@ Press `Ctrl+Shift+P` and begin typing "Jupyter". It should auto-populate the opt
 
 ## Task 4: Connect to the database and create VECTOR user
 
-1. Now test the connection using the OracleDB driver for Python. Paste the following code and be sure to replace the `your_dsn` text with the value you copied in Task 2.
+1. Now test the connection using the OracleDB driver for Python. When you run this code block, VS Code will prompt you for three values. After entering these three values, the code block will finish executing.
+
+    * Your autonomous database admin password
+    * Your chosen VECTOR user password (recommended: MemoryContext_2026)
+    * The DSN for your Autonomous DB _medium listener
+
+    SCREENSHOT of VS Code prompt for input
 
     ```python
     <copy>
@@ -135,8 +143,6 @@ Press `Ctrl+Shift+P` and begin typing "Jupyter". It should auto-populate the opt
             print("Connection Closed.")
     </copy>
     ```
-
-    SCREENSHOT with full DSN - censor pieces of the service name for privacy.
 
     SCREENSHOT of successful output
 

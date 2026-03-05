@@ -12,14 +12,14 @@ You'll work with **SeerGroup Solutions' IT knowledge base**: internal documentat
 
 #### What You'll Learn
 
-| Step | Description |
-|------|-------------|
-| **1. Initialize Embeddings** | Load a HuggingFace embedding model to convert text into vectors |
-| **2. Create Vector-Enabled Table** | Set up an Oracle-backed vector store with cosine distance via `OracleVS` |
-| **3. Create Index** | Build an HNSW (Hierarchical Navigable Small World) index for fast similarity search |
-| **4. Add Documents** | Store SeerGroup IT knowledge base articles with metadata |
-| **5. Query** | Search for similar documents using natural language |
-| **6. Filter Results** | Use metadata filters to narrow down search results |
+    | Step | Description |
+    |------|-------------|
+    | **1. Initialize Embeddings** | Load a HuggingFace embedding model to convert text into vectors |
+    | **2. Create Vector-Enabled Table** | Set up an Oracle-backed vector store with cosine distance via `OracleVS` |
+    | **3. Create Index** | Build an HNSW (Hierarchical Navigable Small World) index for fast similarity search |
+    | **4. Add Documents** | Store SeerGroup IT knowledge base articles with metadata |
+    | **5. Query** | Search for similar documents using natural language |
+    | **6. Filter Results** | Use metadata filters to narrow down search results |
 
 #### Key Components
 
@@ -34,7 +34,9 @@ You'll work with **SeerGroup Solutions' IT knowledge base**: internal documentat
 
 The following notebook contains all the code for the remainder of the workshop. Download it and open with VS Code.
 
-    [Download lab 2 notebook](https://github.com/enschilling/workshop-dev/blob/main/oci-ai-database-memory-context-engineering/files/workshop-complete.ipynb)
+[Download the notebook](https://github.com/enschilling/workshop-dev/blob/main/oci-ai-database-memory-context-engineering/files/workshop-complete.ipynb)
+
+
 
 
 ## Step 2: Connect to Oracle AI Database and Initialize Embeddings
