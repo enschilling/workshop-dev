@@ -34,7 +34,7 @@ You'll work with **SeerGroup Solutions' IT knowledge base**: internal documentat
 
 The following notebook contains all the code for the remainder of the workshop. Download it and open with VS Code.
 
-[Download the notebook](https://github.com/enschilling/workshop-dev/blob/main/oci-ai-database-memory-context-engineering/files/workshop-complete.ipynb)
+[Download the notebook](https://raw.githubusercontent.com/enschilling/workshop-dev/refs/heads/main/oci-ai-database-memory-context-engineering/files/workshop-complete.ipynb)
 
 
 ## Step 2: Connect to Oracle AI Database and Initialize Embeddings
