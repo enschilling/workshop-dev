@@ -12,14 +12,6 @@ In this lab, you'll learn how to store and search documents using **semantic sim
 
 You'll work with **SeerGroup's research paper collection**: a curated set of academic papers spanning AI, physics, mathematics, and more. Our AI research assistant "Proteus" will use this collection to help analysts navigate the flood of academic literature.
 
-### Prerequisites
-
-This lab assumes you have:
-
-- Provisioned the Workshop using the LiveLabs Sandbox
-- Retrieved your account credentials from the LiveLabs UI
-- Have Microsoft VS Code installed on your computer
-
 ### What You'll Learn
 
 

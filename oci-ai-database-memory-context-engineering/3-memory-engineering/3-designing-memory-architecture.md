@@ -1,8 +1,12 @@
 # Lab 3: Designing the Memory Architecture
 
+## Introduction
+
 Memory Types, Design Decisions, and Storage Setup
 
-### Objective
+**Estimated Time:** 20 minutes
+
+### Objectives
 
 In this activity, you'll understand *why* Proteus needs six distinct memory types, learn the design principles behind each one, and create all the database tables and vector stores that will power the Memory Manager in Lab 4.
 

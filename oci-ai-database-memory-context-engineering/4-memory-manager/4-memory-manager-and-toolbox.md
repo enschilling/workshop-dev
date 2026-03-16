@@ -1,8 +1,12 @@
 # Lab 3: Building the Memory Manager & Toolbox
 
+## Introduction
+
 The MemoryManager Class and Semantic Tool Discovery
 
-## Objective
+**Estimated Time:" 15 minutes
+
+### Objectives
 
 In this Lab, you'll implement the two core abstractions that power Proteus:
 
@@ -10,8 +14,6 @@ In this Lab, you'll implement the two core abstractions that power Proteus:
 2. **Toolbox** — a semantic tool registry where tools are discovered by meaning, not by name
 
 By the end, you'll be able to test individual memory operations: write a conversation message, search the knowledge base, register a tool, and retrieve it via natural language query.
-
---------
 
 ## Task 1: The MemoryManager Class
 
