@@ -159,7 +159,7 @@ For this lab, you will create a new `.ipynb` file and copy in the code to prep t
 
     ```
     <copy>
-    pip install -qU oracledb langchain-oracledb langchain langchain-openai langchain-huggingface ipywidgets tavily-python sentence-transformers ipykernel jupyter numpy 
+    pip install -qU oracledb langchain-oracledb langchain langchain-openai langchain-huggingface ipywidgets tavily-python sentence-transformers ipykernel jupyter numpy datasets
     </copy>
     ```
 
@@ -211,7 +211,7 @@ For this lab, you will create a new `.ipynb` file and copy in the code to prep t
     adb_user = "ADMIN"
     vector_user = "VECTOR"
 
-
+    %store adb_dsn vector_user vector_password
     try:
         connection = oracledb.connect(
             user=adb_user,
@@ -236,7 +236,7 @@ For this lab, you will create a new `.ipynb` file and copy in the code to prep t
     </copy>
     ```
 
-    SCREENSHOT of successful output
+    ![Successful DB connection output in VS Code](images/02-vscode-db-connection-success.png)
 
 3. Create the VECTOR user.
 
@@ -371,7 +371,7 @@ For this lab, you will create a new `.ipynb` file and copy in the code to prep t
     <copy>
     ```
 
-    SCREENSHOT code output
+    ![Notebook execution output - successfully created vector user](images/02-vscode-dbsetup-output.png)
 
 You may now proceed to the next lab.
 
