@@ -82,7 +82,12 @@ In Proteus's design, the harness is intentionally opinionated: memory loading an
 2. **Adaptivity from agent-triggered tools** — the model can selectively fetch, expand, or compact only when needed.
 3. **Clear control boundaries** — the harness owns state integrity; the model owns strategy inside those boundaries.
 
+### Key Components
+
+Placeholder
+
 --------
+
 
 ## Task 1: Define Table Names
 
