@@ -2,9 +2,9 @@
 
 ## Introduction
 
-As part of the Sandbox environment, an Autonomous Database running Oracle AI Database 26ai has already been provisioned for you. You'll need Microsoft Visual Studio Code installed on your own laptop / PC to complete the workshop.
+For the entirety of this workshop, you'll need just an Autonomous Database running Oracle AI Database 26ai and a local IDE. In this section you'll get logged into your OCI Sandbox environment, provision the DB, and set up the pre-requisites in Microsoft Visual Studio Code (installed locally on your machine).
 
-In this section you'll get your IDE prepared, connect to the Oracle Autonomous Database, then create a VECTOR user for use in the subsequent labs.
+This workshop has been tested with VS Code on both Mac and Windows. If you prefer to use a different IDE, some of the instructions in this section may vary slightly.
 
 **Estimated Time:** 15 minutes
 
@@ -13,8 +13,8 @@ In this section you'll get your IDE prepared, connect to the Oracle Autonomous D
 In this lab, you will:
 
 1. Log into the provided OCI tenancy
-2. Review and connect to the Autonomous Database that was provisioned for you
-3. Create a dedicated user for vector operations
+2. Use Coud Shell / CLI to provisiong the Autonomous Database (ADB)
+3. Connect to the ADB instance and create a dedicated user for vector operations
 
 ### Prerequisites
 
@@ -22,51 +22,132 @@ This lab assumes you have:
 
 - Provisioned the Workshop using the LiveLabs Sandbox
 - Retrieved your account credentials from the LiveLabs UI
-- Installed Microsoft VS Code Community Edition
+- Have Microsoft VS Code installed on your computer
 
 ## Task 1: Log into the OCI Tenancy
 
-... 
-    DO WE HAVE: existing instructions we can pull to show how to 
-    retrieve credentials in LiveLabs and log into the tenancy?
-...
+1. Click the **View Loging Info** link to access account information.
 
-## Task 2: Locate and review the Oracle AI Database 26ai instance
+    ![LiveLabs - Account Info Link](images/02-view-login-info.png)
 
-1. Update ACL to include your IP (click the slide button) and save.
+2. Locate and copy the Compartment OCID value. Store it in a text file to use in just a minute.
 
-    SCREENSHOT
+3. Click the **[Launch OCI]** button and log in with the *Username* and *Password* provided.
 
-2. Update mTLS - not required
+    ![LiveLabs - Log into OCI](images/02-launch-oci.png)
 
-    SCREENSHOT
+4. You should land on the OCI Dashboard, at which point you can proceed to the next task.
 
-3. Click the **[Database connection]** button at the top of the screen. Locate and copy the full **Connection string** for the TNS name that corresponds with `medium`. (Paste in a note pad for future reference)
+## Task 2: Create an Autonomous Database Instance
 
-    SCREENSHOT
+1. Open Cloud Shell
 
-4. Time to set up VS Code
+    ![Cloud shell button in UI](images/02-cloud-shell-button.png)
+
+2. Copy the following command. Replace `<your-compartment-ocid>` with the value copied earlier.
+
+    ```bash
+    <copy>
+    oci db autonomous-database create \
+    --compartment-id "<your-compartment-ocid>" \
+    --db-name "memengdb" \
+    --admin-password 'WElcome123##' \
+    --compute-model ECPU \
+    --compute-count 4 \
+    --data-storage-size-in-tbs 1 \
+    --display-name 'MemoryEngineering' \
+    --is-free-tier false \
+    --license-model LICENSE_INCLUDED \
+    --db-workload DW \
+    --db-version 26ai
+    </copy>
+    ```
+
+    >NOTE: You're welcome to choose your own `admin-password` and/or `disply-name` if you'd like.
+
+3. The command will return a large block of JSON:
+
+    Starting with:
+    ```
+    {
+    "data": {
+        "actual-used-data-storage-size-in-tbs": null,
+        "additional-attributes": null,
+        "allocated-storage-size-in-tbs": null,
+        "apex-details": null,
+        "are-primary-whitelisted-ips-used": null,
+        "auto-refresh-frequency-in-seconds": null,
+    ```
+
+    ...and ending with:
+    ```
+        "vanity-connection-urls": null,
+        "vanity-url-details": {
+        "api-gateway-id": null,
+        "is-disabled": true,
+        "vanity-url-host-name": null
+        },
+        "vault-id": null,
+        "whitelisted-ips": null
+    },
+    "etag": "bffaf316--gzip",
+    "opc-work-request-id": "ocid1.coreservicesworkrequest.oc1.phx.abyh.......ykzp2ltfr7kqa"
+    }
+    ```
+
+4. Use the navigation menu to visit the Autonous AI Database service console.
+
+    ![Web UI Nav Menu showing Oracle AI Database](images/02-nav-adb.png)
+
+5. Once the *State* of the database is `Avaialble`, click the name of the DB instance.
+
+    ![ADB Service Console showing DB instance](images/02-adb-service-console.png)
+
+6. Scroll down the page and locate the **Network** section.
+
+    ![ADB Instance details - Network section](images/02-adb-details-network.png)
+
+7. Click the **[Edit]** button next to **`Access control list`**.
+
+8. Click the *Add my IP address(shows your IP here) to IP value* toggle switch. You should notice the Values field above will populate with the external IP of your current machine.
+
+    ![Network ACL - Add my IP](images/02-adb-network-acl.png)
+
+9. Click **[Save]** and allow the database a minute or so to update. Once the **[Edit]** button next to *Mutual TLS (mTLS) authentication is no longer grayed out, you may proceed to the next step.
+
+10. Click said **[Edit]** button next to the mTLS setting. Click the toggle switch to not require MTLs auth. Click **[Save]**.
+
+    ![Edit MTLS settings dialog](images/02-adb-network-mtls.png)
+ 
+11. Finally - scroll back to the top of the page and click the **[Database connection]** button. Locate and copy the full **Connection string** for the TNS name that corresponds with `medium`. (Paste in a note pad for future reference)
+
+    ![Database connection details screen](images/02-adb-connection-details.png)
+
+12. Time to set up VS Code!!
 
 ## Task 3: Open VS Code and Create Jupyter environment
 
-For this lab, you will create a new `.ipynb` file and copy in the code to prep the database. in future labs, we've provided the `.ipynb` file to streamline these activities.
+For this lab, you will create a new `.ipynb` file and copy in the code to prep the database. The remainder of the labs key off a single, consolidated notebook that will ensure a consistent flow throughout.
+
+<details><summary>IDE Setup in Windows</summary>
 
 1. Open VS Code and close any existing tabs. 
-
 
 2. Create a new Workspace: **File** -> **Open Folder**
 
 3. Select an existing folder where you'd like to create your workspace, or create and select a new folder.
 
-    SCREENSHOT
+    ![Select workspace folder dialog window](images/02-vscode-select-workspace.png)
 
-4. Once the folder is selected, click **[Select folder]**
-
-5. Be sure to save all Jupyter notebooks (`.ipynb` files) into this folder for the duration of the workshop.
+    >NOTE: If prompted to trust the authors of the files in this folder, click **[Yes, I trust the authors]**
 
 6. Press `Ctrl+Shift+P` and begin typing "Jupyter". It should auto-populate the option to `Create: New Jupyter Notebook`. Select this option.
 
-7. Paste the following and press the Run arrow on the left side of the code block:
+7. A new, `Untitled-1.ipynb` file will be created. Make note of the Python kernel in the top right corner. Make sure you are using a supported version. If multiple versions are installed, you'll be able to select the desired version.
+
+    ![Select desired Python kernel version](images/02-vscode-python-kernel.png)
+
+8. Go ahead and paste the following and press the Run arrow on the left side of the code block:
 
     ```
     <copy>
@@ -74,7 +155,7 @@ For this lab, you will create a new `.ipynb` file and copy in the code to prep t
     </copy>
     ```
 
-3. Press the **[+ Code]** button at the top of the notebookt add a new Code block. Paste the following and run the code block:
+9. Press the **[+ Code]** button at the top of the notebook to add a new Code block. Paste the following and run the code block:
 
     ```
     <copy>
@@ -84,7 +165,7 @@ For this lab, you will create a new `.ipynb` file and copy in the code to prep t
 
     >NOTE: This will perform a quiet install that takes 3-5 minutes. No output will be diplayed until it completes.
 
-4. Test to make sure the Python modules were installed properly. Create a new code block, then paste and run the following:
+10. Test to make sure the Python modules were installed properly. Create a new code block, then paste and run the following:
 
     ```
     from openai import OpenAI
@@ -94,6 +175,17 @@ For this lab, you will create a new `.ipynb` file and copy in the code to prep t
 
     >NOTE: No output is displayed unless there are errors. If you see a green check mark, all is well!
 
+11. Finall, before continuing to the next step, restart the kernel.
+
+    ![Restart kernel button in VS Code](images/02-vscode-restart-kernel.png)
+
+</details>
+
+<details><summary>IDE Setup for MacOS</summary>
+
+  DETAILED INSTRUCTIONS HERE
+
+</details>
 
 ## Task 4: Connect to the database and create VECTOR user
 
@@ -103,7 +195,7 @@ For this lab, you will create a new `.ipynb` file and copy in the code to prep t
     * Your chosen VECTOR user password (recommended: MemoryContext_2026)
     * The DSN for your Autonomous DB _medium listener
 
-    SCREENSHOT of VS Code prompt for input
+    ![VS Code prompt for input - DB Admin password](images/02-vscode-run-code-prompt.png)
 
     ```python
     <copy>
