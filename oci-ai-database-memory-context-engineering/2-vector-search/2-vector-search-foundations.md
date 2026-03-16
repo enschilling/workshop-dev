@@ -22,6 +22,7 @@ This lab assumes you have:
 
 ### What You'll Learn
 
+
 | Task | Description |
 |------|-------------|
 | **1. Initialize Embeddings** | Load a HuggingFace embedding model to convert text into vectors |
@@ -43,7 +44,7 @@ This lab assumes you have:
 
 Your environment has been pre-configured with Oracle AI Database 26ai running locally. The `VECTOR` user and connection details are ready to use.
 
-    ```python
+    ```
     import oracledb
     import time
     import logging
@@ -99,7 +100,7 @@ Your environment has been pre-configured with Oracle AI Database 26ai running lo
 
 We'll use the `sentence-transformers/paraphrase-mpnet-base-v2` model to convert text into 768-dimensional vectors. OracleVS handles the table creation, embedding storage, and similarity search under the hood.
 
-    ```python
+    ```
     from langchain_oracledb.vectorstores import OracleVS
     from langchain_community.embeddings import HuggingFaceEmbeddings
     from langchain_oracledb.vectorstores.oraclevs import create_index
@@ -126,7 +127,7 @@ We'll use the `sentence-transformers/paraphrase-mpnet-base-v2` model to convert 
 
 HNSW (Hierarchical Navigable Small World) is a graph-based approximate nearest-neighbor index. It provides fast, accurate similarity search at scale — essential when your knowledge base grows to thousands or millions of documents.
 
-    ```python
+    ```
     def safe_create_index(conn, vs, idx_name):
         """Create index, skipping if it already exists."""
         try:
@@ -152,7 +153,7 @@ HNSW (Hierarchical Navigable Small World) is a graph-based approximate nearest-n
 
 In a real deployment, this data would come from institutional repositories, journal APIs, or preprint servers. Here we'll load papers from the `nick007x/arxiv-papers` dataset on HuggingFace — a collection of arXiv papers spanning multiple disciplines that Proteus will use to answer research queries.
 
-    ```python
+    ```
     from datasets import load_dataset
 
     MAX_PAPERS = 300
@@ -203,7 +204,7 @@ In a real deployment, this data would come from institutional repositories, jour
 
 > **🔍 Notice** The process to ingest the data may take 3-5 minutes. Your patience is appreciated.
 
-    ```python
+    ```
     # Inspect one sample to see the metadata fields we can filter on
     sample_primary_subject = sampled_papers[0]["primary_subject"] if sampled_papers else ""
     sample_arxiv_id = sampled_papers[0]["arxiv_id"] if sampled_papers else ""
@@ -217,7 +218,7 @@ Now let's see the power of semantic search. Unlike keyword search, vector simila
 
 ### Basic Similarity Search
 
-    ```python
+    ```
     query = "Find research papers about planetary exploration mission planning"
 
     results = vector_store.similarity_search(query, k=3)
@@ -236,7 +237,7 @@ Now let's see the power of semantic search. Unlike keyword search, vector simila
 
 Scores let Proteus gauge confidence. A score close to 0 means high similarity (cosine distance); a score near 1 means low relevance.
 
-    ```python
+    ```
     query = "methods for detecting gravitational waves"
 
     results = vector_store.similarity_search_with_score(query, k=3)
@@ -254,7 +255,7 @@ In a real research workflow, Proteus needs to narrow results by subject area, sp
 
 ### Filter by Subject Area
 
-    ```python
+    ```
     query = "Find papers related to mission planning and observational astronomy"
 
     docs = vector_store.similarity_search(
@@ -272,7 +273,7 @@ In a real research workflow, Proteus needs to narrow results by subject area, sp
 
 ### Filter by Paper ID
 
-    ```python
+    ```
     docs = vector_store.similarity_search(
         query="Explain key themes in this research paper",
         k=5,

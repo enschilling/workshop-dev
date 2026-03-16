@@ -283,7 +283,7 @@ Here we create five separate OracleVS-backed vector stores — one for each sema
     print("✅ All indexes created!")
     ```
 
-## Task 5: Seed the Knowledge Base with Research Papers
+## Task 5: Seed the Knowledgebase with Research Papers
 
 We'll reuse the arXiv papers from Activity 1 to populate the knowledge base memory. In production, this would be a continuous ingestion pipeline from institutional repositories, journal APIs, or preprint servers.
 
@@ -307,6 +307,8 @@ We'll reuse the arXiv papers from Activity 1 to populate the knowledge base memo
         knowledge_base_vs.add_texts(kb_texts, kb_meta)
         print(f"✅ Seeded knowledge base memory with {len(kb_texts)} arXiv papers")
     ```
+
+> **🔍 Notice** The process to seed the knowledgebase may take 3-5 minutes. Your patience is appreciated.
 
 ## Lab 3 Recap
 
