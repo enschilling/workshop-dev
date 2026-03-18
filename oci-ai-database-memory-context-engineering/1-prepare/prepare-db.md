@@ -187,10 +187,12 @@ For this lab, you will create a new `.ipynb` file and copy in the code to prep t
 
 13. Test to make sure the Python modules were installed properly. Create a new code block, then paste and run the following:
 
-    ```
+    ```bash
+    <copy>
     from openai import OpenAI
     from langchain_huggingface import HuggingFaceEmbeddings
     import oracledb
+    </copy>
     ```
 
     >NOTE: No output is displayed unless there are errors. If you see a green check mark, all is well!

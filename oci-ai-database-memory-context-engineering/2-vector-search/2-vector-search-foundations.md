@@ -36,7 +36,7 @@ You'll work with **SeerGroup's research paper collection**: a curated set of aca
 
 Your environment has been pre-configured with Oracle AI Database 26ai running locally. The `VECTOR` user and connection details are ready to use.
 
-    ```
+    ```python
     import oracledb
     import time
     import logging
@@ -87,12 +87,12 @@ Your environment has been pre-configured with Oracle AI Database 26ai running lo
     vector_conn = connect_to_oracle()
     print("Using user:", vector_conn.username)
     ```
-
+    
 ## Task 2: Initialize Embeddings and Create a Vector-Enabled Table
 
 We'll use the `sentence-transformers/paraphrase-mpnet-base-v2` model to convert text into 768-dimensional vectors. OracleVS handles the table creation, embedding storage, and similarity search under the hood.
 
-    ```
+    ```python
     from langchain_oracledb.vectorstores import OracleVS
     from langchain_community.embeddings import HuggingFaceEmbeddings
     from langchain_oracledb.vectorstores.oraclevs import create_index
@@ -119,7 +119,7 @@ We'll use the `sentence-transformers/paraphrase-mpnet-base-v2` model to convert 
 
 HNSW (Hierarchical Navigable Small World) is a graph-based approximate nearest-neighbor index. It provides fast, accurate similarity search at scale — essential when your knowledge base grows to thousands or millions of documents.
 
-    ```
+    ```python
     def safe_create_index(conn, vs, idx_name):
         """Create index, skipping if it already exists."""
         try:
