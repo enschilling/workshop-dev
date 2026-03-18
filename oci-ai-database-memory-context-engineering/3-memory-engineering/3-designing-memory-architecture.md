@@ -287,7 +287,7 @@ Here we create five separate OracleVS-backed vector stores — one for each sema
     )
     ```
 
-### Build HNSW Indexes for Each Vector Store
+* Build HNSW Indexes for Each Vector Store
 
     ```python
     print("Creating vector indexes...")
