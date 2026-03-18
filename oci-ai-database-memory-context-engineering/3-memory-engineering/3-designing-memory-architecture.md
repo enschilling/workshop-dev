@@ -91,13 +91,13 @@ Placeholder
 
 ## Task 1: Define Table Names
 
-Each memory type gets its own table. SQL tables for exact-match retrieval (conversational history, tool logs); vector-enabled SQL tables for semantic search (everything else).
+* Each memory type gets its own table. SQL tables for exact-match retrieval (conversational history, tool logs); vector-enabled SQL tables for semantic search (everything else).
 
-
-    ```
+    ```python
+    <copy>
     # Table names for each memory type
-    CONVERSATIONAL_TABLE   = "CONVERSATIONAL_MEMORY"   # Episodic memory
-    KNOWLEDGE_BASE_TABLE   = "SEMANTIC_MEMORY"          # Semantic memory
+    CONVERSATIONAL_TABLE   = "CONVERSATIONAL_MEMORY"     # Episodic memory
+    KNOWLEDGE_BASE_TABLE   = "SEMANTIC_MEMORY"           # Semantic memory
     WORKFLOW_TABLE         = "WORKFLOW_MEMORY"           # Procedural memory
     TOOLBOX_TABLE          = "TOOLBOX_MEMORY"            # Procedural memory
     ENTITY_TABLE           = "ENTITY_MEMORY"             # Semantic memory
@@ -121,6 +121,7 @@ Each memory type gets its own table. SQL tables for exact-match retrieval (conve
                 print(f"  ✗ {table}: {e}")
 
     vector_conn.commit()
+    </copy>
     ```
 
 
