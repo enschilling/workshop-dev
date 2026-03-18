@@ -119,7 +119,7 @@ Your environment has been pre-configured with Oracle AI Database 26ai running lo
 
 We'll use the `sentence-transformers/paraphrase-mpnet-base-v2` model to convert text into 768-dimensional vectors. OracleVS handles the table creation, embedding storage, and similarity search under the hood.
 
-    ```python
+    ```
     <copy>
     from langchain_oracledb.vectorstores import OracleVS
     from langchain_community.embeddings import HuggingFaceEmbeddings
