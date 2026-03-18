@@ -93,7 +93,8 @@ Placeholder
 
 Each memory type gets its own table. SQL tables for exact-match retrieval (conversational history, tool logs); vector-enabled SQL tables for semantic search (everything else).
 
-    ```python
+
+    ```
     # Table names for each memory type
     CONVERSATIONAL_TABLE   = "CONVERSATIONAL_MEMORY"   # Episodic memory
     KNOWLEDGE_BASE_TABLE   = "SEMANTIC_MEMORY"          # Semantic memory
@@ -121,6 +122,7 @@ Each memory type gets its own table. SQL tables for exact-match retrieval (conve
 
     vector_conn.commit()
     ```
+
 
     ```python
     # Model token limits (for context management in Activity 4)
