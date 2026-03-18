@@ -131,7 +131,25 @@ For this lab, you will create a new `.ipynb` file and copy in the code to prep t
 
 <details><summary>IDE Setup in Windows</summary>
 
-1. Open VS Code and close any existing tabs. 
+1. Ensure that you have **`Python 3.11.9`** or newer installed.
+
+    * Use the Python installer to get the latest version: [Download Python Installer for Windows](https://www.python.org/downloads/release/pymanager-260/)
+
+    * Use `pyenv-win` to install and manage multiple versions of Python.
+
+        * Open **PowerShell as an Administrator** 
+        * Run `Get-ExecutionPolicy` - if it is anything other than *Unrestricted* or *RemoteSigned*, you'll need to run `Set-ExecutionPolicy RemoteSigned`
+        * Install `pyenv-win` with this command:
+            ```bash
+            <copy>
+            Invoke-WebRequest -UseBasicParsing -Uri "https://raw.githubusercontent.com/pyenv-win/pyenv-win/master/pyenv-win/install-pyenv-win.ps1" -OutFile "./install-pyenv-win.ps1"; &"./install-pyenv-win.ps1"
+            </copy>
+            ```
+        * Install the latest version of v3.12: `pyenv install 3.12.10`
+
+            ![Using pyenv-win to install Python 3.12.10](images/02-win-pyenv-install.png)
+
+2. Open VS Code and close any existing tabs. 
 
 2. Create a new Workspace: **File** -> **Open Folder**
 
@@ -143,19 +161,21 @@ For this lab, you will create a new `.ipynb` file and copy in the code to prep t
 
 6. Press `Ctrl+Shift+P` and begin typing "Jupyter". It should auto-populate the option to `Create: New Jupyter Notebook`. Select this option.
 
-7. A new, `Untitled-1.ipynb` file will be created. Make note of the Python kernel in the top right corner. Make sure you are using a supported version. If multiple versions are installed, you'll be able to select the desired version.
+7. A new, `Untitled-1.ipynb` file will be created. For the best experience, you'll want to create a virtual environment fo the workshop. Click **[Select Kernel]** in the top right corner of VS Code.
 
-    ![Select desired Python kernel version](images/02-vscode-python-kernel.png)
+8. Click *+ Create Python Environment*
 
-8. Go ahead and paste the following and press the Run arrow on the left side of the code block:
+    ![Menu option to create python evironment](images/02-vscode-select-kernel.png)
 
-    ```
-    <copy>
-    pip install --upgrade pip
-    </copy>
-    ```
+9. Choose the ***venv** Manages virtual environments created using 'venv'* 
 
-9. Press the **[+ Code]** button at the top of the notebook to add a new Code block. Paste the following and run the code block:
+10. Select desired Python version and assign a name: `oracle-agent-env`
+
+    >NOTE: For creating / testing the workshop I used 3.12.10 on Windows
+
+11. You can skip package installation. We'll do that in a separate step. 
+
+12. VS Code will automatically install a bunch of required packages to support Jupyter notebooks. We'll go ahead and add a few more that are required for the workshop. Paste the following and run the code block:
 
     ```
     <copy>
@@ -165,7 +185,7 @@ For this lab, you will create a new `.ipynb` file and copy in the code to prep t
 
     >NOTE: This will perform a quiet install that takes 3-5 minutes. No output will be diplayed until it completes.
 
-10. Test to make sure the Python modules were installed properly. Create a new code block, then paste and run the following:
+13. Test to make sure the Python modules were installed properly. Create a new code block, then paste and run the following:
 
     ```
     from openai import OpenAI
@@ -175,7 +195,7 @@ For this lab, you will create a new `.ipynb` file and copy in the code to prep t
 
     >NOTE: No output is displayed unless there are errors. If you see a green check mark, all is well!
 
-11. Finall, before continuing to the next step, restart the kernel.
+14. Finally, before continuing to the next step, restart the kernel.
 
     ![Restart kernel button in VS Code](images/02-vscode-restart-kernel.png)
 
@@ -183,7 +203,81 @@ For this lab, you will create a new `.ipynb` file and copy in the code to prep t
 
 <details><summary>IDE Setup for MacOS</summary>
 
-  DETAILED INSTRUCTIONS HERE
+1. First off, make sure you have the necessary tools installed.
+
+    * **Conda:** Install via [Miniconda](https://docs.conda.io/en/latest/miniconda.html) (recommended) or [Anaconda](https://www.anaconda.com/download)
+    * **pyenv:** Install via [pyenv GitHub](https://github.com/pyenv/pyenv) OR `brew install pyenv`. Get Homebrew at [brew.sh](https://brew.sh/)
+    * **VS Code:** Download at [code.visualstudio.com](https://code.visualstudio.com/)
+
+2. Next - decide whether you want to use **Conda** or **pyenv + venv** for your development environment. Execute one of the following in your shell.
+
+    * Option A: Conda:
+
+        ```bash
+        <copy>
+        conda create -n oracle-agent-env python3.11
+        conda activate oracle-agent-env
+        </copy>
+        ```
+
+        ![Shell command to create and activate conda environment](images/02-mac-create-conda.png)
+
+    * Option B: pyenv + venv
+
+        ```bash
+        <copy>
+        pyenv install 3.11.9    # skip if already installed
+        pyenv local 3.11.9
+        python -m venv oracle-agent-env
+        source oracle-agent-env/bin/activate
+        </copy>
+        ``` 
+    
+    >NOTE: Once activated, your terminal prompt shows *(oracle-agentenv)*. Keep this session open for the duration of the workshop.
+
+3. Open VS Code and create a new Workspace: **File -> Open Folder**
+
+4. Select an existing folder or create and select a new one.
+
+    ![VS Code Open Folder](images/02-mac-open-folder.png)
+
+    >NOTE: If prompted to trust the authors of the files in this folder, click **[Yes, I trust the authors]**
+
+5. Press *Cmd+Shift+P* and begin typing "*Jupyter*". Select *Create: New Jupyter Notebook*
+
+    ![Create new jupyter notebook](images/02-mac-create-jupyter-notebook.png)
+
+    >NOTE: You may need the [Python extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python) and [Jupyter extension](https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter) if not already installed.
+
+6. A new *Untitled-1.ipyn* file will be created. Confirm the kernel in the top right corner matches your environment.
+
+    ![Validate selected kernel](images/02-mac-validate-kernel.png)
+
+7. Paste the following code in the initial code block and press play.
+
+    ```bash
+    <copy>
+    pip install -qU oracledb langchain-oracledb langchain langchain-openai langchain-huggingface ipywidgets tavily-python sentence-transformers ipykernel jupyter numpy datasets
+    </copy>
+    ```
+
+    >NOTE: This will perform a quiet install that may take 3-5 minutes. No output will be displayed until it completes.
+
+8. Test the installation by creating a new code block, then paste and run:
+
+    ```bash
+    <copy>
+    from openai import OpenAI
+    from langchain_huggingface import HuggingFaceEmbeddings
+    import oracledb
+    </copy>
+    ```
+
+    ![Output of test python code](images/02-mac-verify-setup.png)
+
+    >NOTE: Check for the green check mark and *All modules imported uccessfully - no errors*
+
+9. Finally, restart the kernel before proceeding to the next section.
 
 </details>
 

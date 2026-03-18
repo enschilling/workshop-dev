@@ -70,7 +70,7 @@ In this workshop, you'll learn how to engineer memory systems that give AI agent
 - Oracle Cloud Infrastructure (OCI) Tenancy
 - Cloud Environment details provided by LiveLabs
 - Visual Studio Code (VS Code) Installed
-- Python 3.14+ installed
+- Python 3.11+ installed
 - [OpenAI API Key](https://help.openai.com/en/articles/4936850-where-do-i-find-my-openai-api-key)
 - [Tavily API Key](https://www.tavily.com/)
 
