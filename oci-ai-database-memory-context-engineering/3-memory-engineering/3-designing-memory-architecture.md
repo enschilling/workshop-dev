@@ -141,9 +141,9 @@ Placeholder
     
 ## Task 2: Create the Conversational Memory Table
 
-Unlike semantic memories backed by vector stores, conversational memory uses a traditional SQL table because we need **exact retrieval by thread ID** (not similarity search). Each research session gets its own `thread_id`.
+* Unlike semantic memories backed by vector stores, conversational memory uses a traditional SQL table because we need **exact retrieval by thread ID** (not similarity search). Each research session gets its own `thread_id`.
 
-The table includes a `summary_id` column — when older messages are summarized and compressed, they're marked (not deleted) with a reference to the summary that replaced them.
+* The table includes a `summary_id` column — when older messages are summarized and compressed, they're marked (not deleted) with a reference to the summary that replaced them.
 
     ```python
     def create_conversational_history_table(conn, table_name: str = "CONVERSATIONAL_MEMORY"):
@@ -199,11 +199,11 @@ The table includes a `summary_id` column — when older messages are summarized 
 
 ## Task 3: Create the Tool Log Table
 
-Tool call outputs during agent execution can **bloat the context window** quickly — a single web search might return thousands of tokens that are only needed once.
+* Tool call outputs during agent execution can **bloat the context window** quickly — a single web search might return thousands of tokens that are only needed once.
 
-The `TOOL_LOG` table acts as an **experimental memory**: full tool outputs are persisted to the database and replaced in the context window with a compact one-line reference. Proteus can retrieve full outputs later if needed.
+* The `TOOL_LOG` table acts as an **experimental memory**: full tool outputs are persisted to the database and replaced in the context window with a compact one-line reference. Proteus can retrieve full outputs later if needed.
 
-This is a form of **context offloading** — keeping the working memory lean while preserving full fidelity in durable storage.
+* This is a form of **context offloading** — keeping the working memory lean while preserving full fidelity in durable storage.
 
     ```python
     def create_tool_log_table(conn, table_name: str = "TOOL_LOG"):
