@@ -4,7 +4,7 @@
 
 The MemoryManager Class and Semantic Tool Discovery
 
-**Estimated Time:" 15 minutes
+**Estimated Time:** 15 minutes
 
 ### Objectives
 
@@ -40,9 +40,10 @@ There are existing frameworks that abstract memory management for AI agents:
 
 For learning purposes, building your own memory manager (as we do here) gives you a deep understanding of how memory engineering works. For production, you might consider using or extending an existing framework. Note that this workshop only illustrates reads and writes — a production system would also need deletion, updates, and TTL-based expiry.
 
-### The Implementation
+* **The Implementation**
 
     ```python
+    <copy>
     import json as json_lib
     from datetime import datetime
 
@@ -476,11 +477,15 @@ For learning purposes, building your own memory manager (as we do here) gives yo
                 {"id": rid, "role": role, "content": content, "timestamp": ts}
                 for rid, role, content, ts in rows
             ]
+    </copy>
     ```
 
 ## Task 2: Initialize the Memory Manager
 
+* Time to define the Memory Manager so we can call it later.
+
     ```python
+    <copy>
     memory_manager = MemoryManager(
         conn=vector_conn,
         conversation_table=CONVERSATION_HISTORY_TABLE,
@@ -491,13 +496,15 @@ For learning purposes, building your own memory manager (as we do here) gives yo
         summary_vs=summary_vs,
         tool_log_table=TOOL_LOG_TABLE_NAME,
     )
+    </copy>
     ```
 
 ### Quick Smoke Test
 
-Let's verify the memory manager works by writing and reading a test conversation:
+* Let's verify the memory manager works by writing and reading a test conversation:
 
     ```python
+    <copy>
     # Write a test conversation
     test_thread = "SESSION-TEST-001"
     memory_manager.write_conversational_memory("Can you find papers on transformer architectures for time-series forecasting?", "user", test_thread)
@@ -505,11 +512,14 @@ Let's verify the memory manager works by writing and reading a test conversation
 
     # Read it back
     print(memory_manager.read_conversational_memory(test_thread))
+    </copy>
     ```
 
     ```python
+    <copy>
     # Test knowledge base search
     print(memory_manager.read_knowledge_base("transformer architectures for time-series"))
+    </copy>
     ```
 
 ## Task 3: The Semantic Toolbox
@@ -537,7 +547,7 @@ The `Toolbox` class solves this by treating tools as a **searchable memory**:
 
     This means your system can **scale to hundreds of tools** while the LLM only sees the most relevant ones for each query.
 
-### How It Works
+* **How It Works**
 
     ```
     User Query → Embed Query → Vector Search → Find tools with similar docstrings → Return relevant tools
@@ -560,9 +570,10 @@ This means a simple docstring like `"Search the web"` becomes a rich description
 | **Context Engineering** | Selective tool retrieval | Only relevant tools enter the context window |
 | **Prompt Engineering** | Role setting | "You are a technical writer" improves docstring quality |
 
-### The Implementation
+* **The Implementation**
 
     ```python
+    <copy>
     import inspect
     import uuid
     from typing import Callable, Optional, Union
@@ -581,7 +592,6 @@ This means a simple docstring like `"Search the web"` becomes a rich description
         signature: str
         parameters: dict
         return_type: str
-
 
     class Toolbox:
         """
@@ -734,11 +744,15 @@ This means a simple docstring like `"Search the web"` becomes a rich description
             if func is None:
                 return decorator
             return decorator(func)
+    </copy>
     ```
 
 ## Task 4: Initialize the Toolbox and Set Up API Keys
 
+* Make sure you have your OpenAI API Key Handy for this.
+
     ```python
+    <copy>
     import os
     import getpass
 
@@ -746,26 +760,24 @@ This means a simple docstring like `"Search the web"` becomes a rich description
     def set_env_securely(var_name, prompt):
         value = getpass.getpass(prompt)
         os.environ[var_name] = value
-    ```
 
-    ```python
     set_env_securely("OPENAI_API_KEY", "OpenAI API Key: ")
-    ```
 
-    ```python
     from openai import OpenAI
 
     client = OpenAI()
 
     # Initialize the Toolbox
     toolbox = Toolbox(memory_manager=memory_manager, llm_client=client)
+    </coyp>
     ```
 
 ## Task 5: Test Tool Registration and Retrieval
 
-Let's register a simple diagnostic tool and verify semantic retrieval works:
+* Let's register a simple diagnostic tool and verify semantic retrieval works:
 
     ```python
+    <copy>
     @toolbox.register_tool(augment=True)
     def lookup_paper_details(arxiv_id: str) -> str:
         """Look up detailed metadata for a research paper by its arXiv ID."""
@@ -778,14 +790,17 @@ Let's register a simple diagnostic tool and verify semantic retrieval works:
         return mock_papers.get(
             arxiv_id, f"❓ Paper not found: {arxiv_id}"
         )
+    </copy>
     ```
 
     ```python
+    <copy>
     # Test semantic retrieval — does the toolbox find this tool for a related query?
     import pprint
 
     retrieved_tools = memory_manager.read_toolbox("look up details for a specific research paper")
     pprint.pprint(retrieved_tools)
+    </copy>
     ```
 
 > **🔍 Try it**: Change the query to something different — "find the authors of this paper" or "get metadata for arXiv 1706.03762" — and see if the tool is still retrieved. This is semantic retrieval in action.
