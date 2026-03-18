@@ -238,7 +238,7 @@ Placeholder
 
 ## Task 4: Create Vector-Enabled Tables for Semantic Memories
 
-* Here we create five separate OracleVS-backed vector stores — one for each semantic memory type. Each uses the same embedding model for consistency.
+Here we create five separate OracleVS-backed vector stores — one for each semantic memory type. Each uses the same embedding model for consistency.
 
 | Vector Store Handle | Purpose |
 |---------------------|---------|
@@ -247,6 +247,8 @@ Placeholder
 | `toolbox_vs` | Tool definitions for semantic tool discovery |
 | `entity_vs` | Extracted entities: paper titles, authors, research topics, arXiv IDs |
 | `summary_vs` | Compressed summaries for long research sessions |
+
+* Run the following code to create the requisite tables.
 
     ```python
     knowledge_base_vs = OracleVS(
