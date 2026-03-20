@@ -121,6 +121,6 @@ The agent you built today has one RAG knowledge base and seven SQL tools. But th
 
 ## Acknowledgements
 
-* **Author(s)** - [Your Name]
-* **Contributors** - [Contributor Names]
+* **Author(s)** - Jean-Rene Gauthier [AID]
+* **Contributors** - Eli Schilling - Cloud Architect, Gareth Nathan - SDE, GenAI
 * **Last Updated By/Date** - Published March 2026

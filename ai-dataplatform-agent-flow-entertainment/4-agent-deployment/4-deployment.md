@@ -80,6 +80,6 @@ The Entertainment Release & Performance Analyst agent is now a production-ready 
 
 ## Acknowledgements
 
-* **Author(s)** - [Your Name]
-* **Contributors** - [Contributor Names]
+* **Author(s)** - Jean-Rene Gauthier [AID]
+* **Contributors** - Eli Schilling - Cloud Architect, Gareth Nathan - SDE, GenAI
 * **Last Updated By/Date** - Published March 2026
