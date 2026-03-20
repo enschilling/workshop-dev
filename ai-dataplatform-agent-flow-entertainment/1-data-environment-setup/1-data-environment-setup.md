@@ -1,10 +1,10 @@
-# Lab 2: Data Environment Setup
+# Lab 1: Data Environment Setup
 
 ## Introduction
 
 Before building the AI agent, we need to ensure the data environment is in place. In this lab, you'll explore the pre-configured catalog and volume that have been set up for the workshop, then create a Knowledge Base that turns those documents into vector representations for RAG retrieval. You'll also verify the Oracle AI Database tables that will power the agent's SQL tools.
 
-By the end of this lab, all the data assets — structured (database tables) and unstructured (knowledge base documents) — will be ready for the agent flow you'll build in Lab 3.
+By the end of this lab, all the data assets — structured (database tables) and unstructured (knowledge base documents) — will be ready for the agent flow you'll build in Lab 2.
 
 **Estimated Time:** 15 Minutes
 
@@ -21,7 +21,7 @@ In this lab you will:
 
 This lab assumes you have:
 
-* Completed Lab 1 (Introduction and Overview)
+* Reviewed the Workshop Introduction and Overview
 * Access to the AIDP Workbench instance provisioned for this workshop
 * The following resources have been pre-configured by your facilitator:
     * A standard catalog named `agent_assets`
@@ -118,7 +118,7 @@ The agent's SQL tools query structured data from an Oracle AI Database. For this
     > - **Unstructured (RAG)**: The Knowledge Base with vector-indexed release playbooks and strategy documents — for answering questions about definitions, policies, and interpretation rules
     > - **Structured (SQL)**: The Oracle AI Database tables with box office, streaming, and marketing data — for answering questions about specific metrics, trends, and ROI numbers
 
-## Lab 2 Recap
+## Lab 1 Recap
 
 In this lab, you set up the complete data environment for the Entertainment Analyst agent:
 

@@ -1,4 +1,4 @@
-# Lab 4: Validate the Agent Flow
+# Lab 3: Validate the Agent Flow
 
 ## Introduction
 
@@ -23,7 +23,7 @@ In this lab you will:
 
 This lab assumes you have:
 
-* Completed Lab 3 (Agent Flow Setup)
+* Completed Lab 2 (Agent Flow Setup)
 * The agent flow attached to an active AI Compute
 * All tools (1 RAG + 7 SQL) configured and connected to the agent node
 
@@ -188,7 +188,7 @@ Before moving on, take a moment to consider what just happened across the test s
 
     > **Discussion prompt**: "If this agent were available to your team today, what would be the first question you'd ask about your current release? What additional data sources or tools would make it more useful?"
 
-## Lab 4 Recap
+## Lab 3 Recap
 
 In this lab, you validated the Entertainment Release & Performance Analyst agent across a comprehensive set of real-world scenarios:
 

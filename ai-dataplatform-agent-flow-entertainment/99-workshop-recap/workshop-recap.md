@@ -8,7 +8,7 @@ Over the course of this workshop, you went from a blank canvas to a production-d
 
 ### What You Built
 
-In five labs, you designed, configured, tested, and deployed a **Release & Performance Analyst Agent** — an AI-powered assistant that answers natural language questions about movie and TV show performance by combining two capabilities:
+In four labs, you designed, configured, tested, and deployed a **Release & Performance Analyst Agent** — an AI-powered assistant that answers natural language questions about movie and TV show performance by combining two capabilities:
 
 - **RAG (Retrieval-Augmented Generation)** over internal release playbooks, marketing measurement guidelines, and distribution rules — for questions about definitions, policies, thresholds, and interpretation
 - **SQL tools** that execute parameterized queries against an Oracle AI Database containing box office, streaming, and marketing campaign data — for questions about specific metrics, trends, and ROI
@@ -17,7 +17,7 @@ The agent serves cross-functional teams from a single, governed interface — el
 
 ## What You Accomplished — Lab by Lab
 
-### Lab 1: Introduction and Overview
+### Workshop Introduction and Overview
 
 You established the foundational context for the workshop:
 
@@ -26,7 +26,7 @@ You established the foundational context for the workshop:
 - Walked through the medallion architecture (bronze → silver → gold) using a movie release scenario — understanding how raw data flows from ingestion through transformation to business-ready analytics and AI-powered insights
 - Oriented yourself in the AIDP Workbench environment, understanding the role of the Master Catalog, Workspaces, Compute, and Agent Flows
 
-### Lab 2: Data Environment Setup
+### Lab 1: Data Environment Setup
 
 You prepared the data assets that power the agent:
 
@@ -34,7 +34,7 @@ You prepared the data assets that power the agent:
 - Created a **Knowledge Base** that converted those documents into vector embeddings — enabling the agent to search internal knowledge by semantic meaning, not just keywords
 - Verified the **Oracle AI Database tables** containing box office, streaming, and marketing data — the structured data that powers the agent's SQL tools
 
-### Lab 3: Agent Flow Setup
+### Lab 2: Agent Flow Setup
 
 You built the agent itself on the visual canvas:
 
@@ -43,7 +43,7 @@ You built the agent itself on the visual canvas:
 - Wired up a **RAG tool** connected to the Knowledge Base for policy and definition questions
 - Wired up **seven SQL tools** covering box office performance, streaming health, campaign summaries, channel breakdowns, and reference lookups
 
-### Lab 4: Validate the Agent Flow
+### Lab 3: Validate the Agent Flow
 
 You tested the agent across a comprehensive set of real-world scenarios:
 
@@ -53,7 +53,7 @@ You tested the agent across a comprehensive set of real-world scenarios:
 - Cross-title comparative analysis and streaming performance reports
 - Custom structured output formatting on demand
 
-### Lab 5: Deploy the Agent Flow
+### Lab 4: Deploy the Agent Flow
 
 You deployed the agent to production:
 

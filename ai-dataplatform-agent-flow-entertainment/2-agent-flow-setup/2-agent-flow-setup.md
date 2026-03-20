@@ -1,4 +1,4 @@
-# Lab 3: Agent Flow Setup
+# Lab 2: Agent Flow Setup
 
 ## Introduction
 
@@ -15,14 +15,14 @@ In this lab you will:
 1. Create an AI Compute to host the agent flow
 2. Create an agent flow and attach it to the AI Compute
 3. Configure the agent node with a model and detailed agent instructions
-4. Add a RAG tool connected to the Knowledge Base you created in Lab 2
+4. Add a RAG tool connected to the Knowledge Base you created in Lab 1
 5. Add seven SQL tools that query box office, streaming, and marketing data from the Oracle AI Database
 
 ### Prerequisites
 
 This lab assumes you have:
 
-* Completed Lab 2 (Data Environment Setup)
+* Completed Lab 1 (Data Environment Setup)
 * A Knowledge Base (`entertainment_analyst_kb`) in Active status with documents ingested
 * Access to the Oracle AI Database with entertainment performance tables
 * Downloaded the Agent Instructions file from: [agent-instructions.txt](https://raw.githubusercontent.com/oracle-samples/oracle-aidp-samples/refs/heads/main/ai/agent-flows/visual-flow/entertainment-analyst/agent-instructions.txt)
@@ -109,7 +109,7 @@ The agent node is the core of your flow. It defines the LLM model, the system in
 
 ## Task 4: Add the RAG Tool
 
-The RAG tool connects the agent to the Knowledge Base you created in Lab 2. When users ask about definitions, policies, thresholds, or interpretation rules, the agent uses this tool to retrieve relevant passages from the internal documents.
+The RAG tool connects the agent to the Knowledge Base you created in Lab 1. When users ask about definitions, policies, thresholds, or interpretation rules, the agent uses this tool to retrieve relevant passages from the internal documents.
 
 1. Drag a **RAG tool** onto the canvas.
 
@@ -122,7 +122,7 @@ The RAG tool connects the agent to the Knowledge Base you created in Lab 2. When
     Attribution Guidelines, Distribution Window & Territory Rules
     ```
 
-3. In the **Configuration** tab, select the Knowledge Base you created in Lab 2 (`entertainment_analyst_kb`).
+3. In the **Configuration** tab, select the Knowledge Base you created in Lab 1 (`entertainment_analyst_kb`).
 
 4. Set the document retrieval limit to **5**. This is the number of chunks returned by the Knowledge Base for each query.
 
@@ -388,7 +388,7 @@ These tools provide reference data that helps the agent resolve IDs and codes wh
 
 5. This tool has **no parameters**.
 
-## Lab 3 Recap
+## Lab 2 Recap
 
 In this lab, you built the complete agent flow for the Entertainment Release & Performance Analyst:
 

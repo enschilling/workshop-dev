@@ -1,4 +1,4 @@
-# Lab 5: Deploy the Agent Flow
+# Lab 4: Deploy the Agent Flow
 
 ## Introduction
 
@@ -20,7 +20,7 @@ In this lab you will:
 
 This lab assumes you have:
 
-* Completed Lab 4 (Validate the Agent Flow)
+* Completed Lab 3 (Validate the Agent Flow)
 * An active AI Compute
 * A fully configured and tested agent flow
 
@@ -28,7 +28,7 @@ This lab assumes you have:
 
 1. From the agent flow canvas, click the **Deploy** button in the upper right corner.
 
-2. In the deployment dialog, select the **AI Compute** that will host the deployed agent flow. You can use the same AI Compute you created in Lab 3, or select a different one if your facilitator has provisioned a dedicated deployment compute.
+2. In the deployment dialog, select the **AI Compute** that will host the deployed agent flow. You can use the same AI Compute you created in Lab 2, or select a different one if your facilitator has provisioned a dedicated deployment compute.
 
 3. Click **Deploy** and wait for the deployment to complete. The status will update to indicate a successful deployment.
 
@@ -62,7 +62,7 @@ Once deployed, the agent flow endpoint can be called programmatically via `curl`
 
     > **Key takeaway**: Deployment turns your agent from a prototype into a production service. The REST endpoint makes it accessible to any application or integration, while OCI IAM ensures only authorized users and systems can access it. The same governance, RBAC, and lineage controls that protect the data in the Workbench carry through to the deployed agent.
 
-## Lab 5 Recap
+## Lab 4 Recap
 
 In this lab, you completed the final step of the end-to-end agent development lifecycle:
 
