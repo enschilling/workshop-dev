@@ -3,8 +3,8 @@
     "help": "livelabs-help-oci_us@oracle.com",
     "tutorials": [
         {
-            "title": "Overview and Highlights",
-            "filename": "../../0-introduction-and-overview/0-introduction-and-overview-sandbox.md"
+            "title": "Workshop Introduction and Overview",
+            "filename": "../../0-intro-and-overview/workshop-intro-and-overview-sandbox.md"
         },
         {
             "title": "Get Started",
