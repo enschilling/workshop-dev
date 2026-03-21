@@ -12,8 +12,8 @@ By the end of this lab, you'll have a fully configured Entertainment Release & P
 
 In this lab you will:
 
-1. Create an AI Compute to host the agent flow
-2. Create an agent flow and attach it to the AI Compute
+1. Create an AI Compute instance to host the agent flow
+2. Create an agent flow and attach it to the AI Compute instance
 3. Configure the agent node with a model and detailed agent instructions
 4. Add a RAG tool connected to the Knowledge Base you created in Lab 1
 5. Add seven SQL tools that query box office, streaming, and marketing data from the Oracle AI Database
@@ -25,13 +25,15 @@ This lab assumes you have:
 * Completed Lab 1 (Data Environment Setup)
 * A Knowledge Base (`entertainment_analyst_kb`) in Active status with documents ingested
 * Access to the Oracle AI Database with entertainment performance tables
-* Downloaded the Agent Instructions file from: [agent-instructions.txt](https://raw.githubusercontent.com/oracle-samples/oracle-aidp-samples/refs/heads/main/ai/agent-flows/visual-flow/entertainment-analyst/agent-instructions.txt)
+* Extracted the `agent_instructions.txt` file from the Zip archive in Lab 1
 
-## Task 1: Create the AI Compute
+## Task 1: Create the AI Compute Instance
 
 An AI Compute hosts your agent flows. You need an active AI Compute to test agent flows and deploy them. Think of it as the runtime engine for your agent.
 
 1. From the AIDP Workbench Home Page, select your workspace from the drop-down menu listing all workspaces.
+
+    ![Use the drop-down menu to select your workspace](images/02-select-workspace.png " ")
 
 2. Click on **Compute** under the selected workspace.
 
@@ -50,11 +52,15 @@ An AI Compute hosts your agent flows. You need an active AI Compute to test agen
 
 7. Click **Create** and wait for the AI Compute to reach **Active** status. This may take a few minutes.
 
-    > **Note**: The AI Compute is where your agent flow executes. Once attached, any changes you make to the agent flow are automatically propagated to the AI Compute — meaning you can edit and test quasi-simultaneously.
+    ![Create new AI compute dialog window](images/02-compute-create-instance.png " ")
+    
+    > **Note**: It may take 3-5 minutes to provision this resource. The AI Compute instance is where your agent flow executes. Once attached, any changes you make to the agent flow are automatically propagated to the AI Compute instance — meaning you can edit and test quasi-simultaneously.
+
+8. When the **`entertainment_analyst_compute`** resource is ready to use, proceed to the next task.
 
 ## Task 2: Create the Agent Flow
 
-With the AI Compute active, you can now create the agent flow — the visual canvas where you design the agent's behavior, tools, and configuration.
+With the AI Compute instance active, you can now create the agent flow — the visual canvas where you design the agent's behavior, tools, and configuration.
 
 1. Navigate to your workspace and click on **Agent Flows**. Click the **+** button to create a new agent flow.
 
@@ -62,26 +68,28 @@ With the AI Compute active, you can now create the agent flow — the visual can
 
     ```
     Name: entertainment_analyst
-    Description: An internal analytics and decision-support agent for an entertainment
-    studio or streaming platform.
+    Description: An internal analytics and decision-support agent for an entertainment studio or streaming platform.
     ```
+
+    ![Create dialogue for new Agent Flow](images/02-agent-flows-create.png " ")
 
 3. You will be directed to the **agent flow canvas** — a visual design environment where you'll drag and configure agent nodes and tools.
 
 4. Attach the agent flow to the AI Compute you just created. In the upper right corner, click **Compute** → **Attach to AI Compute**, then select the AI Compute you created in Task 1.
 
+    ![Attach AI Compute to Agent flow using the menu](images/02-agent-flows-attach-compute.png " ")
+
 ## Task 3: Configure the Agent Node
 
 The agent node is the core of your flow. It defines the LLM model, the system instructions that govern the agent's behavior, and the reasoning approach.
 
-1. Drag an **Agent node** onto the canvas.
+1. Drag an **Agent node** onto the canvas, then click on the entity frame that appears on the Canvas.
 
-2. Give the agent node a name and description:
+2. Click the *Agent Name* and *Agent Description* to edit both. Assign more detailed values.
 
     ```
-    Name: Entertainment Release and Performance Analyst
-    Description: You are an internal analytics and decision-support agent for an
-    entertainment studio or streaming platform.
+    Name: Analyst Agent
+    Description: You are an internal analytics and decision-support agent for an entertainment studio or streaming platform.
     ```
 
 3. In the **Configuration** tab, set the following:
@@ -99,13 +107,15 @@ The agent node is the core of your flow. It defines the LLM model, the system in
     - Response style guidelines (concise, analytical, structured)
     - What it must NOT do (no guessing metrics, no bypassing SQL tools, no fabricating data)
 
-5. Download the Agent Instructions file from the following link:
+5. Open the **`agent_instructions.txt`** file that was in the Zip archive you extracted earlier.
 
-    [https://raw.githubusercontent.com/oracle-samples/oracle-aidp-samples/refs/heads/main/ai/agent-flows/visual-flow/entertainment-analyst/agent-instructions.txt](https://raw.githubusercontent.com/oracle-samples/oracle-aidp-samples/refs/heads/main/ai/agent-flows/visual-flow/entertainment-analyst/agent-instructions.txt)
+6. Copy the entire contents into the **Agent Instructions** box in the Configuration tab.
 
-6. Open the downloaded file and copy the entire contents into the **Agent Instructions** box in the Configuration tab.
+    ![Agent configuration dialog with all parameters entered](images/02-agent-flows-create-agent-details.png " ")
 
 7. Leave the **Model Parameters** and **Safety Guardrails** settings as-is for now.
+
+8. The **Agent flows** canvas auto-saves your input as you work. Now you're ready to move to the next task.
 
 ## Task 4: Add the RAG Tool
 
@@ -113,16 +123,21 @@ The RAG tool connects the agent to the Knowledge Base you created in Lab 1. When
 
 1. Drag a **RAG tool** onto the canvas.
 
+    ![Agent flows canvas - attach RAG tool](images/02-agent-flows-attach-rag.png " ")
+
 2. Enter a name and description:
 
     ```
     Name: internal_knowledge_sources_rag
-    Description: You have access to the following authoritative internal documents via a
-    RAG tool: Content Strategy & Release Operations Playbook, Marketing Measurement &
-    Attribution Guidelines, Distribution Window & Territory Rules
+    Description: You have access to the following authoritative internal documents via a RAG tool: 
+        - Content Strategy & Release Operations Playbook
+        - Marketing Measurement & Attribution Guidelines
+        - Distribution Window & Territory Rules
     ```
 
 3. In the **Configuration** tab, select the Knowledge Base you created in Lab 1 (`entertainment_analyst_kb`).
+
+    ![RAG tool configuration - select knowledge base](images/02-agent-flows-rag-select-kbase.png " ")
 
 4. Set the document retrieval limit to **5**. This is the number of chunks returned by the Knowledge Base for each query.
 
@@ -136,11 +151,13 @@ The RAG tool connects the agent to the Knowledge Base you created in Lab 1. When
 
 7. You should see relevant passages returned from the release playbook documents. This confirms the Knowledge Base is properly connected and returning results.
 
+    [NEED SCREENSHOT]
+
 ## Task 5: Add the SQL Tools — Box Office and Streaming
 
 Now we'll add the SQL tools. Each SQL tool executes a single, pre-defined, parameterized query against the Oracle AI Database. The agent selects which tool to call based on the user's question and populates the parameters automatically.
 
-### Tool 1: get_box_office_weekend
+### Tool 1: Get box office weekend data
 
 This tool returns weekend theatrical performance for a title in a given market.
 
@@ -153,11 +170,12 @@ This tool returns weekend theatrical performance for a title in a given market.
     Description: Weekend theatrical performance for a title in a market.
     ```
 
-3. Under **Catalog and Schema**, select `vectordb23ai.aidp_scenario_5` (or the catalog/schema specified by your facilitator).
+3. Under **Catalog and Schema**, select `ea1_aidb.admin`.
 
 4. Enter the following SQL query:
 
     ```sql
+    <copy>
     SELECT
       t.title_name,
       b.weekend_end_date,
@@ -169,17 +187,15 @@ This tool returns weekend theatrical performance for a title in a given market.
     JOIN titles t ON t.title_id = b.title_id
     WHERE b.title_id = {{title_id}}
       AND b.market_code = {{market_code}}
+    </copy>
     ```
 
 5. The parameters `{{title_id}}` and `{{market_code}}` will appear in the right panel under **AI Tool Definition**. Enter descriptions for each:
 
     ```
-    {{title_id}}: The title ID of the movie. For example, T1002. If you are unsure, use the
-    tool get_title_id. The last option is to ask the user.
+    {{title_id}}: The title ID of the movie. For example, T1002. If you are unsure, use the tool get_title_id. The last option is to ask the user.
 
-    {{market_code}}: Market code is a two letter code representing the country or region
-    where the movie is released. These are documented in our internal policy documents. An
-    example is Japan being JP.
+    {{market_code}}: Market code is a two letter code representing the country or region where the movie is released. These are documented in our internal policy documents. An example is Japan being JP.
     ```
 
 6. Optionally, click the **Test** tab and assign values to validate:
@@ -191,7 +207,7 @@ This tool returns weekend theatrical performance for a title in a given market.
 
     You should see two rows for Skyline Heist on 2025-09-14 and 2025-09-21.
 
-### Tool 2: get_streaming_trend
+### Tool 2: Get streaming trend data
 
 This tool returns weekly streaming health metrics (starts, hours, completion rate) for a title in a region.
 
@@ -209,6 +225,7 @@ This tool returns weekly streaming health metrics (starts, hours, completion rat
 4. Enter the following SQL query:
 
     ```sql
+    <copy>
     SELECT
       t.title_name,
       s.week_start_date,
@@ -221,22 +238,21 @@ This tool returns weekly streaming health metrics (starts, hours, completion rat
     WHERE s.title_id = {{title_id}}
       AND s.region_code = {{region_code}}
     ORDER BY s.week_start_date ASC;
+    </copy>
     ```
 
 5. Enter parameter descriptions:
 
     ```
-    {{title_id}}: The title ID of the movie. For example, T1002. If you are unsure, use the
-    tool get_title_id. The last option is to ask the user.
+    {{title_id}}: The title ID of the movie. For example, T1002. If you are unsure, use the tool get_title_id. The last option is to ask the user.
 
-    {{region_code}}: A two letter code representing the country or region where the movie is
-    released. These are documented in our internal policy documents. An example is Japan
+    {{region_code}}: A two letter code representing the country or region where the movie is released. These are documented in our internal policy documents. An example is Japan
     being JP.
     ```
 
 ## Task 6: Add the SQL Tools — Marketing
 
-### Tool 3: get_campaign_summary
+### Tool 3: Get campaign summary data
 
 This tool returns the roll-up of spend, attributed revenue, and computed ROI for a marketing campaign.
 
@@ -246,8 +262,7 @@ This tool returns the roll-up of spend, attributed revenue, and computed ROI for
 
     ```
     Name: get_campaign_summary
-    Description: Roll up spend + attributed revenue + computed ROI for a campaign (all
-    channels, all days).
+    Description: Roll up spend + attributed revenue + computed ROI for a campaign (all channels, all days).
     ```
 
 3. Select the same catalog and schema.
@@ -255,6 +270,7 @@ This tool returns the roll-up of spend, attributed revenue, and computed ROI for
 4. Enter the following SQL query:
 
     ```sql
+    <copy>
     SELECT
       c.campaign_id,
       c.campaign_name,
@@ -274,12 +290,13 @@ This tool returns the roll-up of spend, attributed revenue, and computed ROI for
     WHERE c.campaign_id = {{campaign_id}}
     GROUP BY
       c.campaign_id, c.campaign_name, c.title_id, t.title_name, c.start_date, c.end_date;
+    </copy>
     ```
 
 5. Enter the parameter description:
 
     ```
-    {{campaign_id}}: The ID of a marketing campaign associated with movies. For example: C2001.
+    {{campaign_id}}: The ID of a marketing campaign associated with movies. For example: Z2001.
     ```
 
 ### Tool 4: get_campaign_channel_breakdown
@@ -300,6 +317,7 @@ This tool provides a breakdown of campaign spend and revenue by marketing channe
 4. Enter the following SQL query:
 
     ```sql
+    <copy>
     SELECT
       d.channel,
       SUM(d.spend_usd) AS spend_usd,
@@ -312,6 +330,7 @@ This tool provides a breakdown of campaign spend and revenue by marketing channe
     WHERE d.campaign_id = {{campaign_id}}
     GROUP BY d.channel
     ORDER BY spend_usd DESC;
+    </copy>
     ```
 
 5. Enter the parameter description:
@@ -374,8 +393,7 @@ These tools provide reference data that helps the agent resolve IDs and codes wh
 
     ```
     Name: get_campaign_code
-    Description: Provides a mapping between campaign ID, the campaign name and the
-    associated movie (the title ID).
+    Description: Provides a mapping between campaign ID, the campaign name and the associated movie (the title ID).
     ```
 
 3. Select the same catalog and schema.

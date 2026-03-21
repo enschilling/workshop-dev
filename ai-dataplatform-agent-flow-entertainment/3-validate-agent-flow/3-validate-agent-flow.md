@@ -69,7 +69,7 @@ Now test the agent's ability to handle a follow-up question that narrows the sco
 1. In the same session, enter the following prompt:
 
     ```
-    Can you look at the canadian market?
+    Can you look at the Canadian market?
     ```
 
 2. Observe the agent's response. It should:

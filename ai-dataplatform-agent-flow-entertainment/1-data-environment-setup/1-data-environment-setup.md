@@ -46,26 +46,31 @@ A standard catalog in AIDP stores AI-related artifacts — volumes, tables, sche
 
 A volume stores unstructured data — files, documents, images — within a catalog. The volume for this workshop contains the internal release playbooks and strategy documents that the RAG tool will search.
 
-1. Inside the **`entertainment_analyst`** catalog, locate the **default** schema, click on **Volumes**.
+1. First off, [Click Here](https://github.com/enschilling/workshop-dev/raw/refs/heads/main/ai-dataplatform-agent-flow-entertainment/files/kb_documents.zip) to download the Zip file containing all the sample docs required for this workshop.
 
-2. Click the **+** next to the filter field to start creating a new volume.
-
-    ![Volumes interface - add new volume button](images/01-catalog-add-volume.png " ")
-
-3. Provide a name for the volume **`entertainment_analyst`** and a description **`this volume stores release playbooks, market prioritization, etc.`**. Click **[Create]**.
-
-    ![Create new volume](images/01-catalog-create-volume.png " ")
-
-3. Upload KB files to the volume: Click the volume name **`entertainment_analyst`** then click the **+** button to the right of the Filter field. Click to browse or drag-and-drop the three `.docx` files from the Zip archive you downloaded earlier.
-
-    ![Upload files itnerface](images/01-catalog-volume-upload-files.png " ")
-
-    
-4. Click **[Upload]**, then review the files. You should see the following internal documents:
+2. Unzip the file; you should have 3 `.docx` and 3 `.txt` files pertaining to the Knowledge Base components, and 1 `agent_instructions.txt` file that you'll use in Lab 2.
 
     - **Content Strategy & Release Operations Playbook** — Defines release windows, territory prioritization, green/yellow/red performance signals, and decision frameworks
     - **Marketing Measurement & Attribution Guidelines** — Defines metric definitions (e.g., completion rate, ROI), attribution logic, and interpretation rules
     - **Distribution Window & Territory Rules** — Defines territorial constraints, windowing strategies, and market codes
+    - **Agent Instructions** - Detailed parameters that will be used to define how the agent is to operate
+
+3. Back in the AIDP Wrokbench, return to the **`entertainment_analyst`** catalog, locate the **default** schema, click on **Volumes**.
+
+4. Click the **+** next to the filter field to start creating a new volume.
+
+    ![Volumes interface - add new volume button](images/01-catalog-add-volume.png " ")
+
+5. Provide a name for the volume **`entertainment_analyst`** and a description **`this volume stores release playbooks, market prioritization, etc.`**. Click **[Create]**.
+
+    ![Create new volume](images/01-catalog-create-volume.png " ")
+
+6. Click the volume name **`entertainment_analyst`** then click the **+** button to the right of the Filter field. Click to browse or drag-and-drop the three `.docx` files from the Zip archive you downloaded earlier.
+
+    ![Upload files itnerface](images/01-catalog-volume-upload-files.png " ")
+
+    
+.7 Click **[Upload]**, then review the files. You should see the following internal documents:
 
 4. These are the documents that the AI agent will search via RAG when users ask questions about definitions, policies, thresholds, or interpretation rules. For example, when a user asks *"What does our playbook say about territory priorities for releases?"*, the agent will retrieve relevant passages from these documents.
 
@@ -124,9 +129,9 @@ The agent's SQL tools query structured data from an Oracle AI Database. For this
 
 3. Click the name of the autonmous database to view details. When the page loads, click **[Database actions]** and select **SQL**.  This will open the SQL Workbench in a new brower tab.
 
-4. In the *Navigator* on the left, click the first drop-down menu and locate the **Entertainment** schema. You should see the following tables populate below.
+4. In the *Navigator* on the left, click the first drop-down menu and locate the **Entertainment** schema. 
 
-Verify that the following tables exist and contain data:
+    * You should see the following tables populate below.
 
     | Table Name | Description | Key Columns |
     |---|---|---|
