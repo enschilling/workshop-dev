@@ -12,8 +12,8 @@ By the end of this lab, all the data assets — structured (database tables) and
 
 In this lab you will:
 
-1. Explore the pre-configured standard catalog (`agent_assets`) and managed volume (`entertainment_analyst`) containing release playbooks and strategy documents
-2. Create a Knowledge Base and populate it with the documents from the volume
+1. Create a new standard catalog (`entertainment_analyst`) and managed volume (`entertainment_analyst`) where you'll upload release playbooks and strategy documents
+2. Create a Knowledge Base and an associated data source that consumes the documents from the managed volume
 3. Verify the Oracle AI Database tables that contain box office, streaming, and marketing data
 4. Understand how the structured (SQL) and unstructured (RAG) data assets connect to the agent you'll build
 
@@ -23,34 +23,45 @@ This lab assumes you have:
 
 * Reviewed the Workshop Introduction and Overview
 * Access to the AIDP Workbench instance provisioned for this workshop
-* The following resources have been pre-configured by your facilitator:
-    * A standard catalog named `agent_assets`
-    * A managed volume named `entertainment_analyst` with release playbooks and strategy documents already uploaded
-    * An Oracle AI Database with entertainment performance tables already ingested
 
-## Task 1: Explore the Standard Catalog
+## Task 1: Create the Catalog
 
-A standard catalog in AIDP stores AI-related artifacts — volumes, tables, schemas, and knowledge bases. For this workshop, a catalog has been pre-created to hold all the assets our agent will need.
+A standard catalog in AIDP stores AI-related artifacts — volumes, tables, schemas, and knowledge bases. For this workshop, you'll start by creating a new standard catalog.
 
 1. From the AIDP Workbench Home Page, click on **Master Catalog**.
 
-2. Locate the catalog named **`agent_assets`**. Click on it to open it.
+2. Click **[Create catalog]** in the upper right corner. Provide a catalog name **`entertainment_analyst`** and a description **`a catalog that stores the assets needed by the entertainment industry analyst agent.`**. Click **[Create]**
 
-3. Take a moment to review the catalog. Notice that it is a **Standard Catalog** — meaning it stores data directly within AIDP (backed by OCI Object Storage and Delta Lake), as opposed to an External Catalog which connects to data outside the platform.
+    ![Master Catalog interface - create new standard catalog](images/01-catalog-create.png)
+
+3. It will take just a moment to create the new catalog. When ready, click **entertainment_analyst** to open the new catalog.
+
+    > **Note**: a **Standard Catalog** means it stores data directly within AIDP (backed by OCI Object Storage and Delta Lake), as opposed to an External Catalog which connects to data outside the platform.
 
 4. Click on the **default** schema within the catalog. This is where the volume and knowledge base assets are organized.
 
-    > **Note**: This catalog was pre-created for the workshop to save time. In a real-world scenario, you would create this catalog yourself by clicking **Create Catalog** from the Master Catalog page, giving it a name and description, selecting "Standard Catalog" as the type, and leaving the compartment field blank.
+    ![Catalog interface - resource types inside entertainment_analyst](images/01-catalog-view-components.png)
 
-## Task 2: Explore the Managed Volume
+## Task 2: Create the Managed Volume
 
 A volume stores unstructured data — files, documents, images — within a catalog. The volume for this workshop contains the internal release playbooks and strategy documents that the RAG tool will search.
 
-1. Inside the **`agent_assets`** catalog, click on the **default** schema, then click on **Volumes**.
+1. Inside the **`entertainment_analyst`** catalog, locate the **default** schema, click on **Volumes**.
 
-2. Locate the volume named **`entertainment_analyst`**. Click on it.
+2. Click the **+** next to the filter field to start creating a new volume.
 
-3. Review the files that have been uploaded. You should see the following internal documents:
+    ![Volumes interface - add new volume button](images/01-catalog-add-volume.png " ")
+
+3. Provide a name for the volume **`entertainment_analyst`** and a description **`this volume stores release playbooks, market prioritization, etc.`**. Click **[Create]**.
+
+    ![Create new volume](images/01-catalog-create-volume.png " ")
+
+3. Upload KB files to the volume: Click the volume name **`entertainment_analyst`** then click the **+** button to the right of the Filter field. Click to browse or drag-and-drop the three `.docx` files from the Zip archive you downloaded earlier.
+
+    ![Upload files itnerface](images/01-catalog-volume-upload-files.png " ")
+
+    
+4. Click **[Upload]**, then review the files. You should see the following internal documents:
 
     - **Content Strategy & Release Operations Playbook** — Defines release windows, territory prioritization, green/yellow/red performance signals, and decision frameworks
     - **Marketing Measurement & Attribution Guidelines** — Defines metric definitions (e.g., completion rate, ROI), attribution logic, and interpretation rules
@@ -58,13 +69,11 @@ A volume stores unstructured data — files, documents, images — within a cata
 
 4. These are the documents that the AI agent will search via RAG when users ask questions about definitions, policies, thresholds, or interpretation rules. For example, when a user asks *"What does our playbook say about territory priorities for releases?"*, the agent will retrieve relevant passages from these documents.
 
-    > **Note**: This volume was pre-created and pre-populated for the workshop. In a real-world scenario, you would create the volume by navigating to the default schema, clicking **Volumes**, clicking the **+** button, selecting "Managed" volume, and then uploading your files via drag-and-drop.
-
 ## Task 3: Create a Knowledge Base
 
 Now we'll create the key asset that enables RAG. A Knowledge Base creates vector representations (embeddings) of the documents in the volume. When the agent receives a question, it performs a semantic search against these vectors to find the most relevant passages — even if the user's wording doesn't exactly match the document text.
 
-1. Navigate back to the **`agent_assets`** catalog. Click on the **default** schema.
+1. Navigate back to the **`entertainment_analyst`** catalog. Click on the **default** schema.
 
 2. Click on **Knowledge Bases**.
 
@@ -77,6 +86,8 @@ Now we'll create the key asset that enables RAG. A Knowledge Base creates vector
     Description: Contains internal release playbooks, marketing guidelines, and distribution rules
     ```
 
+    ![Create a new knowledgebase in the catalog](images/01-catalog-create-kbase.png " ")
+
 5. Leave the **Advanced Settings** as-is for now. These settings control the embedding model, chunk size, and chunk overlap. The defaults are appropriate for this workshop.
 
 6. Click **Create**. The Knowledge Base will take a few seconds to become Active.
@@ -85,23 +96,37 @@ Now we'll create the key asset that enables RAG. A Knowledge Base creates vector
 
 8. Under the **Data Source** tab, click the **+** button to add a data source.
 
+    ![Add data source to entertainment_analyst_kb](images/01-catalog-kbase-add-datasource.png " ")
+
 9. In the data source selection window, select the **`entertainment_analyst`** volume from your catalog. This is the volume containing the release strategy and playbook documents. Leave all advanced settings as-is.
 
 10. Click **Add**.
 
+    ![Select and add the entertainment_analyst data source](images/01-catalog-kbase-add-select-datasource.png " ")
+
 11. Navigate to the **History** tab of your Knowledge Base. You should see a line entry with the operation name **"Update Knowledge Base"**. This step ingests the documents — chunking them, generating embeddings, and indexing the vectors.
+
+    ![Knowledgebase is ingesting documents from the data source](images/01-catalog-kbase-ingest-docs.png " ")
 
 12. Wait for the status to show **Succeeded** before moving on. This typically takes less than one minute since we're ingesting a small set of documents.
 
     > **What just happened?** The Knowledge Base chunked each document into smaller passages, generated vector embeddings for each chunk using an embedding model, and stored those vectors in an index. When the RAG tool receives a query, it converts the query into a vector, finds the most semantically similar chunks, and returns them as context for the LLM. This is how the agent can answer policy and definition questions grounded in your actual internal documents.
 
-## Task 4: Verify the Oracle AI Database Tables
+## Task 4: [Optional] Verify the Oracle AI Database Tables
 
 The agent's SQL tools query structured data from an Oracle AI Database. For this workshop, the following tables have been pre-ingested with entertainment performance data.
 
-1. Your facilitator will provide connection details for the Oracle AI Database. The tables are stored in the `entertainment` schema (or the schema specified by your facilitator).
+1. Log into the OCI Console (See *Get Started* in left nav menu for more details).
 
-2. Verify that the following tables exist and contain data:
+2. Use the navigation menu to open the Autunomous AI Database console.
+
+    ![OCI Nav menu - Autonomous AI Database console](images/01-navigate-autonomous-ai-database.png)
+
+3. Click the name of the autonmous database to view details. When the page loads, click **[Database actions]** and select **SQL**.  This will open the SQL Workbench in a new brower tab.
+
+4. In the *Navigator* on the left, click the first drop-down menu and locate the **Entertainment** schema. You should see the following tables populate below.
+
+Verify that the following tables exist and contain data:
 
     | Table Name | Description | Key Columns |
     |---|---|---|
@@ -112,17 +137,32 @@ The agent's SQL tools query structured data from an Oracle AI Database. For this
     | `marketing_campaigns` | Campaign metadata linking campaigns to titles | `campaign_id`, `campaign_name`, `title_id`, `start_date`, `end_date` |
     | `marketing_daily_spend` | Daily spend and attributed revenue by campaign and channel | `campaign_id`, `channel`, `spend_usd`, `attributed_revenue_usd` |
 
-3. These tables represent the **gold layer** of the medallion architecture — curated, query-optimized data ready for business consumption. The agent's SQL tools will execute parameterized, read-only queries against these tables to answer performance and ROI questions.
+5. Check one or more of the tables to view the data.
+
+    ```sql
+    <copy>
+    select * from marketing_daily_spend;
+    </copy>
+    ```
+
+    ![Input SQL query and click run button](images/01-sql-test-query.png " ")
+
+    ![SQL query output](images/01-sql-test-query-output.png " ")
+
+6. These tables represent the **gold layer** of the medallion architecture — curated, query-optimized data ready for business consumption. The agent's SQL tools will execute parameterized, read-only queries against these tables to answer performance and ROI questions.
+
 
     > **Key takeaway**: You now have two categories of data assets ready for the agent:
     > - **Unstructured (RAG)**: The Knowledge Base with vector-indexed release playbooks and strategy documents — for answering questions about definitions, policies, and interpretation rules
     > - **Structured (SQL)**: The Oracle AI Database tables with box office, streaming, and marketing data — for answering questions about specific metrics, trends, and ROI numbers
 
+7. You may close the SQL Workbench browser tab and return to the AI Data Platform tab for the remainder of the workshop.
+
 ## Lab 1 Recap
 
 In this lab, you set up the complete data environment for the Entertainment Analyst agent:
 
-- You explored the pre-configured **`agent_assets`** standard catalog and the **`entertainment_analyst`** volume containing internal release playbooks and strategy documents.
+- You explored the pre-configured **`entertainment_analyst`** standard catalog and the **`entertainment_analyst`** volume containing internal release playbooks and strategy documents.
 - You created a **Knowledge Base** (`entertainment_analyst_kb`), populated it with documents from the volume, and verified that the ingestion succeeded. This enables RAG — the agent can now search your internal documents by semantic meaning.
 - You verified the **Oracle AI Database tables** containing box office, streaming, and marketing campaign data. These power the agent's SQL tools.
 
