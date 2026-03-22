@@ -1,4 +1,4 @@
-# Lab 3: Building the Memory Manager & Toolbox
+# Lab 4: Building the Memory Manager & Toolbox
 
 ## Introduction
 
