@@ -807,7 +807,7 @@ This means a simple docstring like `"Search the web"` becomes a rich description
 
 --------
 
-## Lab 3 Recap
+## Lab 4 Recap
 
 | What You Built | Why It Matters |
 |---------------|----------------|
@@ -820,7 +820,7 @@ This means a simple docstring like `"Search the web"` becomes a rich description
 
 **Key Insight**: The Toolbox sits at the intersection of three disciplines: *memory engineering* (tools as procedural memory), *context engineering* (only relevant tools in context), and *prompt engineering* (role-setting for better docstring augmentation).
 
-**Next up**: In Lab 4, we'll build the context engineering layer — usage tracking, summarization, just-in-time retrieval — and integrate Tavily for web search.
+**Next up**: In Lab 5, we'll build the context engineering layer — usage tracking, summarization, just-in-time retrieval — and integrate Tavily for web search.
 
 ## Learn More
 
