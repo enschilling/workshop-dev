@@ -170,7 +170,9 @@ This tool returns weekend theatrical performance for a title in a given market.
     Description: Weekend theatrical performance for a title in a market.
     ```
 
-3. Under **Catalog and Schema**, select `ea1_aidb.admin`.
+3. Under **Catalog and Schema**, click the **Search** drop-down. Expand the **`aidatabase`** item and select the **`entertainment`** schema.
+
+    ![Screenshot depicting the catalog and schema drop-down](images/02-agent-flows-sql-select-schema.png " ")
 
 4. Enter the following SQL query:
 
@@ -198,6 +200,8 @@ This tool returns weekend theatrical performance for a title in a given market.
     {{market_code}}: Market code is a two letter code representing the country or region where the movie is released. These are documented in our internal policy documents. An example is Japan being JP.
     ```
 
+    ![Screenshot depicting AI Tool definition description input](images/02-agent-flows-sql-ai-tool-definition.png " ")
+
 6. Optionally, click the **Test** tab and assign values to validate:
 
     ```
@@ -206,6 +210,8 @@ This tool returns weekend theatrical performance for a title in a given market.
     ```
 
     You should see two rows for Skyline Heist on 2025-09-14 and 2025-09-21.
+
+    ![Screenshot depicting test results](images/02-agent-flows-sql-test-tool.png " ")
 
 ### Tool 2: Get streaming trend data
 
