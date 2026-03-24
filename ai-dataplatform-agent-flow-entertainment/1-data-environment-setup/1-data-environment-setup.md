@@ -80,7 +80,7 @@ A volume stores unstructured data — files, documents, images — within a cata
     - **Content Strategy & Release Operations Playbook** — Defines release windows, territory prioritization, green/yellow/red performance signals, and decision frameworks
     - **Marketing Measurement & Attribution Guidelines** — Defines metric definitions (e.g., completion rate, ROI), attribution logic, and interpretation rules
     - **Distribution Window & Territory Rules** — Defines territorial constraints, windowing strategies, and market codes
-    - **Agent Instructions** - Detailed parameters that will be used to define how the agent is to operate
+    - **Agent Instructions** - Detailed instructions that will be used to define how the agent is to operate
 
 3. Back in the AIDP Wrokbench, return to the **`entertainment_analyst`** catalog, locate the **default** schema, click on **Volumes**.
 
@@ -150,7 +150,7 @@ The agent's SQL tools query structured data from an Oracle AI Database. For this
 
 1. Log into the OCI Console (See *Get Started* in left nav menu for more details).
 
-2. Use the navigation menu to open the Autunomous AI Database console.
+2. Use the navigation menu to open the Autonomous AI Database Console.
 
     ![OCI Nav menu - Autonomous AI Database console](images/01-navigate-autonomous-ai-database.png)
 
