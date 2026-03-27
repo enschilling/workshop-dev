@@ -273,7 +273,7 @@ This tool returns the roll-up of spend, attributed revenue, and computed ROI for
     {{campaign_id}}: The ID of a marketing campaign associated with movies. For example: Z2001.
     ```
 
-### Tool 4: get_campaign_channel_breakdown
+### Tool 4: Get campaign channel breakdown
 
 This tool provides a breakdown of campaign spend and revenue by marketing channel.
 
@@ -317,7 +317,7 @@ This tool provides a breakdown of campaign spend and revenue by marketing channe
 
 These tools provide reference data that helps the agent resolve IDs and codes when users ask questions using title names, market names, or campaign names instead of IDs.
 
-### Tool 5: get_title_id
+### Tool 5: Get title id
 
 1. Drag a **SQL tool** onto the canvas.
 
@@ -338,7 +338,7 @@ These tools provide reference data that helps the agent resolve IDs and codes wh
 
 5. This tool has **no parameters**.
 
-### Tool 6: get_market_code
+### Tool 6: Get market code
 
 1. Drag a **SQL tool** onto the canvas.
 
@@ -359,7 +359,7 @@ These tools provide reference data that helps the agent resolve IDs and codes wh
 
 5. This tool has **no parameters**.
 
-### Tool 7: get_campaign_code
+### Tool 7: Get campaign code
 
 1. Drag a **SQL tool** onto the canvas.
 

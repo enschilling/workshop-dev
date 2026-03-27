@@ -31,7 +31,7 @@ This lab assumes you have:
 
 The Playground is a built-in testing environment where you can create sessions and have conversations with your agent flow before deploying it to production.
 
-1. From the agent flow canvas, click the **Test** button in the toolbar. This reveals the Playground panel.
+1. From the agent flow canvas, click the **Playground** located just above the canvas. This reveals the Playground panel.
 
 2. In the chat window, click the **+** button to start a new test session with the agent you created.
 
