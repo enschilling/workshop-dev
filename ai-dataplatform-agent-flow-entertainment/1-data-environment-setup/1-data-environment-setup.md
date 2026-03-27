@@ -80,7 +80,7 @@ For this workshop, an ALH instance has been provisioned and loaded with sample d
 
 > **Important** You'll need the **`Database Admin Password`** found in the **`View Login Info`** on the LiveLabs workshop page (covered in the **Getting Started** section)
 
-![Screenshot of ADB admin password location](/images/01-datbase-retrieve-password.png " ")
+![Screenshot of ADB admin password location](images/01-database-retrieve-password.png " ")
 
 1. From the AIDP Workbench Home Page, click on **Master Catalog**.
 
@@ -92,8 +92,10 @@ For this workshop, an ALH instance has been provisioned and loaded with sample d
 
 3. Enter the following details, then select **Catalog type** -> **External catalog**.
 
-| Catalog name | ```<copy>aidatabase</copy>``` |
-| Description | ```<copy>A catalog that connects to the Autonomous AI Lakehouse database.</copy>``` |
+    ```
+    Catalog name: aidatabase
+    Description: A catalog that connects to the Autonomous AI Lakehouse database.
+    ```
 
 4. For **External source method** select **Choose ALH instance**.
 
@@ -115,7 +117,7 @@ For this workshop, an ALH instance has been provisioned and loaded with sample d
 
     ![Screenshot of the create catalog dialog](images/01-catalog-add-external.png)
  
-## Task 2: Create the (Standard) Entertainment Analyst Catalog
+## Task 3: Create the (Standard) Entertainment Analyst Catalog
 
 A standard catalog in AIDP stores AI-related artifacts — volumes, tables, schemas, and knowledge bases. For this workshop, you'll be creating a new standard catalog.
 
@@ -133,7 +135,7 @@ A standard catalog in AIDP stores AI-related artifacts — volumes, tables, sche
 
     ![Catalog interface - resource types inside entertainment_analyst](images/01-catalog-view-components.png)
 
-## Task 3: Create the Managed Volume
+## Task 4: Create the Managed Volume
 
 A volume stores unstructured data — files, documents, images — within a catalog. The volume for this workshop contains the internal release playbooks and strategy documents that the RAG tool will search.
 
@@ -164,7 +166,7 @@ A volume stores unstructured data — files, documents, images — within a cata
 
 8. These are the documents that the AI agent will search via RAG when users ask questions about definitions, policies, thresholds, or interpretation rules. For example, when a user asks *"What does our playbook say about territory priorities for releases?"*, the agent will retrieve relevant passages from these documents.
 
-## Task 4: Create a Knowledge Base
+## Task 5: Create a Knowledge Base
 
 Now we'll create the key asset that enables RAG. A Knowledge Base creates vector representations (embeddings) of the documents in the volume. When the agent receives a question, it performs a semantic search against these vectors to find the most relevant passages — even if the user's wording doesn't exactly match the document text.
 
@@ -207,7 +209,7 @@ Now we'll create the key asset that enables RAG. A Knowledge Base creates vector
 
     > **What just happened?** The Knowledge Base chunked each document into smaller passages, generated vector embeddings for each chunk using an embedding model, and stored those vectors in an index. When the RAG tool receives a query, it converts the query into a vector, finds the most semantically similar chunks, and returns them as context for the LLM. This is how the agent can answer policy and definition questions grounded in your actual internal documents.
 
-## Task 5: [Optional] Verify the Oracle AI Database Tables
+## Task 6: [Optional] Verify the Oracle AI Database Tables
 
 The agent's SQL tools query structured data from an Oracle AI Database. For this workshop, the following tables have been pre-ingested with entertainment performance data.
 
@@ -263,12 +265,13 @@ The agent's SQL tools query structured data from an Oracle AI Database. For this
 
 In this lab, you set up the complete data environment for the Entertainment Analyst agent:
 
+- You created an **AI Compute** to host and execute the agent flow.
 - You created a new **`AiDatabase`** external catalog connecting to the Autnomous Lakehouse AI Database instance.
 - You created a new **`entertainment_analyst`** standard catalog and a **`entertainment_analyst`** volume, then uploaded internal release playbooks and strategy documents.
 - You created a **Knowledge Base** (`entertainment_analyst_kb`), populated it with documents from the volume, and verified that the ingestion succeeded. This enables RAG — the agent can now search your internal documents by semantic meaning.
 - You verified the **Oracle AI Database tables** containing box office, streaming, and marketing campaign data. These power the agent's SQL tools.
 
-In the next lab, you'll create the agent flow itself — configuring the AI Compute, building the agent node, and wiring up the RAG and SQL tools.
+In the next lab, you'll create the agent flow itself — building the agent node and wiring up the RAG and SQL tools.
 
 ## Learn More
 

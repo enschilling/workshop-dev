@@ -12,11 +12,10 @@ By the end of this lab, you'll have a fully configured Entertainment Release & P
 
 In this lab you will:
 
-1. Create an AI Compute instance to host the agent flow
-2. Create an agent flow and attach it to the AI Compute instance
-3. Configure the agent node with a model and detailed agent instructions
-4. Add a RAG tool connected to the Knowledge Base you created in Lab 1
-5. Add seven SQL tools that query box office, streaming, and marketing data from the Oracle AI Database
+1. Create an agent flow and attach it to the AI Compute instance
+2. Configure the agent node with a model and detailed agent instructions
+3. Add a RAG tool connected to the Knowledge Base you created in Lab 1
+4. Add seven SQL tools that query box office, streaming, and marketing data from the Oracle AI Database
 
 ### Prerequisites
 
@@ -27,40 +26,9 @@ This lab assumes you have:
 * Access to the Oracle AI Database with entertainment performance tables
 * Extracted the `agent_instructions.txt` file from the Zip archive in Lab 1
 
-## Task 1: Create the AI Compute Instance
+## Task 1: Create the Agent Flow
 
-An AI Compute hosts your agent flows. You need an active AI Compute to test agent flows and deploy them. Think of it as the runtime engine for your agent.
-
-1. From the AIDP Workbench Home Page, select your workspace from the drop-down menu listing all workspaces.
-
-    ![Use the drop-down menu to select your workspace](images/02-select-workspace.png " ")
-
-2. Click on **Compute** under the selected workspace.
-
-3. In the Compute page, click on the **AI Compute** tab.
-
-4. Click the **+** button to add an AI Compute.
-
-5. Enter a name and description:
-
-    ```
-    Name: entertainment_analyst_compute
-    Description: AI Compute for the Entertainment Release & Performance Analyst agent
-    ```
-
-6. Use the default size of **1 OCPU** and **16 GB of RAM**.
-
-7. Click **Create** and wait for the AI Compute to reach **Active** status. This may take a few minutes.
-
-    ![Create new AI compute dialog window](images/02-compute-create-instance.png " ")
-    
-    > **Note**: It may take 3-5 minutes to provision this resource. The AI Compute instance is where your agent flow executes. Once attached, any changes you make to the agent flow are automatically propagated to the AI Compute instance — meaning you can edit and test quasi-simultaneously.
-
-8. When the **`entertainment_analyst_compute`** resource is ready to use, proceed to the next task.
-
-## Task 2: Create the Agent Flow
-
-With the AI Compute instance active, you can now create the agent flow — the visual canvas where you design the agent's behavior, tools, and configuration.
+With the AI Compute instance created in Lab 1 (should be **Active** now), you can now create the agent flow — the visual canvas where you design the agent's behavior, tools, and configuration.
 
 1. Navigate to your workspace and click on **Agent Flows**. Click the **+** button to create a new agent flow.
 
@@ -79,7 +47,7 @@ With the AI Compute instance active, you can now create the agent flow — the v
 
     ![Attach AI Compute to Agent flow using the menu](images/02-agent-flows-attach-compute.png " ")
 
-## Task 3: Configure the Agent Node
+## Task 2: Configure the Agent Node
 
 The agent node is the core of your flow. It defines the LLM model, the system instructions that govern the agent's behavior, and the reasoning approach.
 
@@ -117,7 +85,7 @@ The agent node is the core of your flow. It defines the LLM model, the system in
 
 8. The **Agent flows** canvas auto-saves your input as you work. Now you're ready to move to the next task.
 
-## Task 4: Add the RAG Tool
+## Task 3: Add the RAG Tool
 
 The RAG tool connects the agent to the Knowledge Base you created in Lab 1. When users ask about definitions, policies, thresholds, or interpretation rules, the agent uses this tool to retrieve relevant passages from the internal documents.
 
@@ -153,7 +121,7 @@ The RAG tool connects the agent to the Knowledge Base you created in Lab 1. When
 
     [NEED SCREENSHOT]
 
-## Task 5: Add the SQL Tools — Box Office and Streaming
+## Task 4: Add the SQL Tools — Box Office and Streaming
 
 Now we'll add the SQL tools. Each SQL tool executes a single, pre-defined, parameterized query against the Oracle AI Database. The agent selects which tool to call based on the user's question and populates the parameters automatically.
 
@@ -256,7 +224,7 @@ This tool returns weekly streaming health metrics (starts, hours, completion rat
     being JP.
     ```
 
-## Task 6: Add the SQL Tools — Marketing
+## Task 5: Add the SQL Tools — Marketing
 
 ### Tool 3: Get campaign summary data
 
@@ -345,7 +313,7 @@ This tool provides a breakdown of campaign spend and revenue by marketing channe
     {{campaign_id}}: The marketing campaign ID of interest. For example: C2001.
     ```
 
-## Task 7: Add the SQL Tools — Reference Lookups
+## Task 6: Add the SQL Tools — Reference Lookups
 
 These tools provide reference data that helps the agent resolve IDs and codes when users ask questions using title names, market names, or campaign names instead of IDs.
 
@@ -416,7 +384,6 @@ These tools provide reference data that helps the agent resolve IDs and codes wh
 
 In this lab, you built the complete agent flow for the Entertainment Release & Performance Analyst:
 
-- You created an **AI Compute** to host and execute the agent flow.
 - You created the **agent flow** on the visual canvas and attached it to the AI Compute.
 - You configured the **agent node** with the xai.grok-4-fast-reasoning model and detailed instructions that define the agent's reasoning flow, response style, and behavioral guardrails.
 - You added a **RAG tool** connected to the Knowledge Base containing release playbooks and strategy documents.
