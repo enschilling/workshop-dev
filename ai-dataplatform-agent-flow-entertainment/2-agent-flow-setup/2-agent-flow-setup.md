@@ -130,6 +130,8 @@ The RAG tool connects the agent to the Knowledge Base you created in Lab 1. When
     </copy>
     ```
 
+    >Note: The **`Description`** field comes pre-populated with instructions on how to use the field. You'll want to delete all contents before pasting the above description.
+
 3. In the **Configuration** tab, select the Knowledge Base you created in Lab 1 (`entertainment_analyst_kb`).
 
     ![RAG tool configuration - select knowledge base](images/02-agent-flows-rag-select-kbase.png " ")

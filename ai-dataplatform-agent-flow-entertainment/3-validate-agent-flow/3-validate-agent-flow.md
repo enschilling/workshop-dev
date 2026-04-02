@@ -33,9 +33,7 @@ The Playground is a built-in testing environment where you can create sessions a
 
 1. From the agent flow canvas, click the **Playground** located just above the canvas. This reveals the Playground panel.
 
-2. In the chat window, click the **+** button to start a new test session with the agent you created.
-
-3. The session is now active. You can type natural language questions in the chat input and the agent will reason, call tools, and respond — just as it would in production.
+2. The session is now active. You can type natural language questions in the chat input and the agent will reason, call tools, and respond — just as it would in production.
 
     > **Tip**: As you test, watch the tool call indicators. The Playground shows which tools the agent invokes, what parameters it passes, and what data comes back. This transparency is invaluable for understanding and debugging the agent's reasoning.
 
