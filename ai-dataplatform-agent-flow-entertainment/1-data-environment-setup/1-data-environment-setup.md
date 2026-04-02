@@ -45,21 +45,32 @@ An AI Compute hosts your agent flows. You need an active AI Compute to test agen
 
 5. From the AIDP Workbench Home Page, select your workspace from the drop-down menu listing all workspaces.
 
-    ![Use the drop-down menu to select your workspace](images/01-select-workspace.png " ")
+    ![Use the drop-down menu to select your workspace](images/01-dashboard-select-workspace.gif " ")
 
 6. Click on **Compute** under the selected workspace.
+
+    ![Screenshot depicting the Compute section of workspace](images/01-aidp-navigate-compute.png " ")
 
 7. In the Compute page, click on the **AI Compute** tab.
 
 8. Click the **+** button to add an AI Compute.
 
-    ![Screenshot of the AI compute tab and plus button](images/01-aidp-create-compute.png)
+    ![Screenshot of the AI compute tab and plus button](images/01-aidp-create-compute.png " ")
 
 9. Enter a name and description:
 
+    **Name**
     ```
-    Name: entertainment_analyst_compute
+    <copy>
+    entertainment_analyst_compute
+    </copy>
+    ```
+
+    **Description**
+    ```
+    <copy>
     Description: AI Compute for the Entertainment Release & Performance Analyst agent
+    </copy>
     ```
 
 10. Use the default size of **1 OCPU** and **16 GB of RAM**.
@@ -90,30 +101,43 @@ For this workshop, an ALH instance has been provisioned and loaded with sample d
 
     ![Screenshot of Create Catalog button](images/01-aidp-create-catalog.png " ")
 
-3. Enter the following details, then select **Catalog type** -> **External catalog**.
+3. Enter the following details:
 
+    **Catalog name:**
     ```
-    Catalog name: aidatabase
-    Description: A catalog that connects to the Autonomous AI Lakehouse database.
+    <copy>
+    aidatabase
+    </copy>
     ```
 
-4. For **External source method** select **Choose ALH instance**.
+    **Description**
+    ```
+    <copy>
+    A catalog that connects to the Autonomous AI Lakehouse database.
+    </copy>
+    ```
 
-5. Several fields should auto-populate. If the **Compartment** drop-down does not show your assigned workshop compartment, go ahead and locate / select your designated compartment.
+4. Then select **Catalog type** -> **External catalog**.
 
-6. Move to the **ALH instance** drop down and locate the **hol-entertainment-dev-zzz** instance. The last 8 characters will be a random string.
+5. For **External source method** select **Choose ALH instance**.
 
-7. From the **Service** dropdown, select the label that ends with **_high** to choose the high priority DSN.
+6. Several fields should auto-populate. If the **Compartment** drop-down does not show your assigned workshop compartment, go ahead and locate / select your designated compartment.
 
-8. Enter authentication details:
+7. Move to the **ALH instance** drop down and locate the **hol-entertainment-dev-zzz** instance. The last 8 characters will be a random string.
+
+    >NOTE: You might see a second resource with a shorter name listed in the drop-down. This is the database instance created by AI Data Platform for storing its vector embeddings. No need to pay it any mind.
+
+8. From the **Service** dropdown, select the label that ends with **_high** to choose the high priority Data Source Name (DSN). This is the connection string AIDP will use for high-priority access to the database.
+
+9. Enter authentication details:
 
     - **Wallet password (optional)**: You may choose your own password, or leave this field blank and allow AIDP to manage the wallet password.
     - **Username**: ENTERTAINMENT
     - **Password**: This was retrieved earlier from the LiveLabs Login Info dialog. 
 
-9. Click **[Test connection]** - confirm that the connection is successful.
+10. Click **[Test connection]** - confirm that the connection is successful.
 
-10. Click **[Create]**.
+11. Click **[Create]**.
 
     ![Screenshot of the create catalog dialog](images/01-catalog-add-external.png)
  
@@ -123,15 +147,31 @@ A standard catalog in AIDP stores AI-related artifacts — volumes, tables, sche
 
 1. From the AIDP Workbench Home Page, click on **Master Catalog**.
 
-2. Click **[Create catalog]** in the upper right corner. Provide a catalog name **`entertainment_analyst`** and a description **`a catalog that stores the assets needed by the entertainment industry analyst agent.`**. Click **[Create]**
+2. Click **[Create catalog]** in the upper right corner and provide the following: 
+
+    **Catalog name**
+    ```
+    <copy>
+    entertainment_analyst
+    </copy>
+    ```
+
+    **Description**
+    ```
+    <copy>
+    A catalog that stores the assets needed by the entertainment industry analyst agent.
+    </copy>
+    ```
+
+3. Click **[Create]**
 
     ![Master Catalog interface - create new standard catalog](images/01-catalog-create.png)
 
-3. It will take just a moment to create the new catalog. When ready, click **entertainment_analyst** to open the new catalog.
+4. It will take just a moment to create the new catalog. When ready, click **entertainment_analyst** to open the new catalog.
 
-    > **Note**: a **Standard Catalog** means it stores data directly within AIDP (backed by OCI Object Storage and Delta Lake), as opposed to an External Catalog which connects to data outside the platform.
+    > **Note**: a **Standard Catalog** means it stores data directly within AIDP (backed by OCI Object Storage and [Delta Lake](https://delta.io/) open source file format), as opposed to an External Catalog which connects to data outside the platform.
 
-4. Click on the **default** schema within the catalog. This is where the volume and knowledge base assets are organized.
+5. Click on the **default** schema within the catalog. This is where the volume and knowledge base assets are organized.
 
     ![Catalog interface - resource types inside entertainment_analyst](images/01-catalog-view-components.png)
 
@@ -154,7 +194,21 @@ A volume stores unstructured data — files, documents, images — within a cata
 
     ![Volumes interface - add new volume button](images/01-catalog-add-volume.png " ")
 
-5. Provide a name for the volume **`entertainment_analyst`** and a description **`this volume stores release playbooks, market prioritization, etc.`**. Click **[Create]**.
+5. Provide a name and description for the volume:
+
+    **Name**
+    ```
+    <copy>
+    entertainment_analyst
+    </copy>
+    ```
+
+    **Description**
+    ```
+    <copy>
+    This volume stores release playbooks, market prioritization, etc.
+    </copy>
+    ```
 
     ![Create new volume](images/01-catalog-create-volume.png " ")
 
@@ -178,9 +232,18 @@ Now we'll create the key asset that enables RAG. A Knowledge Base creates vector
 
 4. Enter the following values:
 
+    **Name**
     ```
-    Name: entertainment_analyst_kb
-    Description: Contains internal release playbooks, marketing guidelines, and distribution rules
+    <copy>
+    entertainment_analyst_kb
+    </copy>
+    ```
+
+    **Description**
+    ```
+    <copy>
+    Contains internal release playbooks, marketing guidelines, and distribution rules.
+    </copy>
     ```
 
     ![Create a new knowledgebase in the catalog](images/01-catalog-create-kbase.png " ")
