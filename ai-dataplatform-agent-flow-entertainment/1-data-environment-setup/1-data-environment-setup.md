@@ -33,7 +33,7 @@ An AI Compute hosts your agent flows. You need an active AI Compute to test agen
 
     ![Screenshot of main navigation menu](images/01-navigate-nav-menu.png " ")
 
-2. Naviate **Analytics & AI** --> **AI Data Platform Workbench**.
+2. Navigate **Analytics & AI** --> **AI Data Platform Workbench**.
 
     ![Screenshot of link to AI Data Platform menu item](images/01-navigate-ai-data-platform.png " ")
 
@@ -69,7 +69,7 @@ An AI Compute hosts your agent flows. You need an active AI Compute to test agen
     **Description**
     ```
     <copy>
-    Description: AI Compute for the Entertainment Release & Performance Analyst agent
+    AI Compute for the Entertainment Release & Performance Analyst agent
     </copy>
     ```
 
@@ -89,7 +89,7 @@ An external catalog in AIDP enables you to connect to an Autonomous Lakehouse (A
 
 For this workshop, an ALH instance has been provisioned and loaded with sample data already. You'll be creating a new external catalog to leverage that dataset.
 
-> **Important** You'll need the **`Database Admin Password`** found in the **`View Login Info`** on the LiveLabs workshop page (covered in the **Getting Started** section)
+> **Important** You'll need the **`ADB Admin Password`** found in the **`View Login Info`** on the LiveLabs workshop page (covered in the **Getting Started** section). Scroll down under **Reservation Information** and you should see a **Terraform Outputs** section.
 
 ![Screenshot of ADB admin password location](images/01-database-retrieve-password.png " ")
 
@@ -119,6 +119,8 @@ For this workshop, an ALH instance has been provisioned and loaded with sample d
 
 4. Then select **Catalog type** -> **External catalog**.
 
+    >Note: The **External source type** should default to **`Oracle Autonomous AI Lakehouse`**. That is exactly what we want.
+
 5. For **External source method** select **Choose ALH instance**.
 
 6. Several fields should auto-populate. If the **Compartment** drop-down does not show your assigned workshop compartment, go ahead and locate / select your designated compartment.
@@ -133,13 +135,13 @@ For this workshop, an ALH instance has been provisioned and loaded with sample d
 
     - **Wallet password (optional)**: You may choose your own password, or leave this field blank and allow AIDP to manage the wallet password.
     - **Username**: ENTERTAINMENT
-    - **Password**: This was retrieved earlier from the LiveLabs Login Info dialog. 
+    - **ADM Admin Password**: This was to be retrieved at the beginning of this task.
 
 10. Click **[Test connection]** - confirm that the connection is successful.
 
 11. Click **[Create]**.
 
-    ![Screenshot of the create catalog dialog](images/01-catalog-add-external.png)
+    ![Screenshot of the create catalog dialog](images/01-catalog-add-external.png " ")
  
 ## Task 3: Create the (Standard) Entertainment Analyst Catalog
 

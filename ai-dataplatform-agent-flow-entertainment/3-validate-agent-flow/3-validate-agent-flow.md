@@ -46,7 +46,9 @@ In this step, you'll ask the agent about box office performance for two movies. 
 1. In the Playground chat, enter the following prompt:
 
     ```
-    Can you tell me how well the movies neon knights and skyline hiest did at the box office?
+    <copy>
+    Can you tell me how well the movies neon knights and skyline heist did at the box office?
+    </copy>
     ```
 
 2. Observe the agent's response. It should:
@@ -69,7 +71,9 @@ Now test the agent's ability to handle a follow-up question that narrows the sco
 1. In the same session, enter the following prompt:
 
     ```
+    <copy>
     Can you look at the Canadian market?
+    </copy>
     ```
 
 2. Observe the agent's response. It should:
@@ -93,7 +97,7 @@ This step tests the marketing analysis capabilities. The agent needs to identify
     ```
     <copy>
     How about the campaign spend for these movies? What's the breakdown per channel?
-    <copy>
+    </copy>
     ```
 
 2. Observe the agent's response. It should:

@@ -122,7 +122,7 @@ The RAG tool connects the agent to the Knowledge Base you created in Lab 1. When
 
     **Description**
     ```
-    <coyp>
+    <copy>
     You have access to the following authoritative internal documents via a RAG tool: 
         - Content Strategy & Release Operations Playbook
         - Marketing Measurement & Attribution Guidelines
@@ -203,7 +203,8 @@ This tool returns weekend theatrical performance for a title in a given market.
     
     **{{title_id}}**
     ```
-    <copy>The title ID of the movie. For example, T1002. If you are unsure, use the tool get_title_id. The last option is to ask the user.
+    <copy>
+    The title ID of the movie. For example, T1002. If you are unsure, use the tool get_title_id. The last option is to ask the user.
     </copy>
     ```
 
@@ -429,7 +430,7 @@ These tools provide reference data that helps the agent resolve IDs and codes wh
 4. Enter the following SQL query:
 
     ```sql
-    <coyp>
+    <copy>
     SELECT * FROM titles
     </copy>
     ```
@@ -463,7 +464,7 @@ These tools provide reference data that helps the agent resolve IDs and codes wh
     ```sql
     <copy>
     SELECT * FROM markets
-    <copy>
+    </copy>
     ```
 
 5. This tool has **no parameters**.
