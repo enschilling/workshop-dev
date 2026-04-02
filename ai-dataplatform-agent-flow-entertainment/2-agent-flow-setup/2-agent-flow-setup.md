@@ -34,9 +34,18 @@ With the AI Compute instance created in Lab 1 (should be **Active** now), you ca
 
 2. Enter a name and description:
 
+    **Name**
     ```
-    Name: entertainment_analyst
-    Description: An internal analytics and decision-support agent for an entertainment studio or streaming platform.
+    <copy>
+    entertainment_analyst
+    </copy>
+    ```
+    
+    **Description**
+    ```
+    <copy>
+    An internal analytics and decision-support agent for an entertainment studio or streaming platform.
+    </copy>
     ```
 
     ![Create dialogue for new Agent Flow](images/02-agent-flows-create.png " ")
@@ -55,9 +64,18 @@ The agent node is the core of your flow. It defines the LLM model, the system in
 
 2. Click the *Agent Name* and *Agent Description* to edit both. Assign more detailed values.
 
+    **Name**
     ```
-    Name: Analyst Agent
-    Description: You are an internal analytics and decision-support agent for an entertainment studio or streaming platform.
+    <copy>
+    Analyst Agent
+    </copy>
+    ```
+    
+    **Description**
+    ```
+    <copy>
+    You are an internal analytics and decision-support agent for an entertainment studio or streaming platform.
+    </copy>
     ```
 
 3. In the **Configuration** tab, set the following:
@@ -95,12 +113,21 @@ The RAG tool connects the agent to the Knowledge Base you created in Lab 1. When
 
 2. Enter a name and description:
 
+    **Name**
     ```
-    Name: internal_knowledge_sources_rag
-    Description: You have access to the following authoritative internal documents via a RAG tool: 
+    <copy>
+    internal_knowledge_sources_rag
+    </copy>
+    ```
+
+    **Description**
+    ```
+    <coyp>
+    You have access to the following authoritative internal documents via a RAG tool: 
         - Content Strategy & Release Operations Playbook
         - Marketing Measurement & Attribution Guidelines
         - Distribution Window & Territory Rules
+    </copy>
     ```
 
 3. In the **Configuration** tab, select the Knowledge Base you created in Lab 1 (`entertainment_analyst_kb`).
@@ -114,12 +141,14 @@ The RAG tool connects the agent to the Knowledge Base you created in Lab 1. When
 6. Optionally, click the **Test** tab to verify the RAG tool is working. Enter the following test query:
 
     ```
+    <copy>
     Territory priorities for releases
+    </copy>
     ```
 
 7. You should see relevant passages returned from the release playbook documents. This confirms the Knowledge Base is properly connected and returning results.
 
-    [NEED SCREENSHOT]
+    ![Screenshot showing rag tool validation](images/02-agent-flows-validate-rag.png " ")
 
 ## Task 4: Add the SQL Tools — Box Office and Streaming
 
@@ -133,9 +162,18 @@ This tool returns weekend theatrical performance for a title in a given market.
 
 2. Enter the name and description:
 
+    **Name**
     ```
-    Name: get_box_office_weekend
-    Description: Weekend theatrical performance for a title in a market.
+    <copy>
+    get_box_office_weekend
+    </copy>
+    ```
+    
+    **Description**
+    ```
+    <copy>
+    Weekend theatrical performance for a title in a market.
+    </copy>
     ```
 
 3. Under **Catalog and Schema**, click the **Search** drop-down. Expand the **`aidatabase`** item and select the **`entertainment`** schema.
@@ -162,10 +200,18 @@ This tool returns weekend theatrical performance for a title in a given market.
 
 5. The parameters `{{title_id}}` and `{{market_code}}` will appear in the right panel under **AI Tool Definition**. Enter descriptions for each:
 
+    
+    **{{title_id}}**
     ```
-    {{title_id}}: The title ID of the movie. For example, T1002. If you are unsure, use the tool get_title_id. The last option is to ask the user.
+    <copy>The title ID of the movie. For example, T1002. If you are unsure, use the tool get_title_id. The last option is to ask the user.
+    </copy>
+    ```
 
-    {{market_code}}: Market code is a two letter code representing the country or region where the movie is released. These are documented in our internal policy documents. An example is Japan being JP.
+    **{{market_code}}**
+    ```
+    <copy>
+    Market code is a two letter code representing the country or region where the movie is released. These are documented in our internal policy documents. An example is Japan being JP.
+    </copy>
     ```
 
     ![Screenshot depicting AI Tool definition description input](images/02-agent-flows-sql-ai-tool-definition.png " ")
@@ -189,9 +235,18 @@ This tool returns weekly streaming health metrics (starts, hours, completion rat
 
 2. Enter the name and description:
 
+    **Name**
     ```
-    Name: get_streaming_trend
-    Description: Weekly streaming health trend (starts, hours, completion) for a title in a region.
+    <copy>
+    get_streaming_trend
+    </copy>
+    ```
+
+    **Description**
+    ```
+    <copy>
+    Weekly streaming health trend (starts, hours, completion) for a title in a region.
+    </copy>
     ```
 
 3. Select the same catalog and schema as the previous tool.
@@ -211,17 +266,24 @@ This tool returns weekly streaming health metrics (starts, hours, completion rat
     JOIN titles t ON t.title_id = s.title_id
     WHERE s.title_id = {{title_id}}
       AND s.region_code = {{region_code}}
-    ORDER BY s.week_start_date ASC;
+    ORDER BY s.week_start_date ASC
     </copy>
     ```
 
 5. Enter parameter descriptions:
 
+    **{{title_id}}**
     ```
-    {{title_id}}: The title ID of the movie. For example, T1002. If you are unsure, use the tool get_title_id. The last option is to ask the user.
+    <copy>
+    The title ID of the movie. For example, T1002. If you are unsure, use the tool get_title_id. The last option is to ask the user.
+    </copy>
+    ```
 
-    {{region_code}}: A two letter code representing the country or region where the movie is released. These are documented in our internal policy documents. An example is Japan
-    being JP.
+    **{{region_code}}**
+    ```
+    <copy>
+    A two letter code representing the country or region where the movie is released. These are documented in our internal policy documents. An example is Japan being JP.
+    </copy>
     ```
 
 ## Task 5: Add the SQL Tools — Marketing
@@ -234,9 +296,18 @@ This tool returns the roll-up of spend, attributed revenue, and computed ROI for
 
 2. Enter the name and description:
 
+    **Name**
     ```
-    Name: get_campaign_summary
-    Description: Roll up spend + attributed revenue + computed ROI for a campaign (all channels, all days).
+    <copy>
+    get_campaign_summary
+    </copy>
+    ```
+
+    **Description**
+    ```
+    <copy>
+    Roll up spend + attributed revenue + computed ROI for a campaign (all channels, all days).
+    </copy>
     ```
 
 3. Select the same catalog and schema.
@@ -263,14 +334,18 @@ This tool returns the roll-up of spend, attributed revenue, and computed ROI for
     JOIN marketing_daily_spend d ON d.campaign_id = c.campaign_id
     WHERE c.campaign_id = {{campaign_id}}
     GROUP BY
-      c.campaign_id, c.campaign_name, c.title_id, t.title_name, c.start_date, c.end_date;
+      c.campaign_id, c.campaign_name, c.title_id, t.title_name, c.start_date, c.end_date
     </copy>
     ```
 
 5. Enter the parameter description:
 
+    **{{campaign_id}}**
+
     ```
-    {{campaign_id}}: The ID of a marketing campaign associated with movies. For example: Z2001.
+    <copy>
+    The ID of a marketing campaign associated with movies. For example: Z2001.
+    </copy>
     ```
 
 ### Tool 4: Get campaign channel breakdown
@@ -281,9 +356,18 @@ This tool provides a breakdown of campaign spend and revenue by marketing channe
 
 2. Enter the name and description:
 
+    **Name**
     ```
-    Name: get_campaign_channel_breakdown
-    Description: Provides a breakdown of campaign spend and revenue by marketing channel.
+    <copy>
+    get_campaign_channel_breakdown
+    </copy>
+    ```
+
+    **Description**
+    ```
+    <copy>
+    Provides a breakdown of campaign spend and revenue by marketing channel.
+    </copy>
     ```
 
 3. Select the same catalog and schema.
@@ -303,14 +387,17 @@ This tool provides a breakdown of campaign spend and revenue by marketing channe
     FROM marketing_daily_spend d
     WHERE d.campaign_id = {{campaign_id}}
     GROUP BY d.channel
-    ORDER BY spend_usd DESC;
+    ORDER BY spend_usd DESC
     </copy>
     ```
 
 5. Enter the parameter description:
 
+    **{{campaign_id}}**
     ```
-    {{campaign_id}}: The marketing campaign ID of interest. For example: C2001.
+    <copy>
+    The marketing campaign ID of interest. For example: C2001.
+    </copy>
     ```
 
 ## Task 6: Add the SQL Tools — Reference Lookups
@@ -323,9 +410,18 @@ These tools provide reference data that helps the agent resolve IDs and codes wh
 
 2. Enter the name and description:
 
+    **Name**
     ```
-    Name: get_title_id
-    Description: This tool returns a table of all title IDs and title names.
+    <copy>
+    get_title_id
+    </copy>
+    ```
+
+    **Description**
+    ```
+    <copy>
+    This tool returns a table of all title IDs and title names.
+    </copy>
     ```
 
 3. Select the same catalog and schema.
@@ -333,7 +429,9 @@ These tools provide reference data that helps the agent resolve IDs and codes wh
 4. Enter the following SQL query:
 
     ```sql
+    <coyp>
     SELECT * FROM titles
+    </copy>
     ```
 
 5. This tool has **no parameters**.
@@ -344,9 +442,18 @@ These tools provide reference data that helps the agent resolve IDs and codes wh
 
 2. Enter the name and description:
 
+    **Name**
     ```
-    Name: get_market_code
-    Description: Returns a table of market codes alongside market names and currency.
+    <copy>
+    get_market_code
+    </copy>
+    ```
+
+    **Description**
+    ```
+    <copy>
+    Returns a table of market codes alongside market names and currency.
+    </copy>
     ```
 
 3. Select the same catalog and schema.
@@ -354,7 +461,9 @@ These tools provide reference data that helps the agent resolve IDs and codes wh
 4. Enter the following SQL query:
 
     ```sql
+    <copy>
     SELECT * FROM markets
+    <copy>
     ```
 
 5. This tool has **no parameters**.
@@ -365,9 +474,18 @@ These tools provide reference data that helps the agent resolve IDs and codes wh
 
 2. Enter the name and description:
 
+    **Name**
     ```
-    Name: get_campaign_code
-    Description: Provides a mapping between campaign ID, the campaign name and the associated movie (the title ID).
+    <copy>
+    get_campaign_code
+    </copy>
+    ```
+
+    **Description**
+    ```
+    <copy>
+    Provides a mapping between campaign ID, the campaign name and the associated movie (the title ID).
+    </copy>
     ```
 
 3. Select the same catalog and schema.
@@ -375,7 +493,9 @@ These tools provide reference data that helps the agent resolve IDs and codes wh
 4. Enter the following SQL query:
 
     ```sql
+    <copy>
     SELECT * FROM marketing_campaigns
+    </copy>
     ```
 
 5. This tool has **no parameters**.

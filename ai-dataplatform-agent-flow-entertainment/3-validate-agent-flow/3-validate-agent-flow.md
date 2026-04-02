@@ -91,7 +91,9 @@ This step tests the marketing analysis capabilities. The agent needs to identify
 1. In the same session, enter the following prompt:
 
     ```
+    <copy>
     How about the campaign spend for these movies? What's the breakdown per channel?
+    <copy>
     ```
 
 2. Observe the agent's response. It should:
@@ -113,7 +115,9 @@ This step tests the agent's ability to reason across the data it already retriev
 1. In the same session, enter the following prompt:
 
     ```
+    <copy>
     Are the top channels the same for both movies?
+    </copy>
     ```
 
 2. Observe the agent's response. It should:
@@ -135,7 +139,9 @@ This step shifts to streaming data and tests the agent's ability to handle a com
 1. In the same session, enter the following prompt:
 
     ```
+    <copy>
     Can you give me a report on streaming for cosmic kitchen and maple street?
+    </copy>
     ```
 
 2. Observe the agent's response. It should:
@@ -157,7 +163,9 @@ This final test evaluates the agent's ability to produce formatted tabular outpu
 1. In the same session, enter the following prompt:
 
     ```
+    <copy>
     Can you return a table for me? The columns are the two shows and the rows are the weeks. Just focus on the US market.
+    </copy>
     ```
 
 2. Observe the agent's response. It should:
