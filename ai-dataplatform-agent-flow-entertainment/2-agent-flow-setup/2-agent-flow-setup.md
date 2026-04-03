@@ -95,7 +95,7 @@ The agent node is the core of your flow. It defines the LLM model, the system in
 
 5. Open the **`agent_instructions.txt`** file that was in the Zip archive you extracted earlier.
 
-6. Copy the entire contents into the **Agent Instructions** box in the Configuration tab.
+6. Delete the instructions in the **Agent Instructions** box and copy the entire content of **`agent_instructions.txt`** into the **Agent Instructions** box in the Configuration tab.
 
     ![Agent configuration dialog with all parameters entered](images/02-agent-flows-create-agent-details.png " ")
 
