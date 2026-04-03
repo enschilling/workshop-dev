@@ -44,7 +44,7 @@ With the AI Compute instance created in Lab 1 (should be **Active** now), you ca
     **Description**
     ```
     <copy>
-    An internal analytics and decision-support agent for an entertainment studio or streaming platform.
+    This is an internal analytics and decision-support agent for an entertainment studio or streaming platform.
     </copy>
     ```
 
