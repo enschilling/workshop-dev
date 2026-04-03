@@ -74,7 +74,7 @@ The agent node is the core of your flow. It defines the LLM model, the system in
     **Description**
     ```
     <copy>
-    You are an internal analytics and decision-support agent for an entertainment studio or streaming platform.
+    This is an internal analytics and decision-support agent for an entertainment studio or streaming platform.
     </copy>
     ```
 
