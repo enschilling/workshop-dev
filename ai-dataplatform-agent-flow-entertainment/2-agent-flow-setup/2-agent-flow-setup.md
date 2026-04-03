@@ -140,7 +140,7 @@ The RAG tool connects the agent to the Knowledge Base you created in Lab 1. When
 
 5. Leave the **Query** field intact.
 
-6. Optionally, click the **Test** tab to verify the RAG tool is working. Enter the following test query:
+6. Optionally, click the **Test** tab to verify the RAG tool is working. Enter the following test query and click **[Submit]**:
 
     ```
     <copy>
@@ -221,9 +221,14 @@ This tool returns weekend theatrical performance for a title in a given market.
 
 6. Optionally, click the **Test** tab and assign values to validate:
 
+    **title_id**
     ```
-    title_id = T1001
-    market_code = US
+    <copy>T1001</copy>
+    ```
+
+    **market_code**
+    ```
+    <copy>US</copy>
     ```
 
     You should see two rows for Skyline Heist on 2025-09-14 and 2025-09-21.

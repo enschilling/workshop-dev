@@ -29,7 +29,7 @@ This lab assumes you have:
 
 An AI Compute hosts your agent flows. You need an active AI Compute to test agent flows and deploy them. Think of it as the runtime engine for your agent.
 
-1. Log into the OCI Console if you've not alrady done so (See **Getting Started** link in the left nav) and click the navigation menu in the top left corner.
+1. Log into the OCI Console if you've not already done so (See **Getting Started** link in the left nav) and click the navigation menu in the top left corner.
 
     ![Screenshot of main navigation menu](images/01-navigate-nav-menu.png " ")
 
@@ -190,7 +190,7 @@ A volume stores unstructured data — files, documents, images — within a cata
     - **Distribution Window & Territory Rules** — Defines territorial constraints, windowing strategies, and market codes
     - **Agent Instructions** - Detailed instructions that will be used to define how the agent is to operate
 
-3. Back in the AIDP Wrokbench, return to the **`entertainment_analyst`** catalog, locate the **default** schema, click on **Volumes**.
+3. Back in the AIDP Workbench, return to the **`entertainment_analyst`** catalog, locate the **default** schema, click on **Volumes**.
 
 4. Click the **+** next to the filter field to start creating a new volume.
 
