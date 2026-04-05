@@ -2,7 +2,7 @@
 
 ## Introduction
 
-With the data environment in place — a Knowledge Base for RAG and Oracle AI Database tables for SQL — it's time to build the agent itself. In this lab, you'll create the AI Compute that powers the agent, design the agent flow on the visual canvas, configure the agent node with detailed instructions, and wire up all the tools: one RAG tool connected to the Knowledge Base and seven SQL tools that query box office, streaming, and marketing data.
+With the data environment in place — a Knowledge Base for RAG and Oracle AI Database tables for SQL — it's time to build the agent itself. In this lab, you'll create the AI Compute that powers the agent, design the agent flow on the visual canvas, configure the agent node with detailed instructions, and wire up all the tools: one RAG tool connected to the Knowledge Base and seven SQL tools that query box office and streaming data.
 
 By the end of this lab, you'll have a fully configured Entertainment Release & Performance Analyst Agent ready for testing.
 
@@ -15,7 +15,7 @@ In this lab you will:
 1. Create an agent flow and attach it to the AI Compute instance
 2. Configure the agent node with a model and detailed agent instructions
 3. Add a RAG tool connected to the Knowledge Base you created in Lab 1
-4. Add seven SQL tools that query box office, streaming, and marketing data from the Oracle AI Database
+4. Add seven SQL tools that query box office and streaming data from the Oracle AI Database
 
 ### Prerequisites
 
@@ -294,125 +294,11 @@ This tool returns weekly streaming health metrics (starts, hours, completion rat
     </copy>
     ```
 
-## Task 5: Add the SQL Tools — Marketing
-
-### Tool 3: Get campaign summary data
-
-This tool returns the roll-up of spend, attributed revenue, and computed ROI for a marketing campaign.
-
-1. Drag a **SQL tool** onto the canvas.
-
-2. Enter the name and description:
-
-    **Name**
-    ```
-    <copy>
-    get_campaign_summary
-    </copy>
-    ```
-
-    **Description**
-    ```
-    <copy>
-    Roll up spend + attributed revenue + computed ROI for a campaign (all channels, all days).
-    </copy>
-    ```
-
-3. Select the same catalog and schema.
-
-4. Enter the following SQL query:
-
-    ```sql
-    <copy>
-    SELECT
-      c.campaign_id,
-      c.campaign_name,
-      c.title_id,
-      t.title_name,
-      c.start_date,
-      c.end_date,
-      SUM(d.spend_usd) AS total_spend_usd,
-      SUM(d.attributed_revenue_usd) AS total_attributed_revenue_usd,
-      CASE
-        WHEN SUM(d.spend_usd) = 0 THEN NULL
-        ELSE (SUM(d.attributed_revenue_usd) - SUM(d.spend_usd)) / SUM(d.spend_usd)
-      END AS roi
-    FROM marketing_campaigns c
-    JOIN titles t ON t.title_id = c.title_id
-    JOIN marketing_daily_spend d ON d.campaign_id = c.campaign_id
-    WHERE c.campaign_id = {{campaign_id}}
-    GROUP BY
-      c.campaign_id, c.campaign_name, c.title_id, t.title_name, c.start_date, c.end_date
-    </copy>
-    ```
-
-5. Enter the parameter description:
-
-    **{{campaign_id}}**
-
-    ```
-    <copy>
-    The ID of a marketing campaign associated with movies. For example: Z2001.
-    </copy>
-    ```
-
-### Tool 4: Get campaign channel breakdown
-
-This tool provides a breakdown of campaign spend and revenue by marketing channel.
-
-1. Drag a **SQL tool** onto the canvas.
-
-2. Enter the name and description:
-
-    **Name**
-    ```
-    <copy>
-    get_campaign_channel_breakdown
-    </copy>
-    ```
-
-    **Description**
-    ```
-    <copy>
-    Provides a breakdown of campaign spend and revenue by marketing channel.
-    </copy>
-    ```
-
-3. Select the same catalog and schema.
-
-4. Enter the following SQL query:
-
-    ```sql
-    <copy>
-    SELECT
-      d.channel,
-      SUM(d.spend_usd) AS spend_usd,
-      SUM(d.attributed_revenue_usd) AS attributed_revenue_usd,
-      CASE
-        WHEN SUM(d.spend_usd) = 0 THEN NULL
-        ELSE (SUM(d.attributed_revenue_usd) - SUM(d.spend_usd)) / SUM(d.spend_usd)
-      END AS roi
-    FROM marketing_daily_spend d
-    WHERE d.campaign_id = {{campaign_id}}
-    GROUP BY d.channel
-    ORDER BY spend_usd DESC
-    </copy>
-    ```
-
-5. Enter the parameter description:
-
-    **{{campaign_id}}**
-    ```
-    <copy>
-    The marketing campaign ID of interest. For example: C2001.
-    </copy>
-    ```
-
-## Task 6: Add the SQL Tools — Reference Lookups
+## Task 5: Add the SQL Tools — Reference Lookups
 
 These tools provide reference data that helps the agent resolve IDs and codes when users ask questions using title names, market names, or campaign names instead of IDs.
 
-### Tool 5: Get title id
+### Tool 3: Get title id
 
 1. Drag a **SQL tool** onto the canvas.
 
@@ -444,7 +330,7 @@ These tools provide reference data that helps the agent resolve IDs and codes wh
 
 5. This tool has **no parameters**.
 
-### Tool 6: Get market code
+### Tool 4: Get market code
 
 1. Drag a **SQL tool** onto the canvas.
 
@@ -476,37 +362,6 @@ These tools provide reference data that helps the agent resolve IDs and codes wh
 
 5. This tool has **no parameters**.
 
-### Tool 7: Get campaign code
-
-1. Drag a **SQL tool** onto the canvas.
-
-2. Enter the name and description:
-
-    **Name**
-    ```
-    <copy>
-    get_campaign_code
-    </copy>
-    ```
-
-    **Description**
-    ```
-    <copy>
-    Provides a mapping between campaign ID, the campaign name and the associated movie (the title ID).
-    </copy>
-    ```
-
-3. Select the same catalog and schema.
-
-4. Enter the following SQL query:
-
-    ```sql
-    <copy>
-    SELECT * FROM marketing_campaigns
-    </copy>
-    ```
-
-5. This tool has **no parameters**.
 
 ## Lab 2 Recap
 
@@ -515,7 +370,7 @@ In this lab, you built the complete agent flow for the Entertainment Release & P
 - You created the **agent flow** on the visual canvas and attached it to the AI Compute.
 - You configured the **agent node** with the xai.grok-4-fast-reasoning model and detailed instructions that define the agent's reasoning flow, response style, and behavioral guardrails.
 - You added a **RAG tool** connected to the Knowledge Base containing release playbooks and strategy documents.
-- You added **seven SQL tools** covering box office performance, streaming health, campaign summaries, channel breakdowns, and reference lookups for titles, markets, and campaigns.
+- You added **four SQL tools** covering box office performance, streaming health, and reference lookups for titles and markets.
 
 The agent now has everything it needs: a brain (the LLM), internal knowledge (RAG), and structured data access (SQL). In the next lab, you'll test it in the Playground.
 
