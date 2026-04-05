@@ -162,7 +162,7 @@ This tool returns weekend theatrical performance for a title in a given market.
 
 1. Drag a **SQL tool** onto the canvas.
 
-2. Enter the name and description:
+2. Enter the name
 
     **Name**
     ```
@@ -171,18 +171,20 @@ This tool returns weekend theatrical performance for a title in a given market.
     </copy>
     ```
     
+3. Under **Catalog and Schema**, click the **Search** drop-down. Expand the **`aidatabase`** item and select the **`entertainment`** schema.
+
+    ![Screenshot depicting the catalog and schema drop-down](images/02-agent-flows-sql-select-schema.png " ")
+
+4. Enter a description. The **`Description`** field comes pre-populated with instructions on how to use the field. You'll want to delete all contents before pasting the above description.
+
     **Description**
     ```
     <copy>
     Weekend theatrical performance for a title in a market.
     </copy>
     ```
-
-3. Under **Catalog and Schema**, click the **Search** drop-down. Expand the **`aidatabase`** item and select the **`entertainment`** schema.
-
-    ![Screenshot depicting the catalog and schema drop-down](images/02-agent-flows-sql-select-schema.png " ")
-
-4. Enter the following SQL query:
+    
+5. Enter the following SQL query:
 
     ```sql
     <copy>
@@ -200,7 +202,7 @@ This tool returns weekend theatrical performance for a title in a given market.
     </copy>
     ```
 
-5. The parameters `{{title_id}}` and `{{market_code}}` will appear in the right panel under **AI Tool Definition**. Enter descriptions for each:
+6. The parameters `{{title_id}}` and `{{market_code}}` will appear in the right panel under **AI Tool Definition**. Enter descriptions for each:
 
     
     **{{title_id}}**
@@ -219,7 +221,7 @@ This tool returns weekend theatrical performance for a title in a given market.
 
     ![Screenshot depicting AI Tool definition description input](images/02-agent-flows-sql-ai-tool-definition.png " ")
 
-6. Optionally, click the **Test** tab and assign values to validate:
+7. Optionally, click the **Test** tab and assign values to validate:
 
     **title_id**
     ```
