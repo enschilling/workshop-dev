@@ -62,7 +62,9 @@ The agent node is the core of your flow. It defines the LLM model, the system in
 
 1. Drag an **Agent node** onto the canvas, then click on the entity frame that appears on the Canvas.
 
-2. Click the *Agent Name* and *Agent Description* to edit both. Assign more detailed values.
+2. Click the *Agent Name* and *Agent Description* in the drawer window to edit both. Assign more detailed values.
+
+   ![Change the agent flow name](images/02-agent-flows-change-name.png " ")
 
     **Name**
     ```
@@ -70,6 +72,8 @@ The agent node is the core of your flow. It defines the LLM model, the system in
     Analyst Agent
     </copy>
     ```
+
+   ![Change the agent flow description](images/02-agent-flows-change-descriptions.png " ")
     
     **Description**
     ```
