@@ -84,10 +84,16 @@ The agent node is the core of your flow. It defines the LLM model, the system in
 
 3. In the **Configuration** tab, set the following:
 
-    ```
-    Region: us-phoenix-1
-    Model: xai.grok-4-fast-reasoning
-    ```
+   **Region**
+
+   For the **Region**, select the region corresponding to the **Generative AI Endpoint Region** in the **View Login Info**: 
+
+   ![Select Generative AI Endpoint Region](images/2-agent-flows-select-llm-region.png " ")
+
+   **Model** 
+
+   Select ```xai.grok-4-fast-reasoning```
+
 
 4. For the **Agent Instructions** field, you'll need the detailed instructions that define the agent's behavior, reasoning flow, and response style. These instructions tell the agent:
 
