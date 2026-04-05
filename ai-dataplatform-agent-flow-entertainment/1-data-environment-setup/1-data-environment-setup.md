@@ -29,7 +29,11 @@ This lab assumes you have:
 
 An AI Compute hosts your agent flows. You need an active AI Compute to test agent flows and deploy them. Think of it as the runtime engine for your agent.
 
-1. Log into the OCI Console if you've not already done so (See **Getting Started** link in the left nav) and click the navigation menu in the top left corner.
+1. Log into the OCI Console if you've not already done so (See **Getting Started** link in the left nav) 
+
+    ![Animated gif showing log in and password reset](images/01-tenancy-login-reset-password.gif)
+
+2. Click the navigation menu in the top left corner.
 
     ![Screenshot of main navigation menu](images/01-navigate-nav-menu.png " ")
 
@@ -39,7 +43,7 @@ An AI Compute hosts your agent flows. You need an active AI Compute to test agen
 
 3. From the *List scope* menu on the left side of the page, click the drop-down and locate the *Compartment* assigned by the LiveLabs environment.
 
-    ![Screenshot of AIDP console - compartment select](images/01-aidp-console-compartment.png " ")
+    ![Animated gif illustrating how to locate and select assigned compartment](images/01-tenancy-select-compartment.gif " ")
 
 4. Click the name of the AIDP Instance to open the Workbench. The workbench will open in a new tab.
 
