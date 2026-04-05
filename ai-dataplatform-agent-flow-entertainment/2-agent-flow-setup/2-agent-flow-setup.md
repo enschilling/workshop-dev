@@ -243,7 +243,7 @@ This tool returns weekly streaming health metrics (starts, hours, completion rat
 
 1. Drag another **SQL tool** onto the canvas.
 
-2. Enter the name and description:
+2. Enter the name. 
 
     **Name**
     ```
@@ -252,16 +252,20 @@ This tool returns weekly streaming health metrics (starts, hours, completion rat
     </copy>
     ```
 
+3. Under **Catalog and Schema**, click the **Search** drop-down. Expand the **`aidatabase`** item and select the **`entertainment`** schema.
+
+    ![Screenshot depicting the catalog and schema drop-down](images/02-agent-flows-sql-select-schema.png " ")
+
+4. Enter the description. The **`Description`** field comes pre-populated with instructions on how to use the field. You'll want to delete all contents before pasting the above description.
+
     **Description**
     ```
     <copy>
     Weekly streaming health trend (starts, hours, completion) for a title in a region.
     </copy>
     ```
-
-3. Select the same catalog and schema as the previous tool.
-
-4. Enter the following SQL query:
+    
+5. Enter the following SQL query:
 
     ```sql
     <copy>
@@ -280,7 +284,7 @@ This tool returns weekly streaming health metrics (starts, hours, completion rat
     </copy>
     ```
 
-5. Enter parameter descriptions:
+6. Enter parameter descriptions:
 
     **{{title_id}}**
     ```
@@ -304,7 +308,7 @@ These tools provide reference data that helps the agent resolve IDs and codes wh
 
 1. Drag a **SQL tool** onto the canvas.
 
-2. Enter the name and description:
+2. Enter the name: 
 
     **Name**
     ```
@@ -313,16 +317,20 @@ These tools provide reference data that helps the agent resolve IDs and codes wh
     </copy>
     ```
 
+3. Under **Catalog and Schema**, click the **Search** drop-down. Expand the **`aidatabase`** item and select the **`entertainment`** schema.
+
+    ![Screenshot depicting the catalog and schema drop-down](images/02-agent-flows-sql-select-schema.png " ")
+
+4. Enter the description. The **`Description`** field comes pre-populated with instructions on how to use the field. You'll want to delete all contents before pasting the above description.
+
     **Description**
     ```
     <copy>
     This tool returns a table of all title IDs and title names.
     </copy>
     ```
-
-3. Select the same catalog and schema.
-
-4. Enter the following SQL query:
+    
+5. Enter the following SQL query:
 
     ```sql
     <copy>
@@ -330,13 +338,13 @@ These tools provide reference data that helps the agent resolve IDs and codes wh
     </copy>
     ```
 
-5. This tool has **no parameters**.
+6. This tool has **no parameters**.
 
 ### Tool 4: Get market code
 
 1. Drag a **SQL tool** onto the canvas.
 
-2. Enter the name and description:
+2. Enter the name:
 
     **Name**
     ```
@@ -344,6 +352,12 @@ These tools provide reference data that helps the agent resolve IDs and codes wh
     get_market_code
     </copy>
     ```
+    
+3. Under **Catalog and Schema**, click the **Search** drop-down. Expand the **`aidatabase`** item and select the **`entertainment`** schema.
+
+    ![Screenshot depicting the catalog and schema drop-down](images/02-agent-flows-sql-select-schema.png " ")
+
+4. Enter the description. The **`Description`** field comes pre-populated with instructions on how to use the field. You'll want to delete all contents before pasting the above description.
 
     **Description**
     ```
@@ -351,10 +365,8 @@ These tools provide reference data that helps the agent resolve IDs and codes wh
     Returns a table of market codes alongside market names and currency.
     </copy>
     ```
-
-3. Select the same catalog and schema.
-
-4. Enter the following SQL query:
+    
+5. Enter the following SQL query:
 
     ```sql
     <copy>
@@ -362,7 +374,7 @@ These tools provide reference data that helps the agent resolve IDs and codes wh
     </copy>
     ```
 
-5. This tool has **no parameters**.
+6. This tool has **no parameters**.
 
 
 ## Lab 2 Recap
