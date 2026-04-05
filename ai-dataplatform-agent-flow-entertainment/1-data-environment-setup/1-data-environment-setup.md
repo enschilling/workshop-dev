@@ -183,14 +183,13 @@ A volume stores unstructured data — files, documents, images — within a cata
 
 1. First off, [Click Here](https://github.com/enschilling/workshop-dev/raw/refs/heads/main/ai-dataplatform-agent-flow-entertainment/files/kb_documents.zip) to download the Zip file containing all the sample docs required for this workshop.
 
-2. Unzip the file; you should have 3 `.docx` files pertaining to the Knowledge Base components, and 1 `agent_instructions.txt` file that you'll use in Lab 2.
+2. Unzip the file; you should have 3 `.docx` files pertaining to the Knowledge Base components that will be built here in Lab 1.
 
     - **Content Strategy & Release Operations Playbook** — Defines release windows, territory prioritization, green/yellow/red performance signals, and decision frameworks
     - **Marketing Measurement & Attribution Guidelines** — Defines metric definitions (e.g., completion rate, ROI), attribution logic, and interpretation rules
     - **Distribution Window & Territory Rules** — Defines territorial constraints, windowing strategies, and market codes
-    - **Agent Instructions** - Detailed instructions that will be used to define how the agent is to operate
 
-3. Back in the AIDP Workbench, return to the **`entertainment_analyst`** catalog, locate the **default** schema, click on **Volumes**.
+3. Back in the AIDP Workbench browser window, return to the **`entertainment_analyst`** catalog, locate the **default** schema, click on **Volumes**.
 
 4. Click the **+** next to the filter field to start creating a new volume.
 
@@ -214,11 +213,15 @@ A volume stores unstructured data — files, documents, images — within a cata
 
     ![Create new volume](images/01-catalog-create-volume.png " ")
 
-6. Click the volume name **`entertainment_analyst`** then click the **+** button to the right of the Filter field. Click to browse or drag-and-drop the three `.docx` files from the Zip archive you downloaded earlier.
+6. Click the volume name **`entertainment_analyst`** then click the **+** button to the right of the Filter field then click **`Upload file`**.
+
+7. Click to browse or drag-and-drop the three `.docx` files from the Zip archive you downloaded earlier.
 
     ![Upload files interface](images/01-catalog-volume-upload-files.png " ")
 
-7. Click **[Upload]**, then review the files. You should see the following internal documents:
+8. Click **[Upload]**, then review the files. You should see the following internal documents:
+
+    ![Verify files uploaded successful](images/01-catalog-volume-upload-files-complete.png " ")
 
 8. These are the documents that the AI agent will search via RAG when users ask questions about definitions, policies, thresholds, or interpretation rules. For example, when a user asks *"What does our playbook say about territory priorities for releases?"*, the agent will retrieve relevant passages from these documents.
 
