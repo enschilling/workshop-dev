@@ -121,29 +121,35 @@ For this workshop, an ALH instance has been provisioned and loaded with sample d
     </copy>
     ```
 
-4. Then select **Catalog type** -> **External catalog**.
+4. Once you select the **Catalog type**, there will be several critical configuration details. Consider watching this animation for reference before proceeding:
+
+    ![Animation showing steps to create external catalog](images/01-catalog-add-external-details.gif " ")
+
+5. Now, select **Catalog type** -> **External catalog**.
 
     >Note: The **External source type** should default to **`Oracle Autonomous AI Lakehouse`**. That is exactly what we want.
 
-5. For **External source method** select **Choose ALH instance**.
+6. For **External source method** select **Choose ALH instance**.
 
-6. Several fields should auto-populate. If the **Compartment** drop-down does not show your assigned workshop compartment, go ahead and locate / select your designated compartment.
+7. Several fields should auto-populate. If the **Compartment** drop-down does not show your assigned workshop compartment, go ahead and locate / select your designated compartment.
 
-7. Move to the **ALH instance** drop down and locate the **hol-entertainment-dev-zzz** instance. The last 8 characters will be a random string.
+8. Move to the **ALH instance** drop down and locate the **hol-entertainment-dev-zzz** instance. The last 8 characters will be a random string.
 
     >NOTE: You might see a second resource with a shorter name listed in the drop-down. This is the database instance created by AI Data Platform for storing its vector embeddings. No need to pay it any mind.
 
-8. From the **Service** dropdown, select the label that ends with **_high** to choose the high priority Data Source Name (DSN). This is the connection string AIDP will use for high-priority access to the database.
+9. From the **Service** dropdown, select the label that ends with **_high** to choose the high priority Data Source Name (DSN). This is the connection string AIDP will use for high-priority access to the database.
 
-9. Enter authentication details:
+10. Enter authentication details:
 
     - **Wallet password (optional)**: You may choose your own password, or leave this field blank and allow AIDP to manage the wallet password.
     - **Username**: ENTERTAINMENT
     - **ADM Admin Password**: This was to be retrieved at the beginning of this task.
 
-10. Click **[Test connection]** - confirm that the connection is successful.
+11. Click **[Test connection]** - confirm that the connection is successful.
 
-11. Click **[Create]**.
+    >Note: If the connect returns an error or is otherwise not successful, contact a workshop facilitator. Do not proceed to the next step.
+
+12. Click **[Create]**.
 
     ![Screenshot of the create catalog dialog](images/01-catalog-add-external.png " ")
  
