@@ -111,7 +111,7 @@ The RAG tool connects the agent to the Knowledge Base you created in Lab 1. When
 
     ![Agent flows canvas - attach RAG tool](images/02-agent-flows-attach-rag.png " ")
 
-2. Enter a name and description:
+2. Enter a name:
 
     **Name**
     ```
@@ -119,6 +119,12 @@ The RAG tool connects the agent to the Knowledge Base you created in Lab 1. When
     internal_knowledge_sources_rag
     </copy>
     ```
+    
+3. In the **Configuration** tab, select the Knowledge Base you created in Lab 1 (`entertainment_analyst_kb`).
+
+    ![RAG tool configuration - select knowledge base](images/02-agent-flows-rag-select-kbase.png " ")
+
+4. Enter a description. The **`Description`** field comes pre-populated with instructions on how to use the field. You'll want to delete all contents before pasting the above description.
 
     **Description**
     ```
@@ -130,17 +136,11 @@ The RAG tool connects the agent to the Knowledge Base you created in Lab 1. When
     </copy>
     ```
 
-    >Note: The **`Description`** field comes pre-populated with instructions on how to use the field. You'll want to delete all contents before pasting the above description.
+5. Set the document retrieval limit to **5**. This is the number of chunks returned by the Knowledge Base for each query.
 
-3. In the **Configuration** tab, select the Knowledge Base you created in Lab 1 (`entertainment_analyst_kb`).
+6. Leave the **Query** field intact.
 
-    ![RAG tool configuration - select knowledge base](images/02-agent-flows-rag-select-kbase.png " ")
-
-4. Set the document retrieval limit to **5**. This is the number of chunks returned by the Knowledge Base for each query.
-
-5. Leave the **Query** field intact.
-
-6. Optionally, click the **Test** tab to verify the RAG tool is working. Enter the following test query and click **[Submit]**:
+7. Optionally, click the **Test** tab to verify the RAG tool is working. Enter the following test query and click **[Submit]**:
 
     ```
     <copy>
@@ -148,7 +148,7 @@ The RAG tool connects the agent to the Knowledge Base you created in Lab 1. When
     </copy>
     ```
 
-7. You should see relevant passages returned from the release playbook documents. This confirms the Knowledge Base is properly connected and returning results.
+8. You should see relevant passages returned from the release playbook documents. This confirms the Knowledge Base is properly connected and returning results.
 
     ![Screenshot showing rag tool validation](images/02-agent-flows-validate-rag.png " ")
 
