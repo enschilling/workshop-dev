@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The agent is built — now it's time to see it in action. In this lab, you'll use the Agent Flow Playground to test the Entertainment Release & Performance Analyst agent with a series of real-world questions that span box office analysis, streaming health, marketing ROI, and cross-title comparisons. Each test is designed to exercise a different combination of the agent's tools (RAG, SQL, or both) and demonstrate how the agent reasons across structured and unstructured data to serve marketing, finance, and content strategy teams.
+The agent is built — now it's time to see it in action. In this lab, you'll use the Agent Flow Playground to test the Entertainment Release & Performance Analyst agent with a series of real-world questions that span box office analysis, streaming health, and cross-title comparisons. Each test is designed to exercise a different combination of the agent's tools (RAG, SQL, or both) and demonstrate how the agent reasons across structured and unstructured data to serve marketing, finance, and content strategy teams.
 
 Pay close attention to how the agent decides which tools to call, how it resolves title names to IDs (even with typos), and how it synthesizes results into clear, actionable business language.
 
@@ -15,9 +15,8 @@ In this lab you will:
 1. Open the Agent Flow Playground and create a test session
 2. Test the agent with a multi-title box office question — observing how it resolves title names and handles typos
 3. Test market-specific follow-ups to see how the agent maintains conversational context
-4. Test marketing ROI and channel breakdown queries spanning multiple campaigns
-5. Test streaming performance with a cross-title comparison request
-6. Test the agent's ability to produce structured tabular output on demand
+4. Test streaming performance with a cross-title comparison request
+5. Test the agent's ability to produce structured tabular output on demand
 
 ### Prerequisites
 
@@ -86,55 +85,7 @@ Now test the agent's ability to handle a follow-up question that narrows the sco
     >
     > Expected behavior: The agent maintains conversational context, resolves the market name to a code, and returns Canada-specific box office data for both titles.
 
-## Task 4: Test Marketing ROI — Campaign Spend and Channel Breakdown
-
-This step tests the marketing analysis capabilities. The agent needs to identify the campaigns associated with the two movies, retrieve spend and ROI data, and break it down by marketing channel.
-
-1. In the same session, enter the following prompt:
-
-    ```
-    <copy>
-    How about the campaign spend for these movies? What's the breakdown per channel?
-    </copy>
-    ```
-
-2. Observe the agent's response. It should:
-    - Use the `get_campaign_code` tool to find campaign IDs associated with both titles
-    - Call the `get_campaign_summary` tool for each campaign to get total spend, revenue, and ROI
-    - Call the `get_campaign_channel_breakdown` tool for each campaign to show spend by channel (e.g., social, programmatic, TV, search)
-    - Present a clear comparison of marketing performance across both titles
-
-    > **Sample response placeholder**:
-    >
-    > *[Insert screenshot of agent response here]*
-    >
-    > Expected behavior: The agent chains multiple tool calls — first resolving campaigns, then retrieving summaries, then channel breakdowns — and synthesizes the results into an actionable marketing analysis.
-
-## Task 5: Test Cross-Title Channel Comparison
-
-This step tests the agent's ability to reason across the data it already retrieved and answer a comparative analytical question.
-
-1. In the same session, enter the following prompt:
-
-    ```
-    <copy>
-    Are the top channels the same for both movies?
-    </copy>
-    ```
-
-2. Observe the agent's response. It should:
-    - Compare the channel breakdown data from the previous response (or re-query if needed)
-    - Identify which channels performed best for each movie
-    - Highlight similarities and differences
-    - Offer interpretation grounded in the data
-
-    > **Sample response placeholder**:
-    >
-    > *[Insert screenshot of agent response here]*
-    >
-    > Expected behavior: The agent provides a clear comparative analysis of channel performance, noting which channels are shared top performers and which differ between titles.
-
-## Task 6: Test Streaming Performance — Multi-Title Comparison
+## Task 4: Test Streaming Performance — Multi-Title Comparison
 
 This step shifts to streaming data and tests the agent's ability to handle a completely different data domain within the same session.
 
@@ -158,7 +109,7 @@ This step shifts to streaming data and tests the agent's ability to handle a com
     >
     > Expected behavior: The agent switches data domains from box office to streaming seamlessly, retrieves multi-week trend data for both titles, and presents it in a report format.
 
-## Task 7: Test Structured Output — Custom Table Format
+## Task 5: Test Structured Output — Custom Table Format
 
 This final test evaluates the agent's ability to produce formatted tabular output when explicitly requested.
 
@@ -182,7 +133,7 @@ This final test evaluates the agent's ability to produce formatted tabular outpu
     >
     > Expected behavior: The agent restructures the data into the requested pivot-style table format, with weeks as rows and the two show titles as column headers, filtered to US market only.
 
-## Task 8: Reflect on the Agent's Behavior
+## Task 6: Reflect on the Agent's Behavior
 
 Before moving on, take a moment to consider what just happened across the test session.
 
@@ -192,9 +143,7 @@ Before moving on, take a moment to consider what just happened across the test s
 
 3. **Error tolerance**: The agent handled a misspelled title name ("skyline hiest") by using the reference lookup tool rather than failing.
 
-4. **Multi-tool chaining**: For the marketing questions, the agent chained multiple tool calls — first resolving campaigns, then fetching summaries, then fetching channel breakdowns — before synthesizing a response.
-
-5. **Output flexibility**: The agent adapted its response format from narrative summaries to structured tables based on the user's explicit request.
+4. **Output flexibility**: The agent adapted its response format from narrative summaries to structured tables based on the user's explicit request.
 
     > **Discussion prompt**: "If this agent were available to your team today, what would be the first question you'd ask about your current release? What additional data sources or tools would make it more useful?"
 
@@ -204,7 +153,6 @@ In this lab, you validated the Entertainment Release & Performance Analyst agent
 
 - Multi-title box office queries with typo handling
 - Market-specific follow-ups with conversational context retention
-- Marketing ROI analysis with multi-tool chaining (campaign lookup → summary → channel breakdown)
 - Cross-title comparative analysis
 - Streaming performance reports across a different data domain
 - Custom structured output formatting on demand
