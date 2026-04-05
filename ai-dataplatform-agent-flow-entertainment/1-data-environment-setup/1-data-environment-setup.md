@@ -29,7 +29,11 @@ This lab assumes you have:
 
 An AI Compute hosts your agent flows. You need an active AI Compute to test agent flows and deploy them. Think of it as the runtime engine for your agent.
 
-1. Log into the OCI Console if you've not already done so (See **Getting Started** link in the left nav) and click the navigation menu in the top left corner.
+1. Log into the OCI Console if you've not already done so (See **Getting Started** link in the left nav) 
+
+    ![Animated gif showing log in and password reset](images/01-tenancy-login-reset-password.gif)
+
+2. Click the navigation menu in the top left corner.
 
     ![Screenshot of main navigation menu](images/01-navigate-nav-menu.png " ")
 
@@ -39,7 +43,7 @@ An AI Compute hosts your agent flows. You need an active AI Compute to test agen
 
 3. From the *List scope* menu on the left side of the page, click the drop-down and locate the *Compartment* assigned by the LiveLabs environment.
 
-    ![Screenshot of AIDP console - compartment select](images/01-aidp-console-compartment.png " ")
+    ![Animated gif illustrating how to locate and select assigned compartment](images/01-tenancy-select-compartment.gif " ")
 
 4. Click the name of the AIDP Instance to open the Workbench. The workbench will open in a new tab.
 
@@ -117,29 +121,35 @@ For this workshop, an ALH instance has been provisioned and loaded with sample d
     </copy>
     ```
 
-4. Then select **Catalog type** -> **External catalog**.
+4. Once you select the **Catalog type**, there will be several critical configuration details. Consider watching this animation for reference before proceeding:
+
+    ![Animation showing steps to create external catalog](images/01-catalog-add-external-details.gif " ")
+
+5. Now, select **Catalog type** -> **External catalog**.
 
     >Note: The **External source type** should default to **`Oracle Autonomous AI Lakehouse`**. That is exactly what we want.
 
-5. For **External source method** select **Choose ALH instance**.
+6. For **External source method** select **Choose ALH instance**.
 
-6. Several fields should auto-populate. If the **Compartment** drop-down does not show your assigned workshop compartment, go ahead and locate / select your designated compartment.
+7. Several fields should auto-populate. If the **Compartment** drop-down does not show your assigned workshop compartment, go ahead and locate / select your designated compartment.
 
-7. Move to the **ALH instance** drop down and locate the **hol-entertainment-dev-zzz** instance. The last 8 characters will be a random string.
+8. Move to the **ALH instance** drop down and locate the **hol-entertainment-dev-zzz** instance. The last 8 characters will be a random string.
 
     >NOTE: You might see a second resource with a shorter name listed in the drop-down. This is the database instance created by AI Data Platform for storing its vector embeddings. No need to pay it any mind.
 
-8. From the **Service** dropdown, select the label that ends with **_high** to choose the high priority Data Source Name (DSN). This is the connection string AIDP will use for high-priority access to the database.
+9. From the **Service** dropdown, select the label that ends with **_high** to choose the high priority Data Source Name (DSN). This is the connection string AIDP will use for high-priority access to the database.
 
-9. Enter authentication details:
+10. Enter authentication details:
 
     - **Wallet password (optional)**: You may choose your own password, or leave this field blank and allow AIDP to manage the wallet password.
     - **Username**: ENTERTAINMENT
     - **ADM Admin Password**: This was to be retrieved at the beginning of this task.
 
-10. Click **[Test connection]** - confirm that the connection is successful.
+11. Click **[Test connection]** - confirm that the connection is successful.
 
-11. Click **[Create]**.
+    >Note: If the connect returns an error or is otherwise not successful, contact a workshop facilitator. Do not proceed to the next step.
+
+12. Click **[Create]**.
 
     ![Screenshot of the create catalog dialog](images/01-catalog-add-external.png " ")
  
@@ -183,14 +193,13 @@ A volume stores unstructured data — files, documents, images — within a cata
 
 1. First off, [Click Here](https://github.com/enschilling/workshop-dev/raw/refs/heads/main/ai-dataplatform-agent-flow-entertainment/files/kb_documents.zip) to download the Zip file containing all the sample docs required for this workshop.
 
-2. Unzip the file; you should have 3 `.docx` files pertaining to the Knowledge Base components, and 1 `agent_instructions.txt` file that you'll use in Lab 2.
+2. Unzip the file; you should have 3 `.docx` files pertaining to the Knowledge Base components that will be built here in Lab 1.
 
     - **Content Strategy & Release Operations Playbook** — Defines release windows, territory prioritization, green/yellow/red performance signals, and decision frameworks
     - **Marketing Measurement & Attribution Guidelines** — Defines metric definitions (e.g., completion rate, ROI), attribution logic, and interpretation rules
     - **Distribution Window & Territory Rules** — Defines territorial constraints, windowing strategies, and market codes
-    - **Agent Instructions** - Detailed instructions that will be used to define how the agent is to operate
 
-3. Back in the AIDP Workbench, return to the **`entertainment_analyst`** catalog, locate the **default** schema, click on **Volumes**.
+3. Back in the AIDP Workbench browser window, return to the **`entertainment_analyst`** catalog, locate the **default** schema, click on **Volumes**.
 
 4. Click the **+** next to the filter field to start creating a new volume.
 
@@ -214,11 +223,15 @@ A volume stores unstructured data — files, documents, images — within a cata
 
     ![Create new volume](images/01-catalog-create-volume.png " ")
 
-6. Click the volume name **`entertainment_analyst`** then click the **+** button to the right of the Filter field. Click to browse or drag-and-drop the three `.docx` files from the Zip archive you downloaded earlier.
+6. Click the volume name **`entertainment_analyst`** then click the **+** button to the right of the Filter field then click **`Upload file`**.
+
+7. Click to browse or drag-and-drop the three `.docx` files from the Zip archive you downloaded earlier.
 
     ![Upload files interface](images/01-catalog-volume-upload-files.png " ")
 
-7. Click **[Upload]**, then review the files. You should see the following internal documents:
+8. Click **[Upload]**, then review the files. You should see the following internal documents:
+
+    ![Verify files uploaded successful](images/01-catalog-volume-upload-files-complete.png " ")
 
 8. These are the documents that the AI agent will search via RAG when users ask questions about definitions, policies, thresholds, or interpretation rules. For example, when a user asks *"What does our playbook say about territory priorities for releases?"*, the agent will retrieve relevant passages from these documents.
 
@@ -256,6 +269,8 @@ Now we'll create the key asset that enables RAG. A Knowledge Base creates vector
 
 7. Once the Knowledge Base shows status **Active**, click on it to open the details.
 
+    ![Verify knowledge base status is Active](images/01-catalog-kbase-active.png " ")
+
 8. Under the **Data Source** tab, click the **+** button to add a data source.
 
     ![Add data source to entertainment_analyst_kb](images/01-catalog-kbase-add-datasource.png " ")
@@ -278,7 +293,9 @@ Now we'll create the key asset that enables RAG. A Knowledge Base creates vector
 
 The agent's SQL tools query structured data from an Oracle AI Database. For this workshop, the following tables have been pre-ingested with entertainment performance data.
 
-1. Return to the OCI console tab in your browser.
+1. When you clicked the link to access the AIDP Workbench, it would have opened in a new browser tab. Locate and select the browser tab or window that still contains the OCI Console (it might say AI DataPlatform Workbench).
+
+    ![Change browser tabs](images/01-switch-browser-tabs.png " ")
 
 2. Use the navigation menu to open the Autonomous AI Database Console.
 
@@ -305,7 +322,7 @@ The agent's SQL tools query structured data from an Oracle AI Database. For this
     | `marketing_campaigns` | Campaign metadata linking campaigns to titles | `campaign_id`, `campaign_name`, `title_id`, `start_date`, `end_date` |
     | `marketing_daily_spend` | Daily spend and attributed revenue by campaign and channel | `campaign_id`, `channel`, `spend_usd`, `attributed_revenue_usd` |
 
-5. Check one or more of the tables to view the data.
+5. To check the data in the tables, you will need to enter a query in the worksheet screen as shown below. Click the green play button to **`Run Statement`**. 
 
     ```sql
     <copy>
@@ -317,14 +334,20 @@ The agent's SQL tools query structured data from an Oracle AI Database. For this
 
     ![SQL query output](images/01-sql-test-query-output.png " ")
 
-6. These tables represent the **gold layer** of the medallion architecture — curated, query-optimized data ready for business consumption. The agent's SQL tools will execute parameterized, read-only queries against these tables to answer performance and ROI questions.
+6. If you want to query multiple tables at the same time, just separate them with a **"/"** like this, and click the **`Run Script`** icon which is just to the right of Run Statement (Play button):
+
+    ![Image of multi-table query](images/01-sql-workbench-note.png " ")
+
+    >Note: Selecting the table in the left nave bar will only show the columns in the table, not the data.  To review the data you must query with a SQL statement as shown.
+
+7. These tables represent the **gold layer** of the medallion architecture — curated, query-optimized data ready for business consumption. The agent's SQL tools will execute parameterized, read-only queries against these tables to answer performance and ROI questions.
 
 
     > **Key takeaway**: You now have two categories of data assets ready for the agent:
     > - **Unstructured (RAG)**: The Knowledge Base with vector-indexed release playbooks and strategy documents — for answering questions about definitions, policies, and interpretation rules
     > - **Structured (SQL)**: The Oracle AI Database tables with box office, streaming, and marketing data — for answering questions about specific metrics, trends, and ROI numbers
 
-7. You may close the SQL Workbench browser tab and return to the AI Data Platform tab for the remainder of the workshop.
+8. You may close the SQL Workbench browser tab and return to the AI Data Platform tab for the remainder of the workshop.
 
 ## Lab 1 Recap
 
