@@ -263,6 +263,8 @@ Now we'll create the key asset that enables RAG. A Knowledge Base creates vector
 
 7. Once the Knowledge Base shows status **Active**, click on it to open the details.
 
+    ![Verify knowledge base status is Active](images/01-catalog-kbase-active.png " ")
+
 8. Under the **Data Source** tab, click the **+** button to add a data source.
 
     ![Add data source to entertainment_analyst_kb](images/01-catalog-kbase-add-datasource.png " ")
@@ -285,7 +287,9 @@ Now we'll create the key asset that enables RAG. A Knowledge Base creates vector
 
 The agent's SQL tools query structured data from an Oracle AI Database. For this workshop, the following tables have been pre-ingested with entertainment performance data.
 
-1. Return to the OCI console tab in your browser.
+1. When you clicked the link to access the AIDP Workbench, it would have opened in a new browser tab. Locate and select the browser tab or window that still contains the OCI Console (it might say AI DataPlatform Workbench).
+
+    ![Change browser tabs](images/01-switch-browser-tabs.png " ")
 
 2. Use the navigation menu to open the Autonomous AI Database Console.
 
@@ -312,7 +316,7 @@ The agent's SQL tools query structured data from an Oracle AI Database. For this
     | `marketing_campaigns` | Campaign metadata linking campaigns to titles | `campaign_id`, `campaign_name`, `title_id`, `start_date`, `end_date` |
     | `marketing_daily_spend` | Daily spend and attributed revenue by campaign and channel | `campaign_id`, `channel`, `spend_usd`, `attributed_revenue_usd` |
 
-5. Check one or more of the tables to view the data.
+5. To check the data in the tables, you will need to enter a query in the worksheet screen as shown below. Click the green play button to **`Run Statement`**. 
 
     ```sql
     <copy>
@@ -324,14 +328,20 @@ The agent's SQL tools query structured data from an Oracle AI Database. For this
 
     ![SQL query output](images/01-sql-test-query-output.png " ")
 
-6. These tables represent the **gold layer** of the medallion architecture — curated, query-optimized data ready for business consumption. The agent's SQL tools will execute parameterized, read-only queries against these tables to answer performance and ROI questions.
+6. If you want to query multiple tables at the same time, just separate them with a **"/"** like this, and click the **`Run Script`** icon which is just to the right of Run Statement (Play button):
+
+    ![Image of multi-table query](images/01-sql-workbench-note.png " ")
+
+    >Note: Selecting the table in the left nave bar will only show the columns in the table, not the data.  To review the data you must query with a SQL statement as shown.
+
+7. These tables represent the **gold layer** of the medallion architecture — curated, query-optimized data ready for business consumption. The agent's SQL tools will execute parameterized, read-only queries against these tables to answer performance and ROI questions.
 
 
     > **Key takeaway**: You now have two categories of data assets ready for the agent:
     > - **Unstructured (RAG)**: The Knowledge Base with vector-indexed release playbooks and strategy documents — for answering questions about definitions, policies, and interpretation rules
     > - **Structured (SQL)**: The Oracle AI Database tables with box office, streaming, and marketing data — for answering questions about specific metrics, trends, and ROI numbers
 
-7. You may close the SQL Workbench browser tab and return to the AI Data Platform tab for the remainder of the workshop.
+8. You may close the SQL Workbench browser tab and return to the AI Data Platform tab for the remainder of the workshop.
 
 ## Lab 1 Recap
 
