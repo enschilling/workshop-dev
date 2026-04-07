@@ -15,7 +15,7 @@ In this lab you will:
 1. Create an agent flow and attach it to the AI Compute instance
 2. Configure the agent node with a model and detailed agent instructions
 3. Add a RAG tool connected to the Knowledge Base you created in Lab 1
-4. Add seven SQL tools that query box office and streaming data from the Oracle AI Database
+4. Add four SQL tools that query box office and streaming data from the Oracle AI Database
 
 ### Prerequisites
 

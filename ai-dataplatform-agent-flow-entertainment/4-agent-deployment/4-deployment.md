@@ -32,6 +32,8 @@ This lab assumes you have:
 
 3. Click **Deploy** and wait for the deployment to complete. The status will update to indicate a successful deployment.
 
+    ![Screenshot of agent deployment](images/04-agent-deployment.png " ")
+
 ## Task 2: Retrieve the Endpoint URL
 
 Once the deployment is successful, you need to retrieve the production URL that applications will use to communicate with the agent.
@@ -39,6 +41,8 @@ Once the deployment is successful, you need to retrieve the production URL that 
 1. Navigate to the **Details** tab of your agent flow.
 
 2. Locate the **Endpoint URL**. This is the production URL of your deployed agent flow. Copy this URL — it is the address that external applications, scripts, or integration tools will use to send messages to the agent.
+
+    ![Screenshot of details tab](images/04-agent-details-endpoint.png " ")
 
 3. Note that the deployed agent is now a live REST endpoint. It accepts messages and returns responses using the same reasoning, tools, and knowledge that you validated in the Playground.
 

@@ -24,7 +24,7 @@ This lab assumes you have:
 
 * Completed Lab 2 (Agent Flow Setup)
 * The agent flow attached to an active AI Compute
-* All tools (1 RAG + 7 SQL) configured and connected to the agent node
+* All tools (1 RAG + 4 SQL) configured and connected to the agent node
 
 ## Task 1: Open the Playground
 
@@ -59,11 +59,9 @@ In this step, you'll ask the agent about box office performance for two movies. 
     - Return box office gross, screen counts, and ranking data
     - Present the results in structured, business-friendly language
 
-    > **Sample response placeholder**:
-    >
-    > *[Insert screenshot of agent response here]*
-    >
-    > Expected behavior: The agent identifies both titles, resolves the typo, retrieves box office data, and presents a comparative summary.
+    ![Screenshot of agent response](images/03-chat-box-office-performnce.png " ")
+
+    > Observe the behavior: The agent identifies both titles, resolves the typo, retrieves box office data, and presents a comparative summary.
 
 ## Task 3: Test Market-Specific Follow-Up
 
@@ -83,11 +81,8 @@ Now test the agent's ability to handle a follow-up question that narrows the sco
     - Call the `get_box_office_weekend` tool with the Canadian market code for both titles
     - Present the Canadian box office results
 
-    > **Sample response placeholder**:
-    >
-    > *[Insert screenshot of agent response here]*
-    >
-    > Expected behavior: The agent maintains conversational context, resolves the market name to a code, and returns Canada-specific box office data for both titles.
+    ![Screenshot of agent response](images/03-chat-market-follow-up.png " ")
+    > Observe the behavior: The agent maintains conversational context, resolves the market name to a code, and returns Canada-specific box office data for both titles.
 
 ## Task 4: Test Streaming Performance — Multi-Title Comparison
 
@@ -107,11 +102,9 @@ This step shifts to streaming data and tests the agent's ability to handle a com
     - Return weekly streaming metrics: starts, hours streamed, and completion rates
     - Present the data as a comparative report
 
-    > **Sample response placeholder**:
-    >
-    > *[Insert screenshot of agent response here]*
-    >
-    > Expected behavior: The agent switches data domains from box office to streaming seamlessly, retrieves multi-week trend data for both titles, and presents it in a report format.
+    ![Screenshot of agent response](images/03-chat-multi-title-comparison.png " ")
+
+    > Observe the behavior: The agent switches data domains from box office to streaming seamlessly, retrieves multi-week trend data for both titles, and presents it in a report format.
 
 ## Task 5: Test Structured Output — Custom Table Format
 
@@ -131,11 +124,13 @@ This final test evaluates the agent's ability to produce formatted tabular outpu
     - Re-query if necessary, or restructure the data from the previous response
     - Return a clean, well-formatted table comparing both shows week by week
 
-    > **Sample response placeholder**:
-    >
-    > *[Insert screenshot of agent response here]*
-    >
-    > Expected behavior: The agent restructures the data into the requested pivot-style table format, with weeks as rows and the two show titles as column headers, filtered to US market only.
+    ![Screenshot of agent response](images/03-chat-structured-output.png " ")
+
+    > Observe the behavior behavior: The agent restructures the data into the requested pivot-style table format, with weeks as rows and the two show titles as column headers, filtered to US market only.
+
+3. Before wrapping things up, you might consider exploring the **Agent flow task** list to the right of the chat window. You can expand each task to see the workflow, agent tasks, tool tasks, etc.
+
+    ![Screenshot of agent flow task](images/03-agent-flow-task-details.png " ")
 
 ## Task 6: Reflect on the Agent's Behavior
 

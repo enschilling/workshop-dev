@@ -93,13 +93,13 @@ An external catalog in AIDP enables you to connect to an Autonomous Lakehouse (A
 
 For this workshop, an ALH instance has been provisioned and loaded with sample data already. You'll be creating a new external catalog to leverage that dataset.
 
-> **Important** You'll need the **`ADB Admin Password`** found in the **`View Login Info`** on the LiveLabs workshop page (covered in the **Getting Started** section). Scroll down under **Reservation Information** and you should see a **Terraform Outputs** section.
 
-![Screenshot of ADB admin password location](images/01-database-retrieve-password.png " ")
 
 1. From the AIDP Workbench Home Page, click on **Master Catalog**.
 
     ![Screenshot of AIDP workbench home page](images/01-aidp-master-catalog.png " ")
+
+    >Note: You will see that two catalogs already exist **`vectordb26ai`** and **`default`**. Pay no mind to these, we'll cover the steps of creating all requisite catalogs  here in this lab.
 
 2. Click **[Create catalog]** in the upper right coner. 
 
@@ -143,7 +143,11 @@ For this workshop, an ALH instance has been provisioned and loaded with sample d
 
     - **Wallet password (optional)**: You may choose your own password, or leave this field blank and allow AIDP to manage the wallet password.
     - **Username**: ENTERTAINMENT
-    - **ADM Admin Password**: This was to be retrieved at the beginning of this task.
+    - **ADM Admin Password**: Retrieved from the LiveLabs instructions page -> View Login Info -> Terraform Outputs -> ADB Admin Password.
+
+    > **Important** You'll need the **`ADB Admin Password`** found in the **`View Login Info`** on the LiveLabs workshop page (covered in the **Getting Started** section). Scroll down under **Reservation Information** and you should see a **Terraform Outputs** section.
+
+    ![Screenshot of ADB admin password location](images/01-database-retrieve-password.png " ")
 
 11. Click **[Test connection]** - confirm that the connection is successful.
 
