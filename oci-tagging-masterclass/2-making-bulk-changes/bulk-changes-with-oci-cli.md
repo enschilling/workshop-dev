@@ -34,11 +34,11 @@ Use the OCI UI to create a VCN.
 
 2. Select **Networking** and then **Virtual cloud networks** from the navigation menu.
 
-  ![Screenshot showing how to select developer tools](./images/select-networking-vcn.png)
+    ![Screenshot showing how to select developer tools](./images/select-networking-vcn.png)
 
 3. Verify that you're in the correct compartment. Click the **Create VCN** button.
 
-  ![Screenshot showing how to select cloud shell](./images/create-vcn-button.png)
+    ![Screenshot showing how to select cloud shell](./images/create-vcn-button.png)
 
 4. Enter **App-Network** for the name.
 
@@ -50,7 +50,7 @@ Use the OCI UI to create a VCN.
 
 7. Navigate to the **Subnets** tab and click **Create Subnet**
 
-  ![Create Subnet](./images/create-subnet-button.png)
+    ![Create Subnet](./images/create-subnet-button.png)
 
 8. For name, enter **Public-Subnet**
 
@@ -78,7 +78,7 @@ Use the OCI UI to create a VCN.
 
     >**Note:** If you get a *Policy Missing* error, make sure you have navigated first to the compartment assigned to you and then launched the cloud shell. Go to the *Need Help* lab -> *Cannot Access Cloud Shell?* to see how you can do that.
 
-2.  Once the cloud shell has started, enter the following commands. Choose the key name you can remember. This will be the key name you will use to connect to any compute instances you create. Press Enter twice for no passphrase.
+2. Once the cloud shell has started, enter the following commands. Choose the key name you can remember. This will be the key name you will use to connect to any compute instances you create. Press Enter twice for no passphrase.
 
     ````text
     <copy>mkdir .ssh</copy>
@@ -96,7 +96,7 @@ Use the OCI UI to create a VCN.
 
     ![Generate SSH key](./images/cloudshell-ssh.png " ")
 
-3.  Examine the two files that you just created.
+3. Examine the two files that you just created.
 
     ````
     <copy>ls</copy>
@@ -161,7 +161,7 @@ Use the OCI CLI to launch a compute instance. To do so, we will need to collect 
 
 4. Find public subnet in existing VCN
 
-- We'll run the following two commands to retrieve network details required to launch the Compute instance. It's important to note that this assumes your VCN name is **`App-Network`**. If you created your own VCN or the facilitator has provided a different VCN name, be sure to update the command.
+    - We'll run the following two commands to retrieve network details required to launch the Compute instance. It's important to note that this assumes your VCN name is **`App-Network`**. If you created your own VCN or the facilitator has provided a different VCN name, be sure to update the command.
 
     ```bash
     <copy>
@@ -256,7 +256,7 @@ Create two block volumes using the OCI CLI. One will be attached to the compute 
 
 3. Ensure the volume attaches successfully before proceeding.
 
-  ![Block Volume Attached](./images/block-volume-attached.png)
+    ![Block Volume Attached](./images/block-volume-attached.png)
 
 4. Create an object storage bucket.
 
@@ -288,7 +288,7 @@ Create a `resources.json` file with all resource OCIDs and types.
 
 2. Open the Code Editor by clicking the **Developer Tools** button and then selecting **Code Editor**.
 
-  ![Code Editor Button](./images/code-editor-button.png)
+    ![Code Editor Button](./images/code-editor-button.png)
 
 3. Click on the **New File** Button.
 
@@ -372,7 +372,7 @@ Create a `resources.json` file with all resource OCIDs and types.
     </copy>
     ```
 
-5.  Confirm that all resources show the updated defined tag values.
+5. Confirm that all resources show the updated defined tag values.
     
 6. To modify resources in bulk using tags, run the following command in the **Cloud Shell**:
 

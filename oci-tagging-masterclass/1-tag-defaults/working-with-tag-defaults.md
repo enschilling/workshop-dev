@@ -47,15 +47,15 @@ Tag namespaces logically group related tag keys. All defined tags must belong to
 
 3. Select **Tag Namespaces**.
 
-   ![Screenshot showing navigation tag namespaces](./images/03-navigate-to-tag-namespaces.png " ")
+    ![Screenshot showing navigation tag namespaces](./images/03-navigate-to-tag-namespaces.png " ")
 
 4. Click **Create Tag Namespace**.
 
-   ![Screenshot showing create button](./images/04-create-tag-namespace-button.png " ")
+    ![Screenshot showing create button](./images/04-create-tag-namespace-button.png " ")
 
 5. Enter:
 
-   **Name**:
+    **Name**:
 
     ```text
     <copy>
@@ -73,7 +73,7 @@ Tag namespaces logically group related tag keys. All defined tags must belong to
 
 6. Click **Create**.
 
-   ![Screenshot showing create tag namespace dialog](./images/05-create-tag-namespace-dialog.png " ")
+    ![Screenshot showing create tag namespace dialog](./images/05-create-tag-namespace-dialog.png " ")
 
 7. Verify the namespace appears in the list.
 
@@ -122,11 +122,11 @@ This tag will represent which department or business unit owns a resource. It wi
 
 2. Select the namespace you created earlier (`LLTagNamespace`).
 
-   ![Screenshot showing list of tag namespaces](./images/06-tag-namespace-list.png " ")
+    ![Screenshot showing list of tag namespaces](./images/06-tag-namespace-list.png " ")
 
 3. Click **Create Tag Key Definition**.
 
-   ![Screenshot showing button to create tag key definition](./images/07-create-tag-key-definition-button.png " ")
+    ![Screenshot showing button to create tag key definition](./images/07-create-tag-key-definition-button.png " ")
 
 4. Enter the following:
 
@@ -143,11 +143,11 @@ This tag will represent which department or business unit owns a resource. It wi
       </copy>
       ```
 
-   > **IMPORTANT** Be sure to click the **`Cost-tracking`** slide button.
+    > **IMPORTANT** Be sure to click the **`Cost-tracking`** slide button.
 
 5. Click **Create**.
 
-   ![Screenshot showing create tag definition dialog](./images/08-create-costcenter-tag-dialog.png " ")
+    ![Screenshot showing create tag definition dialog](./images/08-create-costcenter-tag-dialog.png " ")
 
 6. Validate the **CostCenter** Tag Key Definition appears in the list. 
 
@@ -182,17 +182,17 @@ To keep tagging consistent, you will restrict values to a predefined list.
 
 1. Still inside the **`LLTagNamespace`** namespace, click **Create Tag Key Definition** once more.
 
-   ![Screenshot showing Create tag key definition button](./images/09-costcenter-tag-key-list.png " ")
+    ![Screenshot showing Create tag key definition button](./images/09-costcenter-tag-key-list.png " ")
 
 2. Enter:
 
-   **Name:** 
+    **Name:** 
       ```text
       <copy>
       Environment
       </copy> 
       ```
-   **Description:**
+    **Description:**
       ```text
       <copy>
       Identifies the environment of the resource
@@ -206,9 +206,9 @@ To keep tagging consistent, you will restrict values to a predefined list.
 
 4. Make sure all the values are entered and click **Create**.
 
-   ![Screenshot showing create tag definition dialog](./images/10-create-environment-tag-dialog.png " ")
+    ![Screenshot showing create tag definition dialog](./images/10-create-environment-tag-dialog.png " ")
 
-   When users apply this tag to a resource, they can only select Dev, Test and Prod. This ensures consistent tagging and supports future policy enforcement.
+    When users apply this tag to a resource, they can only select Dev, Test and Prod. This ensures consistent tagging and supports future policy enforcement.
 
 5. Verify your work.
 
@@ -250,7 +250,7 @@ Governance becomes easier and more reliable.
 
 1. Navigate to **Identity & Security → Compartments**.
 
-   ![Screenshot showing navigation to IAM Compartments](./images/12-navigate-to-compartments.png " ")
+    ![Screenshot showing navigation to IAM Compartments](./images/12-navigate-to-compartments.png " ")
 
 2. Select the compartment where you want the tag applied automatically. 
    
@@ -260,11 +260,11 @@ Governance becomes easier and more reliable.
 
 3. Navigate to **Tag Default**.
 
-   ![Screenshot showing compartment details](./images/14-compartment-details-tag-default-tab.png " ")
+    ![Screenshot showing compartment details](./images/14-compartment-details-tag-default-tab.png " ")
 
 4. Click **Create Tag Default**.
 
-   ![Screenshot showing tag defaults tab](./images/15-create-tag-default-button.png " ")
+    ![Screenshot showing tag defaults tab](./images/15-create-tag-default-button.png " ")
 
 5. Choose:
 
@@ -274,50 +274,50 @@ Governance becomes easier and more reliable.
 
 6. Click **Create Tag Default**.
 
-   ![Screenshot showing create tag default dialog](./images/16-create-tag-default-dialog.png " ")
+    ![Screenshot showing create tag default dialog](./images/16-create-tag-default-dialog.png " ")
 
 7. After assignment, confirm the Tag Default appears in the list for that compartment.
 
-   ![Screenshot showing newly created tag default](./images/17-new-tag-default-in-list.png " ")
+    ![Screenshot showing newly created tag default](./images/17-new-tag-default-in-list.png " ")
 
 <details>
 <summary>CLI Method (Optional)</summary>
-To create a tag default, you need the OCID of the tag key definition (Tag Definition OCID).
+    To create a tag default, you need the OCID of the tag key definition (Tag Definition OCID).
 
 1. Get your Object Storage namespace (you will use this later as well):
-   ```text
-   <copy>
-   oci os ns get
-   </copy>
-   ```
+    ```text
+    <copy>
+    oci os ns get
+    </copy>
+    ```
 2. List namespaces to find your namespace OCID:
-   ```text
-   <copy>
-   oci iam tag-namespace list --compartment-id <tenancy_ocid>
-   </copy>
-   ```
+    ```text
+    <copy>
+    oci iam tag-namespace list --compartment-id <tenancy_ocid>
+    </copy>
+    ```
 3. List tags under your namespace to find the tag definition OCID for `Environment`:
-   ```text
-   <copy>
-   oci iam tag list --tag-namespace-id <tag_namespace_ocid>
-   </copy>
-   ```
+    ```text
+    <copy>
+    oci iam tag list --tag-namespace-id <tag_namespace_ocid>
+    </copy>
+    ```
 4. Create the tag default in the target compartment (example assigns `Prod`):
 
-   ```text
-   <copy>
-   oci iam tag-default create \
-   --compartment-id <target_compartment_ocid> \
-   --tag-definition-id <environment_tag_definition_ocid> \
-   --value Prod
-   </copy>
-   ```
+    ```text
+    <copy>
+    oci iam tag-default create \
+    --compartment-id <target_compartment_ocid> \
+    --tag-definition-id <environment_tag_definition_ocid> \
+    --value Prod
+    </copy>
+    ```
 5. Verify the tag default:
-   ```text
-   <copy>
-   oci iam tag-default list --compartment-id <target_compartment_ocid>
-   </copy>
-   ```
+    ```text
+    <copy>
+    oci iam tag-default list --compartment-id <target_compartment_ocid>
+    </copy>
+    ```
 </details>
 
 ## Task 4: Validate Tag Default Enforcement
@@ -326,7 +326,7 @@ You will create a new bucket in the compartment where you assigned the tag defau
 
 1. Navigate to **Object Storage → Buckets**.
 
-   ![Screenshot showing navigation to object storage -> buckets](./images/18-navigate-to-object-storage-buckets.png " ")
+    ![Screenshot showing navigation to object storage -> buckets](./images/18-navigate-to-object-storage-buckets.png " ")
 
 2. Select the same compartment where you applied the Tag Default and click **Create Bucket**
 
@@ -338,41 +338,41 @@ You will create a new bucket in the compartment where you assigned the tag defau
       </copy>
       ```
 
-   ![Screenshot showing navigation create bucket dialog](./images/19-create-bucket-dialog.png " ")
+    ![Screenshot showing navigation create bucket dialog](./images/19-create-bucket-dialog.png " ")
 
 4. Open the bucket after it is created.
 
-   ![Screenshot showing navigation bucket details](./images/20-bucket-details-page.png " ")
+    ![Screenshot showing navigation bucket details](./images/20-bucket-details-page.png " ")
 
 5. Scroll to the **Tags** section and confirm the tag is present.
 
-   ![Screenshot showing navigation bucket tags](./images/21-bucket-defined-tags-section.png " ")
+    ![Screenshot showing navigation bucket tags](./images/21-bucket-defined-tags-section.png " ")
 
 <details>
  <summary>CLI Method (Optional)</summary>
 1. Get your Object Storage namespace (if you did not already):
-```text
-<copy>
-oci os ns get
-</copy>
-```
+    ```text
+    <copy>
+    oci os ns get
+    </copy>
+    ```
 2. Create a bucket in the compartment where the Tag Default is assigned:
-```text
-<copy>
-oci os bucket create \
---compartment-id <target_compartment_ocid> \
---name tag-test-bucket-cli \
---namespace-name <object_storage_namespace>
-</copy>
-```
+    ```text
+    <copy>
+    oci os bucket create \
+    --compartment-id <target_compartment_ocid> \
+    --name tag-test-bucket-cli \
+    --namespace-name <object_storage_namespace>
+    </copy>
+    ```
 3. Verify the bucket details and confirm the defined tag appears:
-```text
-<copy>
-oci os bucket get \
---bucket-name tag-test-bucket-cli \
---namespace-name <object_storage_namespace>
-</copy>
-```
+    ```text
+    <copy>
+    oci os bucket get \
+    --bucket-name tag-test-bucket-cli \
+    --namespace-name <object_storage_namespace>
+    </copy>
+    ```
 In the output, look for the `defined-tags` section and confirm it includes something similar to:
 - Namespace: `LLTagNamespace`
 - Key: `Environment`

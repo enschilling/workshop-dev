@@ -206,7 +206,7 @@ Now you will create a **deny policy** that blocks deletion of resources tagged a
     </copy>
     ```
 
-> **Important:** IAM deny policies are an opt-in tenancy feature and must be enabled before creating deny statements.
+    > **Important:** IAM deny policies are an opt-in tenancy feature and must be enabled before creating deny statements.
 
 7. Click **Create**.
 

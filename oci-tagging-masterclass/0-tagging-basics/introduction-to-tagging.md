@@ -1,5 +1,11 @@
 # Introduction to Tagging in Oracle Cloud Infrastructure
 
+### Objectives
+
+In this lab, you will:
+* TODO: Add objectives
+
+
 ## The Challenge
 
 As organizations scale their cloud footprint, the number of resources in a tenancy can grow rapidly. Without a structured approach to organization, teams often struggle to answer basic but critical questions: Who created this resource? Which project does it belong to? Is this instance still needed, or is it generating unnecessary cost? Which department should be billed for this storage bucket?

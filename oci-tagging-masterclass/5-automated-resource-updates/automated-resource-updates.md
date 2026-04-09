@@ -325,7 +325,7 @@ The solution is to automatically update the tag default value every day using an
     Current context updated registry with phx.ocir.io/izzzzzzzzzi/auto-tag-project
 
 
-### Create the Function
+    ### Create the Function
 
 2. In Cloud Shell or your local terminal, create a new function:
 
