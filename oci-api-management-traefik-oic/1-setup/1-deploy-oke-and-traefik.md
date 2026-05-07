@@ -46,16 +46,16 @@ The Traefik Hub API Management stack on the OCI Marketplace uses Terraform to pr
     **Chart Configuration:**
     - **Target Namespace:** Enter `traefik`
     - **Traefik Hub Token:** Paste the Gateway token you created in Task 1
+    - **Traefik Hub Version:** Enter the latest stable Traefik Hub `v3.19.x` version. During validation, `v3.19.4` was the latest stable patch release.
 
     **Helm Chart Values:**
 
-    Add the following to the Helm values field to enable cross-namespace referencing, external API support, and the dashboard:
+    Add the following to the Helm values field to enable API management, cross-namespace referencing, external API support, and the dashboard:
 
     ```yaml
     hub:
-      token: "your-gateway-token"
-    apimanagement:
-      enabled: true
+      apimanagement:
+        enabled: true
     ingressRoute:
       dashboard:
         enabled: true
@@ -65,8 +65,11 @@ The Traefik Hub API Management stack on the OCI Marketplace uses Terraform to pr
         allowExternalNameServices: true
     ```
 
+    > **Note:** Use the **Traefik Hub Token** field for your Gateway token. Do not add `hub.token` to the Helm values field.
+
     **OKE Configuration:**
     - If you **do not** have an existing OKE cluster, select the **Create Basic OKE Cluster** checkbox and provide a name for your cluster.
+    - If the stack exposes a Kubernetes version field, choose the latest available OKE Kubernetes version for your region. During validation in Phoenix, new clusters offered up to `v1.35.2`; an existing `v1.33.1` cluster could directly upgrade to `v1.34.2`.
     - If you **do** have an existing cluster, select it from the dropdown in the **Use existing OKE** section.
 
     > **Note:** If using a private cluster, select the **Allow insecure connection** checkbox.
