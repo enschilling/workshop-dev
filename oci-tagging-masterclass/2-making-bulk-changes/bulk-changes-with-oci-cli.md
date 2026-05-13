@@ -186,8 +186,8 @@ Use the OCI CLI to launch a compute instance. To do so, we will need to collect 
         --image-id $image_ocid \
         --subnet-id $subnet_ocid \
         --display-name "LabCompute1" \
-        --shape "VM.Standard.E3.Flex" \
-        --shape-config '{"ocpus": 2, "memory_in_gbs": 32}' \
+        --shape "VM.Standard.E4.Flex" \
+        --shape-config '{"ocpus": 2, "memoryInGBs": 32}' \
         --ssh-authorized-keys-file $ssh_pub_key_path \
         --assign-public-ip true \
         --wait-for-state RUNNING
@@ -262,11 +262,17 @@ Create two block volumes using the OCI CLI. One will be attached to the compute 
 
     ```bash
     <copy>
+    object_namespace=$(oci os ns get --query "data" --raw-output)
+    bucket_name="lab-tagging-bucket-$(date +%Y%m%d%H%M%S)"
+
     oci os bucket create \
       --compartment-id $compartment_ocid \
-      --name lab-tagging-bucket
+      --namespace-name $object_namespace \
+      --name $bucket_name
     
-    bucket_ocid=$(oci os bucket get --bucket-name lab-tagging-bucket \
+    bucket_ocid=$(oci os bucket get \
+    --namespace-name $object_namespace \
+    --bucket-name $bucket_name \
     --query 'data.id' --raw-output)
     </copy>
     ```
@@ -374,21 +380,26 @@ Create a `resources.json` file with all resource OCIDs and types.
 
 5. Confirm that all resources show the updated defined tag values.
     
-6. To modify resources in bulk using tags, run the following command in the **Cloud Shell**:
+6. To modify resources in bulk using tags, run the following command in the **Cloud Shell**. This example finds the block volumes tagged with `Environment = Dev` and resizes them to 60 GB.
 
     ```bash
     <copy>
-    for ocid in $(oci bv volume list -c $compartment_ocid \
-    --query 'data[?"defined-tags"."LLTagNamespace"."Environment" == `Dev`].id' --raw-output | jq -r '.[]'); do
-    echo "Resizing volume: $ocid"
-    oci bv volume update --volume-id $ocid
+    volume_ids=$(oci bv volume list -c $compartment_ocid \
+    --query 'join(`,`, data[?"defined-tags"."LLTagNamespace"."Environment" == `Dev`].id)' \
+    --raw-output)
+
+    IFS=',' read -ra volume_ocids <<< "$volume_ids"
+    for ocid in "${volume_ocids[@]}"; do
+      [ -z "$ocid" ] && continue
+      echo "Resizing volume: $ocid"
+      oci bv volume update --volume-id "$ocid" --size-in-gbs 60 --force
     done
     </copy>
     ```
 
 ## Learn More
 
-- [Bulk Editing tags on resoruces using the OCI CLI](https://www.ateam-oracle.com/bulk-editing-tags-on-resources-using-the-oci-cli)
+- [Bulk Editing tags on resources using the OCI CLI](https://www.ateam-oracle.com/bulk-editing-tags-on-resources-using-the-oci-cli)
 - [OCI CLI bulk-edit reference](https://docs.oracle.com/en-us/iaas/tools/oci-cli/latest/oci_cli_docs/cmdref/iam/tag/bulk-edit.html)
 
 

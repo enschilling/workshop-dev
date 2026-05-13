@@ -106,7 +106,7 @@ A Functions application is a logical grouping of functions. It defines the netwo
     fn update context registry <region_code>.ocir.io/<tenancy_namespace>/tag-enforcement
     ```
 
-    > **Note:** If already completed lab 5, use the same Cloud Shell session. These paremeters are already set.
+    > **Note:** If you already completed Lab 5, use the same Cloud Shell session. These parameters are already set.
 
 ## Task 3: Deploy the Scheduled Compliance Scan Function
 
@@ -394,7 +394,7 @@ When the Events service detects that a compute instance has been created, it sen
     logger.setLevel(logging.INFO)
 
     # --- Configuration ---
-    DEFAULT_TAG_NAMESPACE = "Operations"
+    DEFAULT_TAG_NAMESPACE = "LLTagNamespace"
     DEFAULT_TAG_KEY = "CostCenter"
     DEFAULT_COMPLIANT_VALUE = None
 
@@ -570,7 +570,7 @@ When the Events service detects that a compute instance has been created, it sen
 
     | Key | Value |
     |-----|-------|
-    | `TAG_NAMESPACE` | Your tag namespace (e.g., `Operations`) |
+    | `TAG_NAMESPACE` | Your tag namespace (e.g., `LLTagNamespace`) |
     | `TAG_KEY` | Your tag key (e.g., `CostCenter`) |
 
 ## Task 5: Create an Events Rule

@@ -35,7 +35,7 @@ This lab assumes you have:
 
    ![Screenshot showing architecture change and confirmaiton](images/02-cloud-shell-architecture.png " ")
 
-- You can minimize Cloud Shell at any time, but it's highly recommend you don't exit until you finish the workshop. You'll make use of Cloud Shell in subsequent labs.
+- You can minimize Cloud Shell at any time, but it's highly recommended that you don't exit until you finish the workshop. You'll make use of Cloud Shell in subsequent labs.
 
 ## Task 1: Create a Tag Namespace
 
@@ -43,7 +43,7 @@ Tag namespaces logically group related tag keys. All defined tags must belong to
 
 1. Open the OCI Console.
 
-2. Navigate to **Governance & Adminitstration**.
+2. Navigate to **Governance & Administration**.
 
 3. Select **Tag Namespaces**.
 
@@ -62,6 +62,8 @@ Tag namespaces logically group related tag keys. All defined tags must belong to
     LLTagNamespace
     </copy>
     ```
+
+    > **Note:** Tag namespace names are case-sensitive. Use `LLTagNamespace` exactly as shown so the later CLI examples match your environment.
 
     **Description**:
 

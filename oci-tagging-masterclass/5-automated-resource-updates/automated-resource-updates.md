@@ -120,7 +120,7 @@ The OCI CLI provides powerful tag management capabilities that can be scripted, 
     </copy>
     ```
 
-    This returns a table of all resources tagged with `LLTagNamespace.Environment = Devel`, showing their name, resource type, lifecycle state, and OCID.
+    This returns a table of all resources tagged with `LLTagNamespace.Environment = Dev`, showing their name, resource type, lifecycle state, and OCID.
 
     ```text
     +-------------+-------------------------------------------------------------------------------------+-----------+----------+
@@ -183,7 +183,7 @@ The solution is to automatically update the tag default value every day using an
     - **Description:** `Date by which the resource should be reviewed or decommissioned`
     - **Type:** Leave as free-form (any string value).
 
-2. Next, create a tag default so this tag is automatically applied to new resources. Navigate to **Identity & Security > Compartments**, select the compartment being usedfor this workshop, switch to the **Tag Defaults** tab, and click **Create Tag Default**:
+2. Next, create a tag default so this tag is automatically applied to new resources. Navigate to **Identity & Security > Compartments**, select the compartment being used for this workshop, switch to the **Tag Defaults** tab, and click **Create Tag Default**:
 
     - **Compartment:** Select your workshop compartment.
     - **Tag Namespace:** Select your workshop namespace.
@@ -239,7 +239,7 @@ The solution is to automatically update the tag default value every day using an
     ```bash
     <copy>
     ## Snag your user OCID - make sure to enter your actual user name
-    user_ocid=$(oci iam user list --query "data[?name=='<your username here>'].id | [0]" --raw-output)
+    user_ocid=$(oci iam user list --query "data[?name=='<your_console_user_name>'].id | [0]" --raw-output)
 
     ## Generate the auth token
     auth_token=$(oci iam auth-token create \
@@ -308,7 +308,7 @@ The solution is to automatically update the tag default value every day using an
     <copy>
     fn use context <region full identifier>
     fn update context oracle.compartment-id $compartment_ocid
-    fn update context registry <region 3-letter identifer>.ocir.io/$tenancy_ns/auto-tag-project
+    fn update context registry <region 3-letter identifier>.ocir.io/$tenancy_ns/auto-tag-project
     </copy>
     ```
 
@@ -323,9 +323,10 @@ The solution is to automatically update the tag default value every day using an
     Current context updated oracle.compartment-id with ocid1.compartment.oc1........
     zzz@cloudshell:tag-update (us-phoenix-1)$ fn update context registry phx.ocir.io/$tenancy_ns/auto-tag-project
     Current context updated registry with phx.ocir.io/izzzzzzzzzi/auto-tag-project
+    ```
 
 
-    ### Create the Function
+### Create the Function
 
 2. In Cloud Shell or your local terminal, create a new function:
 
@@ -436,7 +437,7 @@ The solution is to automatically update the tag default value every day using an
         """
         details = oci.identity.models.UpdateTagDefaultDetails(
             value=new_value,
-            is_required=False
+            is_required=True
         )
 
         resp = identity_client.update_tag_default(tag_default_ocid, details)
@@ -507,16 +508,22 @@ The solution is to automatically update the tag default value every day using an
 
 ### Deploy the Function
 
-5. If you do not already have a Functions application, create one (if you completed Lab 6, you can reuse `tag-enforcement-app`). Otherwise, create a new one:
+5. If you do not already have a Functions application, create one (if you completed Lab 6, you can reuse `tag-enforcement-app`). If you marked `ExpirationDate` as required, make sure the Functions application has the required defined tag value when it is created. The OCI CLI example below creates the application with the required tag and the configuration values used by the function:
 
     ```bash
-    </copy>
-    fn create app tag-update-app \
-        --annotation oracle.com/oci/subnetIds='["'$subnet_ocid'"]'
+    <copy>
+    expiration_value=$(date -u -d "+90 days" +%F)
+
+    oci fn application create \
+        --compartment-id $compartment_ocid \
+        --display-name tag-update-app \
+        --subnet-ids '["'$subnet_ocid'"]' \
+        --config '{"TAG_DEFAULT_OCID":"'$tag_default_ocid'","DAYS_OFFSET":"90"}' \
+        --defined-tags '{"LLTagNamespace":{"ExpirationDate":"'$expiration_value'"}}'
     </copy>
     ```
 
-    Or create the application from the Console under **Developer Services > Functions > Create Application**.
+    Or create the application from the Console under **Developer Services > Functions > Create Application**. In the **Tags** section, provide any required defined tags before you click **Create**.
 
 6. Deploy the function:
 
@@ -535,7 +542,7 @@ The solution is to automatically update the tag default value every day using an
 
     ![Screenshot showing manage configuration in Functions console](images/05-functions-app-manage-config.png)
 
-    * Click **[Save chagnes]**
+    * Click **[Save changes]**
 
 ### Test the Function
 

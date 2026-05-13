@@ -107,8 +107,8 @@ This is the CLI command for creating a monthly budget on a compartment:
 
  ```text
     <copy>
-oci budgets budget create \
-  --compartment-id <compartment_ocid> \
+oci budgets budget budget create \
+  --compartment-id <tenancy_ocid> \
   --target-type COMPARTMENT \
   --targets '["<target_compartment_ocid>"]' \
   --amount <budget_amount> \
@@ -117,16 +117,16 @@ oci budgets budget create \
   --description "<budget_description>"
 </copy>
 ```
-> **Note:** compartment-id is the compartment where the budget resource is created in.
+> **Note:** In the current OCI CLI, the budget resource is created under the tenancy/root compartment. Use the target fields to scope the budget to a compartment or tag.
 
 
 This is the CLI command for creating a monthly budget on a cost-tracking tag:
  ```text
     <copy>
-oci budgets budget create \
-  --compartment-id <compartment_ocid> \
+oci budgets budget budget create \
+  --compartment-id <tenancy_ocid> \
   --target-type TAG \
-  --targets '["<tag_key_name>=<tag_key_value>"]' \
+  --targets '["<tag_namespace>.<tag_key_name>.<tag_key_value>"]' \
   --amount <budget_amount> \
   --reset-period MONTHLY \
   --display-name "<budget_display_name>"
@@ -137,14 +137,14 @@ This is the CLI command for creating a budget alert rule:
 
  ```text
     <copy>
-oci budgets alert-rule create \
+oci budgets budget alert-rule create \
 --budget-id <budget_ocid> \
 --threshold <threshold_amount> \
 --threshold-type ABSOLUTE or PERCENTAGE \
 --type ACTUAL or FORECAST \
 --message "message_for_recipients" \
---recipients '["<email_address>"]' \
---display name "<name_of_budget_alert_rule>" 
+--recipients "<email_address>" \
+--display-name "<name_of_budget_alert_rule>"
 </copy>
 ```
 
@@ -203,7 +203,7 @@ In this task, we are going to generate a cost analysis report using filters and 
 
     > **Note:** FOCUS Reports are organized by year, month, day, and multiple time stamps during the day.
 
-    ![Screenshot showing how to expand FOCUS reports](./images/cost-report-focus.png)
+    ![Screenshot showing how to expand FOCUS reports](./images/cost-report-FOCUS.png)
 
 11. Once you have decided on a FOCUS cost report to download, click on the 3 dots to the right side of the report. Click Download Report to download your FOCUS cost report to your local machine.
 
@@ -217,7 +217,7 @@ The FOCUS report contains data on resource usage and consumption costs in your t
 
 We have included an example of a FOCUS cost report would look like for an OCI tenancy. The FOCUS cost report has many columns but here are some important ones to note: UsageQuantity, Tags, PricingUnit, ListUnitPrice, BilledCost.
 
-   ![Screenshot showing an example of a FOCUS report](./images/focus-report-example-final.png)
+   ![Screenshot showing an example of a FOCUS report](./images/FOCUS-report-example-final.png)
 
 You have now generated your first cost analysis report and downloaded a FOCUS cost report.
 

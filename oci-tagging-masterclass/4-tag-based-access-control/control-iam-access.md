@@ -117,7 +117,7 @@ Console Steps
 
     ![Screenshot showing create users tab](./images/08-users-tab-create-user.png " ")
 
-8. Enter **First Name**, **Last Name**, and an **Email** that is *not* currently assoicated with your cloud account.
+8. Enter **First Name**, **Last Name**, and an **Email** that is *not* currently associated with your cloud account.
 
 7. Add the user to the **TagTestUsers** group.
 
@@ -206,7 +206,7 @@ Now you will create a **deny policy** that blocks deletion of resources tagged a
     </copy>
     ```
 
-    > **Important:** IAM deny policies are an opt-in tenancy feature and must be enabled before creating deny statements.
+    > **Important:** IAM deny policies are an opt-in tenancy feature and must be enabled before creating deny statements. A member of the default administrator group in the default domain must enable them from the **Policies** list page by selecting **Actions > Policy settings > Enable IAM Deny Policy**. Enabling IAM deny policies is permanent. Tag-based deny policies can also take up to 24 hours to become fully effective after the feature is first enabled.
 
 7. Click **Create**.
 
@@ -230,6 +230,8 @@ oci iam policy create \
   ]'
 </copy>
 ```
+
+> **Note:** If the CLI returns `Deny statement passed into a Allow compilation`, IAM deny policies have not been enabled in the tenancy yet. Enable the feature in the Console first, then create the deny policy.
 </details>
 
 ## Task 4: Validate Tag-Based Access Control
@@ -305,6 +307,8 @@ In this lab, you:
 ## Learn More
 
 - [Using tags to manage access](https://docs.oracle.com/en-us/iaas/Content/Tagging/Tasks/managingaccesswithtags.htm)
+- [Deny Policies](https://docs.oracle.com/en-us/iaas/Content/Identity/policysyntax/denypolicies.htm)
+- [Deny Policies Known Issues](https://docs.oracle.com/en-us/iaas/Content/Identity/known-issues/known-issues-deny-policies.htm)
 - [Concepts guide: Tag-based access control](https://docs.oracle.com/en/engineered-systems/private-cloud-appliance/3.0-latest/concept/concept-tag-access.html#tag-access-example-taggedtargetcompt)
 - [Improving the Aministrative ... Experience ...](https://blogs.oracle.com/cloud-infrastructure/improving-console-experience-with-tbac-in-oci)
 

@@ -3,7 +3,9 @@
 ### Objectives
 
 In this lab, you will:
-* TODO: Add objectives
+- Describe the difference between free-form tags and defined tags.
+- Explain how tag namespaces, tag defaults, tag variables, and cost-tracking tags work together.
+- Identify the OCI services used throughout this workshop for cost management, access control, and automation.
 
 
 ## The Challenge

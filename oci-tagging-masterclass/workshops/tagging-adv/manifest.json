@@ -4,7 +4,7 @@
     "tutorials": [
         {
             "title": "Tagging Review",
-            "filename": "../../0-tagging-basics/review-of-tagging.md"
+            "filename": "../../0-tagging-basics/introduction-to-tagging.md"
         },
         {
             "title": "Get Started",
@@ -20,11 +20,11 @@
         },
         {
             "title": "Lab 3: The Reaper",
-            "filename": "../../6-advanced-resource-control/the-reaper.md"
+            "filename": "../../6-advanced-resource-control/enforcing-tagging-compliance.md"
         },
         {
             "title": "Lab 4: Cleanup",
-            "filename": "../../7-cleanup/clean-up-resources.md"
+            "filename": "../../7 - cleanup/cleanup-tenancy.md"
         },
         {
             "title": "Need Help?",
