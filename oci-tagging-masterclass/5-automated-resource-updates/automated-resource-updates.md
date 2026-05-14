@@ -189,7 +189,9 @@ The solution is to automatically update the tag default value every day using an
     - **Tag Namespace:** Select your workshop namespace.
     - **Tag Key:** `ExpirationDate`
     - **Default Value:** Enter today's date plus 90 days in `YYYY-MM-DD` format (e.g., `2026-06-01`).
-    - **Is Required:** Check this box so the tag is mandatory on all new resources in the compartment.
+    - **Is Required:** Leave this unchecked for the workshop. Fn CLI does not provide a way to add required defined tags when it creates Functions application and function resources, so a required tag default can block the deployment steps below.
+
+    > **Note:** The tag default still applies to new resources when **Is Required** is unchecked. If you want to make `ExpirationDate` mandatory in your own tenancy after the workshop, first decide how your automation and deployment tools will supply that required tag on every new resource.
 
 3. Click **Create**. Note the **Tag Default OCID** — you will need it when configuring the function.
 
@@ -224,7 +226,7 @@ The solution is to automatically update the tag default value every day using an
     </copy>
     ```
 
-    The first two statements allow the function to read and update tag defaults. The third allows Resource Scheduler to invoke the function.
+    The first two statements allow the function to read and update tag defaults. The third statement allows the Events service to invoke functions if you extend this pattern with event triggers. The fourth allows Resource Scheduler to invoke the function.
 
     > **Note:** The Resource Scheduler policy uses `any-user` with a condition restricting it to the `resourceschedule` principal type. You can further narrow this with the specific scheduler OCID once created. See the Learn More section for details.
 
@@ -308,8 +310,16 @@ The solution is to automatically update the tag default value every day using an
     <copy>
     fn use context <region full identifier>
     fn update context oracle.compartment-id $compartment_ocid
+    fn update context oracle.profile DEFAULT
+    fn update context oracle.region <region full identifier>
     fn update context registry <region 3-letter identifier>.ocir.io/$tenancy_ns/auto-tag-project
     </copy>
+    ```
+
+    If you are running Fn CLI from a local machine rather than OCI Cloud Shell, also make sure the context provider is `oracle`:
+
+    ```bash
+    <copy>fn update context provider oracle</copy>
     ```
 
     ```text
@@ -432,12 +442,12 @@ The solution is to automatically update the tag default value every day using an
         """
         Update the tag default to the new value.
 
-        Sets is_required=True so the tag is mandatory on all new resources
-        in the compartment.
+        Keeps is_required=False so Fn CLI can create and update Functions
+        resources in the compartment without supplying required defined tags.
         """
         details = oci.identity.models.UpdateTagDefaultDetails(
             value=new_value,
-            is_required=True
+            is_required=False
         )
 
         resp = identity_client.update_tag_default(tag_default_ocid, details)
@@ -508,22 +518,20 @@ The solution is to automatically update the tag default value every day using an
 
 ### Deploy the Function
 
-5. If you do not already have a Functions application, create one (if you completed Lab 6, you can reuse `tag-enforcement-app`). If you marked `ExpirationDate` as required, make sure the Functions application has the required defined tag value when it is created. The OCI CLI example below creates the application with the required tag and the configuration values used by the function:
+5. If you do not already have a Functions application, create one with Fn CLI. Replace `<subnet_ocid>` with the subnet OCID you are using for OCI Functions:
 
     ```bash
     <copy>
-    expiration_value=$(date -u -d "+90 days" +%F)
+    fn create app \
+        --annotation oracle.com/oci/subnetIds='["<subnet_ocid>"]' \
+        tag-update-app
 
-    oci fn application create \
-        --compartment-id $compartment_ocid \
-        --display-name tag-update-app \
-        --subnet-ids '["'$subnet_ocid'"]' \
-        --config '{"TAG_DEFAULT_OCID":"'$tag_default_ocid'","DAYS_OFFSET":"90"}' \
-        --defined-tags '{"LLTagNamespace":{"ExpirationDate":"'$expiration_value'"}}'
+    fn config app tag-update-app TAG_DEFAULT_OCID $tag_default_ocid
+    fn config app tag-update-app DAYS_OFFSET 90
     </copy>
     ```
 
-    Or create the application from the Console under **Developer Services > Functions > Create Application**. In the **Tags** section, provide any required defined tags before you click **Create**.
+    > **Note:** If you intentionally made `ExpirationDate` required, create the application from the Console or OCI CLI and provide the required defined tag value at creation time. For the workshop path, keep `ExpirationDate` optional so the Fn CLI commands work as shown.
 
 6. Deploy the function:
 
@@ -533,7 +541,7 @@ The solution is to automatically update the tag default value every day using an
     </copy>
     ```
 
-7. Set the required configuration variable. Navigate to the **Functions Application** in the Console, select the **Configuration** tab, and add:
+7. Confirm the required configuration variables. Navigate to the **Functions Application** in the Console, select the **Configuration** tab, and verify:
 
     | Key | Value |
     |-----|-------|
@@ -542,7 +550,7 @@ The solution is to automatically update the tag default value every day using an
 
     ![Screenshot showing manage configuration in Functions console](images/05-functions-app-manage-config.png)
 
-    * Click **[Save changes]**
+    If you did not set these values with Fn CLI, add them in the Console and click **[Save changes]**.
 
 ### Test the Function
 
@@ -561,7 +569,7 @@ The solution is to automatically update the tag default value every day using an
       "message": "Tag default updated successfully.",
       "tag_default_ocid": "ocid1.tagdefault.oc1..example",
       "new_value": "2026-06-02",
-      "is_required": true
+      "is_required": false
     }
     ```
 

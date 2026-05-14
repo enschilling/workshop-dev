@@ -167,8 +167,10 @@ Console Steps
 
 </details>
 
-## Task 3: Create a Tag-Based Deny Policy
-Now you will create a **deny policy** that blocks deletion of resources tagged as Prod.
+## Task 3: Review a Tag-Based Deny Policy
+Now you will review a **deny policy** that can block deletion of resources tagged as Prod. Treat this task as a policy-design exercise unless you are working in a tenancy where IAM deny policies are already enabled.
+
+> **Important:** IAM deny policies are an opt-in tenancy feature. Enabling them is permanent, and tag-based deny policies can take up to 24 hours to become fully effective after the feature is first enabled. For this workshop, do not enable deny policies in a shared or production tenancy just to complete the lab. Use the sample policy below to understand the pattern, then try it in a tenancy where deny policies have already been enabled or where you are intentionally testing the feature.
 
 ### Console Steps
 
@@ -206,7 +208,7 @@ Now you will create a **deny policy** that blocks deletion of resources tagged a
     </copy>
     ```
 
-    > **Important:** IAM deny policies are an opt-in tenancy feature and must be enabled before creating deny statements. A member of the default administrator group in the default domain must enable them from the **Policies** list page by selecting **Actions > Policy settings > Enable IAM Deny Policy**. Enabling IAM deny policies is permanent. Tag-based deny policies can also take up to 24 hours to become fully effective after the feature is first enabled.
+    If deny policies are not enabled in your tenancy, you can still review this statement and continue to the validation discussion below. If deny policies are enabled in your own test tenancy, you may create the policy and validate the behavior.
 
 7. Click **Create**.
 
@@ -218,6 +220,8 @@ Members of **TagTestUsers** are explicitly denied bucket management actions (inc
 
 <details>
 <summary>CLI Method (Optional)</summary>
+
+Run this command only in a tenancy where IAM deny policies are already enabled:
 
 ```text
 <copy>
@@ -231,11 +235,11 @@ oci iam policy create \
 </copy>
 ```
 
-> **Note:** If the CLI returns `Deny statement passed into a Allow compilation`, IAM deny policies have not been enabled in the tenancy yet. Enable the feature in the Console first, then create the deny policy.
+> **Note:** If the CLI returns `Deny statement passed into a Allow compilation`, IAM deny policies have not been enabled in the tenancy. Do not enable the feature unless your tenancy owner has explicitly decided to test IAM deny policies.
 </details>
 
 ## Task 4: Validate Tag-Based Access Control
-Now you will confirm that the policy is working.
+If you created the deny policy in a tenancy where deny policies are enabled, confirm that the policy is working. If you did not create the policy, read through the validation steps so you understand the expected behavior.
 
 ### Console Validation
 
@@ -272,7 +276,7 @@ Using Cloud Shell (or configured CLI profile for tagtestuser):
     oci os bucket delete --bucket-name tag-test-bucket-cli --namespace-name <object_storage_namespace> --force
     </copy>
     ```
-You should receive a "Not authorized" error.
+If the deny policy was created and has propagated, you should receive a "Not authorized" error.
 
 </details>
 
@@ -288,10 +292,10 @@ You should receive a "Not authorized" error.
 You should now have:
 
 - A bucket tagged as Production
-- A test group and user
-- A tag-based IAM policy created
-- Verified that deletion is blocked for Production-tagged resources
-- Observed how changing the tag changes access behavior
+- A test group and user, if you completed the hands-on identity setup
+- A sample tag-based deny policy you can use in your own deny-policy-enabled tenancy
+- An understanding of how deletion is blocked for Production-tagged resources when the policy is active
+- An understanding of how changing the tag value changes access behavior
 
 ## Summary
 
@@ -299,9 +303,9 @@ In this lab, you:
 
 - Applied a defined tag to a resource
 - Created a test group and user
-- Created a tag-based IAM policy
-- Restricted deletion based on tag value
-- Validated dynamic access control behavior
+- Reviewed a tag-based IAM deny policy
+- Learned how deletion can be restricted based on tag value
+- Reviewed the validation flow for dynamic access control behavior
 - Tag-based access control allows you to move beyond compartment-only permissions and implement flexible, metadata-driven security in OCI.
 
 ## Learn More

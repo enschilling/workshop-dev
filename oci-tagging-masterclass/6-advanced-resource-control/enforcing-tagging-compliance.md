@@ -61,20 +61,20 @@ Before your functions can interact with other OCI services — such as querying 
 
     - **Name:** `TagManagementPolicy`
     - **Description:** `Allows Serverless functions to perform tag-related activities`
-    - **Compartment:** Select your workshop compartment.
+    - **Compartment:** Select a compartment where the policy can reference both your Functions application compartment and your isolated test compartment.
 
 5. Add the following policy statements (click **Show manual editor** to enter them):
 
     ```
     <copy>
-    Allow dynamic-group FunctionsTagManagement to manage instance-family in compartment <your_compartment_name>
-    Allow dynamic-group FunctionsTagManagement to read all-resources in compartment <your_compartment_name>
-    Allow service cloudEvents to use functions-family in compartment <your_compartment_name>
-    Allow any-user to manage functions-family in compartment <your_compartment_name> where all {request.principal.type='resourceschedule'}
+    Allow dynamic-group FunctionsTagManagement to manage instance-family in compartment <isolated_test_compartment_name>
+    Allow dynamic-group FunctionsTagManagement to read all-resources in compartment <isolated_test_compartment_name>
+    Allow service cloudEvents to use functions-family in compartment <functions_compartment_name>
+    Allow any-user to manage functions-family in compartment <functions_compartment_name> where all {request.principal.type='resourceschedule'}
     </copy>
     ```
 
-    The first statement allows the functions to stop and terminate compute instances. The second allows them to search and read resource details. The third allows the Events service to invoke functions in your compartment.
+    The first statement allows the functions to stop compute instances in the isolated test compartment. The second allows them to search and read resource details there. The third allows the Events service to invoke functions in your Functions compartment.
 
 6. Click **Create**.
 
@@ -102,8 +102,16 @@ A Functions application is a logical grouping of functions. It defines the netwo
     fn list context
     fn use context <your_region>
     fn update context oracle.compartment-id <your_compartment_ocid>
-    fn update context api-url https://functions.<your_region>.oraclecloud.com
+    fn update context oracle.profile DEFAULT
+    fn update context oracle.region <your_region>
+    fn update context api-url https://functions.<your_region>.oci.oraclecloud.com
     fn update context registry <region_code>.ocir.io/<tenancy_namespace>/tag-enforcement
+    ```
+
+    If you are running Fn CLI from a local machine rather than OCI Cloud Shell, also make sure the context provider is `oracle`:
+
+    ```bash
+    fn update context provider oracle
     ```
 
     > **Note:** If you already completed Lab 5, use the same Cloud Shell session. These parameters are already set.
@@ -113,6 +121,8 @@ A Functions application is a logical grouping of functions. It defines the netwo
 This function scans all compute instances in a specified compartment using the OCI Resource Search service. For each instance, it checks whether the required defined tag is present with the expected value. If an instance is non-compliant, the function stops it.
 
 This function is designed to be invoked on a schedule (for example, using the OCI Resource Scheduler or an external cron trigger) to periodically sweep for resources that have drifted out of compliance.
+
+> **Important:** This function can stop running compute instances. For the workshop, point `COMPARTMENT_OCID` at an isolated test compartment that contains only resources you are willing to stop. Do not run the scheduled scan against a shared, production, or mixed-use compartment.
 
 1. In Cloud Shell or your local terminal, create a new function boilerplate:
 
@@ -328,7 +338,7 @@ This function is designed to be invoked on a schedule (for example, using the OC
 
     | Key | Value |
     |-----|-------|
-    | `COMPARTMENT_OCID` | The OCID of your workshop compartment |
+    | `COMPARTMENT_OCID` | The OCID of an isolated test compartment that contains only resources you are willing to stop |
     | `TAG_NAMESPACE` | The tag namespace you created in a previous lab (e.g., `LLTagNamespace`) |
     | `TAG_KEY` | The tag key to enforce (e.g., `CostCenter`) |
 
@@ -342,7 +352,7 @@ This function is designed to be invoked on a schedule (for example, using the OC
 
     The function will return a JSON response indicating how many non-compliant instances were found and what actions were taken.
 
-    > **Tip:** To test this safely, create a small compute instance without the required tag and verify that the function stops it. You can then add the required tag to the instance and re-run the scan to confirm it is no longer flagged.
+    > **Tip:** To test this safely, create a small compute instance without the required tag in your isolated test compartment and verify that the function stops it. You can then add the required tag to the instance and re-run the scan to confirm it is no longer flagged.
 
 ## Task 4: Deploy the Event-Driven Compliance Function
 
@@ -575,7 +585,7 @@ When the Events service detects that a compute instance has been created, it sen
 
 ## Task 5: Create an Events Rule
 
-Now that the event-driven function is deployed, you need to create an Events rule that triggers it whenever a new compute instance is launched in your workshop compartment.
+Now that the event-driven function is deployed, you need to create an Events rule that triggers it whenever a new compute instance is launched in your isolated test compartment.
 
 1. Open the **Navigation Menu**, navigate to **Observability & Management**, and select **Events Service > Rules**.
 
@@ -590,12 +600,12 @@ Now that the event-driven function is deployed, you need to create an Events rul
     - **Service Name:** `Compute`
     - **Event Type:** `Instance - Launch End`
 
-4. To scope the rule to your workshop compartment only, add an additional condition:
+4. To scope the rule to your isolated test compartment only, add an additional condition:
 
     - Click **+ Another Condition**.
     - **Condition:** `Attribute`
     - **Attribute Name:** `compartmentId`
-    - **Attribute Values:** Enter the OCID of your workshop compartment.
+    - **Attribute Values:** Enter the OCID of your isolated test compartment.
 
 5. Under **Actions**, configure:
 
@@ -606,7 +616,7 @@ Now that the event-driven function is deployed, you need to create an Events rul
 
 6. Click **Create Rule**.
 
-    The rule is active immediately. Any compute instance that finishes launching in your workshop compartment will now trigger the `event-tag-check` function.
+    The rule is active immediately. Any compute instance that finishes launching in your isolated test compartment will now trigger the `event-tag-check` function.
 
 ## Task 6: Test the Enforcement
 
@@ -616,7 +626,7 @@ You now have two enforcement mechanisms in place. Let's test them.
 
 1. Navigate to **Compute > Instances** and click **Create Instance**.
 
-2. Create a small instance (for example, using the `VM.Standard.E4.Flex` shape with 1 OCPU and 1 GB memory). **Do not add any defined tags** — leave the tagging section at its defaults.
+2. In your isolated test compartment, create a small instance (for example, using the `VM.Standard.E4.Flex` shape with 1 OCPU and 8 GB memory). **Do not add the required defined tag**.
 
 3. After the instance reaches the **Running** state, the Events service will fire the `Instance - Launch End` event. Within a minute, the `event-tag-check` function will be triggered.
 
@@ -626,7 +636,7 @@ You now have two enforcement mechanisms in place. Let's test them.
 
 ### Test with a Compliant Instance
 
-1. Create another small instance, but this time, expand the **Tagging** section during creation.
+1. In the same isolated test compartment, create another small instance, but this time, expand the **Tagging** section during creation.
 
 2. Under **Defined Tags**, select your tag namespace (e.g., `Operations`), select the key (e.g., `CostCenter`), and assign a value.
 
