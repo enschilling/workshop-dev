@@ -407,4 +407,4 @@ Create a `resources.json` file with all resource OCIDs and types.
 
 - **Author** - Daniel Hart
 - **Contributors** - Deion Locklear, Eli Schilling, Wynne Yang
-- **Last Updated By/Date** - Published February, 2026
+- **Last Updated By/Date** - Published May, 2026

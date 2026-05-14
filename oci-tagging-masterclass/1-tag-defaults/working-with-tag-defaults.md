@@ -410,4 +410,4 @@ Tag defaults improve governance, consistency, and cost management across OCI env
 
 - **Author** - Deion Locklear
 - **Contributors** - Daniel Hart, Eli Schilling, Wynne Yang
-- **Last Updated By/Date** - Published February, 2026
+- **Last Updated By/Date** - Published May, 2026
