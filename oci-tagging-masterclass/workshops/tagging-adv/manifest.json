@@ -4,27 +4,27 @@
     "tutorials": [
         {
             "title": "Tagging Review",
-            "filename": "../../0-tagging-basics/introduction-to-tagging.md"
+            "filename": "../../0-tagging-basics/introduction-to-tagging-advanced.md"
         },
         {
             "title": "Get Started",
             "filename": "https://oracle-livelabs.github.io/common/labs/cloud-login/cloud-login.md"
         },
         {
-            "title": "Lab 1: Tag-based access control in IAM",
+            "title": "Lab 4: Tag-based access control in IAM",
             "filename": "../../4-tag-based-access-control/control-iam-access.md"
         },
         {
-            "title": "Lab 2: Automating resource updates",
+            "title": "Lab 5: Automating resource updates",
             "filename": "../../5-automated-resource-updates/automated-resource-updates.md"
         },
         {
-            "title": "Lab 3: The Reaper",
+            "title": "Lab 6: The Reaper",
             "filename": "../../6-advanced-resource-control/enforcing-tagging-compliance.md"
         },
         {
-            "title": "Lab 4: Cleanup",
-            "filename": "../../7 - cleanup/cleanup-tenancy.md"
+            "title": "Cleanup",
+            "filename": "../../7 - cleanup/cleanup-advanced.md"
         },
         {
             "title": "Need Help?",

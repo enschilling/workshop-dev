@@ -4,7 +4,7 @@
     "tutorials": [
         {
             "title": "Introduction to tagging on OCI",
-            "filename": "../../0-tagging-basics/introduction-to-tagging.md"
+            "filename": "../../0-tagging-basics/introduction-to-tagging-core.md"
         },
         {
             "title": "Get Started",
@@ -27,8 +27,8 @@
             "filename": "../../3-cost-management/b-cost-management-tags-biz.md"
         },
         {
-            "title": "Lab 4: Cleanup",
-            "filename": "../../7 - cleanup/cleanup-tenancy.md"
+            "title": "Cleanup",
+            "filename": "../../7 - cleanup/cleanup-core.md"
         },
         {
             "title": "Need Help?",
