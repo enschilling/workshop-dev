@@ -15,7 +15,7 @@ It is deliberately **sequential**: each lab leaves behind infrastructure the nex
 * **Secure access:** OCI Bastion providing SSH and RDP-over-SSH to private hosts that have no public IPs.
 * **Observability:** Network Visualizer, Network Path Analyzer, and VCN Flow Logs for validation and troubleshooting.
 
-![Advanced and Multi-Cloud Networking target architecture](images/advnet-architecture.png)
+![Advanced and Multi-Cloud Networking target architecture](images/advnet-architecture.svg)
 
 **Workshop structure:**
 
