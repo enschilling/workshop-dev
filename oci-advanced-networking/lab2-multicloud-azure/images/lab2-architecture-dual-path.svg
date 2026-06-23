@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 560" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#2563eb"/></marker>
+    <marker id="arS" markerWidth="9" markerHeight="9" refX="2" refY="3" orient="auto"><path d="M7,0 L0,3 L7,6 Z" fill="#2563eb"/></marker>
+  </defs>
+  <rect width="1040" height="560" fill="#ffffff"/>
+  <text x="520" y="40" text-anchor="middle" font-size="22" font-weight="700" fill="#0f172a">Lab 2 &#183; Multi-Cloud OCI &#8596; Azure</text>
+  <text x="520" y="62" text-anchor="middle" font-size="13" fill="#64748b">Two transports onto the same DRG: dedicated interconnect (primary) + IPSec VPN (backup)</text>
+
+  <!-- OCI region -->
+  <rect x="30" y="86" width="360" height="436" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <rect x="30" y="86" width="232" height="26" rx="6" fill="#e2e8f0"/>
+  <text x="46" y="104" font-size="13" font-weight="600" fill="#334155">OCI &#8212; US East (Ashburn)</text>
+
+  <rect x="56" y="150" width="170" height="232" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+  <text x="70" y="173" font-size="13" font-weight="700" fill="#1e293b">advnet-hub-vcn</text>
+  <text x="70" y="191" font-size="11" font-family="monospace" fill="#475569">10.0.0.0/16</text>
+  <rect x="70" y="206" width="142" height="58" rx="5" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="80" y="225" font-size="10.5" font-weight="600" fill="#1e3a8a">Private subnet</text>
+  <text x="80" y="242" font-size="10.5" font-family="monospace" fill="#475569">10.0.1.0/24</text>
+  <text x="80" y="258" font-size="9" fill="#64748b">workload host</text>
+  <rect x="70" y="278" width="142" height="44" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="80" y="296" font-size="10" fill="#475569">Route table</text>
+  <text x="80" y="311" font-size="10" font-family="monospace" fill="#1e293b">10.10.0.0/16 &#8594; DRG</text>
+
+  <rect x="266" y="234" width="110" height="84" rx="10" fill="#2563eb"/>
+  <text x="321" y="268" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">DRG</text>
+  <text x="321" y="288" text-anchor="middle" font-size="9.5" font-family="monospace" fill="#dbeafe">advnet-drg-iad</text>
+  <line x1="226" y1="276" x2="266" y2="276" stroke="#2563eb" stroke-width="2.5" marker-end="url(#ar)" marker-start="url(#arS)"/>
+
+  <!-- Azure region -->
+  <rect x="650" y="86" width="360" height="436" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <rect x="650" y="86" width="220" height="26" rx="6" fill="#e2e8f0"/>
+  <text x="666" y="104" font-size="13" font-weight="600" fill="#334155">Microsoft Azure &#8212; East US</text>
+
+  <!-- Azure gateways -->
+  <rect x="666" y="196" width="150" height="50" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="741" y="216" text-anchor="middle" font-size="11" font-weight="700" fill="#1e3a8a">ExpressRoute GW</text>
+  <text x="741" y="232" text-anchor="middle" font-size="8.5" font-family="monospace" fill="#475569">advnet-azure-ergw</text>
+
+  <rect x="666" y="334" width="150" height="56" rx="8" fill="#eef2ff" stroke="#6366f1" stroke-width="1.5"/>
+  <text x="741" y="353" text-anchor="middle" font-size="11" font-weight="700" fill="#3730a3">VPN Gateway</text>
+  <text x="741" y="368" text-anchor="middle" font-size="8.5" font-family="monospace" fill="#475569">advnet-azure-vpngw</text>
+  <text x="741" y="382" text-anchor="middle" font-size="8.5" font-family="monospace" fill="#475569">20.127.255.224</text>
+
+  <!-- Azure VNet -->
+  <rect x="846" y="150" width="150" height="300" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+  <text x="860" y="173" font-size="12.5" font-weight="700" fill="#1e293b">advnet-azure-vnet</text>
+  <text x="860" y="190" font-size="10.5" font-family="monospace" fill="#475569">10.10.0.0/16</text>
+  <rect x="858" y="204" width="126" height="92" rx="5" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="868" y="223" font-size="10" font-weight="600" fill="#1e3a8a">Workload subnet</text>
+  <text x="868" y="239" font-size="10" font-family="monospace" fill="#475569">10.10.0.0/24</text>
+  <rect x="868" y="250" width="106" height="38" rx="4" fill="#ffffff" stroke="#64748b"/>
+  <text x="921" y="268" text-anchor="middle" font-size="9.5" font-weight="600" fill="#1e293b">advnet-azure-vm</text>
+  <text x="921" y="281" text-anchor="middle" font-size="9" font-family="monospace" fill="#64748b">10.10.0.4</text>
+  <rect x="858" y="306" width="126" height="48" rx="5" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="868" y="324" font-size="10" font-weight="600" fill="#334155">GatewaySubnet</text>
+  <text x="868" y="340" font-size="10" font-family="monospace" fill="#475569">10.10.255.0/27</text>
+
+  <line x1="816" y1="221" x2="846" y2="240" stroke="#2563eb" stroke-width="2" marker-end="url(#ar)"/>
+  <line x1="816" y1="362" x2="846" y2="320" stroke="#6366f1" stroke-width="2" marker-end="url(#ar)" stroke-dasharray="6 4"/>
+
+  <!-- PRIMARY path: FastConnect <-> ExpressRoute -->
+  <line x1="376" y1="262" x2="666" y2="221" stroke="#2563eb" stroke-width="3.5" marker-end="url(#ar)" marker-start="url(#arS)"/>
+  <rect x="430" y="150" width="200" height="44" rx="8" fill="#eff6ff" stroke="#2563eb"/>
+  <text x="530" y="168" text-anchor="middle" font-size="11" font-weight="700" fill="#1e3a8a">FastConnect &#8596; ExpressRoute</text>
+  <text x="530" y="184" text-anchor="middle" font-size="9" fill="#475569">Dedicated &#183; private &#183; ~2 ms RTT</text>
+  <rect x="486" y="232" width="74" height="20" rx="10" fill="#2563eb"/>
+  <text x="523" y="246" text-anchor="middle" font-size="10" font-weight="700" fill="#ffffff">PRIMARY</text>
+
+  <!-- ALTERNATIVE path: IPSec VPN -->
+  <line x1="376" y1="296" x2="666" y2="362" stroke="#6366f1" stroke-width="2.5" stroke-dasharray="7 5" marker-end="url(#ar)" marker-start="url(#arS)"/>
+  <rect x="430" y="402" width="200" height="44" rx="8" fill="#eef2ff" stroke="#6366f1"/>
+  <text x="530" y="420" text-anchor="middle" font-size="11" font-weight="700" fill="#3730a3">Site-to-Site IPSec VPN</text>
+  <text x="530" y="436" text-anchor="middle" font-size="9" fill="#475569">Encrypted &#183; over the public internet</text>
+  <rect x="470" y="360" width="106" height="20" rx="10" fill="#6366f1"/>
+  <text x="523" y="374" text-anchor="middle" font-size="10" font-weight="700" fill="#ffffff">ALTERNATIVE</text>
+</svg>

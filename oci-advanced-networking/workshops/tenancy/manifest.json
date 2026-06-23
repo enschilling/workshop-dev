@@ -1,0 +1,34 @@
+﻿{
+  "workshoptitle": "Advanced & Multi-Cloud Networking on OCI",
+  "help": "livelabs-help-oci_us@oracle.com",
+  "tutorials": [
+    {
+      "title": "Introduction",
+      "filename": "../../introduction/introduction.md"
+    },
+    {
+      "title": "Lab 1: OCI Hub-and-Spoke (Local & Remote VCN Peering)",
+      "filename": "../../lab1-hub-and-spoke/lab1-hub-and-spoke.md"
+    },
+    {
+      "title": "Lab 2: Multi-Cloud - Connecting OCI to Microsoft Azure",
+      "filename": "../../lab2-multicloud-azure/lab2-multicloud-azure.md"
+    },
+    {
+      "title": "Lab 3: Centralized Inspection - OCI Network Firewall",
+      "filename": "../../lab3-network-firewall/lab3-network-firewall.md"
+    },
+    {
+      "title": "Lab 4: Secure Access - OCI Bastion",
+      "filename": "../../lab4-bastion/lab4-bastion.md"
+    },
+    {
+      "title": "Lab 5: Troubleshooting - Network Command Center",
+      "filename": "../../lab5-troubleshooting/lab5-troubleshooting.md"
+    },
+    {
+      "title": "Cleanup",
+      "filename": "../../cleanup/cleanup.md"
+    }
+  ]
+}

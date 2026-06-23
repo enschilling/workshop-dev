@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 540" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#2563eb"/></marker>
+    <marker id="arS" markerWidth="9" markerHeight="9" refX="2" refY="3" orient="auto"><path d="M7,0 L0,3 L7,6 Z" fill="#2563eb"/></marker>
+    <marker id="arG" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#16a34a"/></marker>
+    <marker id="arGS" markerWidth="9" markerHeight="9" refX="2" refY="3" orient="auto"><path d="M7,0 L0,3 L7,6 Z" fill="#16a34a"/></marker>
+  </defs>
+  <rect width="1040" height="540" fill="#ffffff"/>
+  <text x="520" y="38" text-anchor="middle" font-size="22" font-weight="700" fill="#0f172a">Lab 2 &#183; IPSec Tunnel Detail</text>
+  <text x="520" y="60" text-anchor="middle" font-size="13" fill="#64748b">The working Site-to-Site VPN &#8212; single-tunnel demo, tunnel 1 UP / Connected</text>
+
+  <!-- OCI side -->
+  <rect x="28" y="84" width="396" height="300" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <rect x="28" y="84" width="190" height="26" rx="6" fill="#e2e8f0"/>
+  <text x="44" y="102" font-size="13" font-weight="600" fill="#334155">OCI &#8212; Ashburn</text>
+
+  <rect x="48" y="176" width="96" height="64" rx="10" fill="#2563eb"/>
+  <text x="96" y="204" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">DRG</text>
+  <text x="96" y="222" text-anchor="middle" font-size="8" font-family="monospace" fill="#dbeafe">advnet-drg-iad</text>
+
+  <rect x="172" y="138" width="234" height="150" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+  <text x="186" y="160" font-size="12.5" font-weight="700" fill="#1e293b">Site-to-Site VPN</text>
+  <text x="186" y="176" font-size="9.5" font-family="monospace" fill="#475569">advnet-azure-ipsec</text>
+  <text x="186" y="196" font-size="10" fill="#475569">Static route: <tspan font-family="monospace" fill="#1e293b">10.10.0.0/16</tspan></text>
+  <rect x="186" y="206" width="206" height="30" rx="5" fill="#f0fdf4" stroke="#86efac"/>
+  <circle cx="198" cy="221" r="4" fill="#16a34a"/>
+  <text x="210" y="225" font-size="10" fill="#166534">T1 <tspan font-family="monospace">129.80.73.86</tspan>  &#183; IKEv2 &#183; UP</text>
+  <rect x="186" y="240" width="206" height="30" rx="5" fill="#f8fafc" stroke="#cbd5e1"/>
+  <circle cx="198" cy="255" r="4" fill="#cbd5e1"/>
+  <text x="210" y="259" font-size="10" fill="#64748b">T2 <tspan font-family="monospace">129.80.163.22</tspan> &#183; down (by design)</text>
+
+  <line x1="144" y1="208" x2="172" y2="208" stroke="#2563eb" stroke-width="2.5" marker-end="url(#ar)" marker-start="url(#arS)"/>
+
+  <rect x="48" y="300" width="358" height="34" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="60" y="321" font-size="10" fill="#475569">CPE <tspan font-family="monospace" fill="#1e293b">advnet-azure-cpe</tspan> &#8594; peer <tspan font-family="monospace" fill="#1e293b">20.127.255.224</tspan> (Azure gateway)</text>
+
+  <!-- Azure side -->
+  <rect x="616" y="84" width="396" height="300" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <rect x="616" y="84" width="210" height="26" rx="6" fill="#e2e8f0"/>
+  <text x="632" y="102" font-size="13" font-weight="600" fill="#334155">Microsoft Azure &#8212; East US</text>
+
+  <rect x="634" y="138" width="220" height="150" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+  <text x="648" y="160" font-size="12.5" font-weight="700" fill="#1e293b">Local network gateway</text>
+  <text x="648" y="176" font-size="9.5" font-family="monospace" fill="#475569">advnet-oci-lng</text>
+  <text x="648" y="196" font-size="10" fill="#475569">Peer: <tspan font-family="monospace" fill="#1e293b">129.80.73.86</tspan></text>
+  <text x="648" y="213" font-size="10" fill="#475569">Prefixes: <tspan font-family="monospace" fill="#1e293b">10.0.0.0/14</tspan></text>
+  <rect x="648" y="224" width="192" height="48" rx="5" fill="#f0fdf4" stroke="#86efac"/>
+  <text x="658" y="242" font-size="10" fill="#166534">Connection: <tspan font-family="monospace">advnet-oci-conn</tspan></text>
+  <circle cx="662" cy="258" r="4" fill="#16a34a"/>
+  <text x="674" y="262" font-size="10" font-weight="600" fill="#166534">status: Connected</text>
+
+  <rect x="884" y="172" width="116" height="74" rx="10" fill="#eef2ff" stroke="#6366f1" stroke-width="1.5"/>
+  <text x="942" y="194" text-anchor="middle" font-size="11" font-weight="700" fill="#3730a3">VPN Gateway</text>
+  <text x="942" y="210" text-anchor="middle" font-size="8" font-family="monospace" fill="#475569">advnet-azure-vpngw</text>
+  <text x="942" y="225" text-anchor="middle" font-size="8" font-family="monospace" fill="#475569">20.127.255.224</text>
+  <text x="942" y="239" text-anchor="middle" font-size="8" fill="#64748b">route-based (IKEv2)</text>
+
+  <line x1="854" y1="208" x2="884" y2="208" stroke="#6366f1" stroke-width="2.5" marker-end="url(#ar)" marker-start="url(#arS)"/>
+
+  <!-- Tunnel across the middle -->
+  <line x1="406" y1="208" x2="634" y2="208" stroke="#16a34a" stroke-width="3.5" marker-end="url(#arG)" marker-start="url(#arGS)"/>
+  <rect x="448" y="120" width="144" height="40" rx="8" fill="#f0fdf4" stroke="#16a34a"/>
+  <text x="520" y="138" text-anchor="middle" font-size="10.5" font-weight="700" fill="#166534">IPSec Tunnel 1</text>
+  <text x="520" y="152" text-anchor="middle" font-size="9" fill="#166534">IKEv2 &#183; UP / Connected</text>
+  <rect x="476" y="216" width="88" height="20" rx="10" fill="#ffffff" stroke="#86efac"/>
+  <text x="520" y="230" text-anchor="middle" font-size="9" fill="#166534">PSK (shared)</text>
+  <text x="416" y="200" font-size="8.5" font-family="monospace" fill="#475569">129.80.73.86</text>
+  <text x="624" y="200" text-anchor="end" font-size="8.5" font-family="monospace" fill="#475569">20.127.255.224</text>
+
+  <!-- Fix callouts -->
+  <rect x="40" y="406" width="450" height="104" rx="10" fill="#fffbeb" stroke="#fcd34d" stroke-width="1.5"/>
+  <text x="60" y="430" font-size="13" font-weight="700" fill="#92400e">Interop fix #1 &#183; IKE version</text>
+  <text x="60" y="452" font-size="11" fill="#475569">OCI tunnels default to <tspan font-weight="700" fill="#1e293b">IKEv1</tspan>; an Azure route-based</text>
+  <text x="60" y="469" font-size="11" fill="#475569">gateway is <tspan font-weight="700" fill="#1e293b">IKEv2-only</tspan>.</text>
+  <text x="60" y="492" font-size="11" font-weight="600" fill="#166534">&#8594; update both OCI tunnels to IKEv2</text>
+
+  <rect x="510" y="406" width="490" height="104" rx="10" fill="#fffbeb" stroke="#fcd34d" stroke-width="1.5"/>
+  <text x="530" y="430" font-size="13" font-weight="700" fill="#92400e">Interop fix #2 &#183; proposal match</text>
+  <text x="530" y="452" font-size="11" fill="#475569">Default IKE / IPSec parameter sets don&#8217;t overlap, so</text>
+  <text x="530" y="469" font-size="11" fill="#475569">negotiation fails. Pin a matching custom policy:</text>
+  <text x="530" y="492" font-size="10.5" font-weight="600" fill="#166534">&#8594; IKE AES256/SHA256/DH14 &#183; IPSec AES256/SHA256/PFS14</text>
+</svg>

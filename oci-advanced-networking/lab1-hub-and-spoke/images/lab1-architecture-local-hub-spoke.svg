@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 520" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#2563eb"/></marker>
+    <marker id="arS" markerWidth="9" markerHeight="9" refX="2" refY="3" orient="auto"><path d="M7,0 L0,3 L7,6 Z" fill="#2563eb"/></marker>
+  </defs>
+  <rect width="920" height="520" fill="#ffffff"/>
+  <text x="460" y="40" text-anchor="middle" font-size="22" font-weight="700" fill="#0f172a">Lab 1 &#183; Local Hub-and-Spoke</text>
+  <text x="460" y="62" text-anchor="middle" font-size="13" fill="#64748b">DRG v2 same-region VCN peering &#8212; OCI US East (Ashburn)</text>
+
+  <!-- region container -->
+  <rect x="40" y="84" width="840" height="406" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <rect x="40" y="84" width="232" height="26" rx="6" fill="#e2e8f0"/>
+  <text x="56" y="102" font-size="13" font-weight="600" fill="#334155">OCI &#8212; US East (Ashburn)</text>
+
+  <!-- Hub VCN -->
+  <rect x="74" y="132" width="300" height="316" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+  <text x="90" y="156" font-size="14" font-weight="700" fill="#1e293b">advnet-hub-vcn</text>
+  <text x="90" y="174" font-size="12" font-family="monospace" fill="#475569">10.0.0.0/16</text>
+  <rect x="92" y="188" width="264" height="62" rx="6" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="104" y="208" font-size="12" font-weight="600" fill="#1e3a8a">Public subnet</text>
+  <text x="104" y="225" font-size="11" font-family="monospace" fill="#475569">10.0.0.0/24</text>
+  <text x="104" y="242" font-size="10" fill="#64748b">IGW &#183; NAT &#183; Service Gateway</text>
+  <rect x="92" y="260" width="264" height="62" rx="6" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="104" y="280" font-size="12" font-weight="600" fill="#1e3a8a">Private subnet</text>
+  <text x="104" y="297" font-size="11" font-family="monospace" fill="#475569">10.0.1.0/24</text>
+  <text x="104" y="314" font-size="10" fill="#64748b">workload host</text>
+  <rect x="92" y="334" width="264" height="40" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="104" y="351" font-size="10.5" fill="#475569">Route table</text>
+  <text x="104" y="367" font-size="10.5" font-family="monospace" fill="#1e293b">10.1.0.0/16 &#8594; DRG</text>
+
+  <!-- DRG -->
+  <rect x="430" y="248" width="120" height="84" rx="10" fill="#2563eb"/>
+  <text x="490" y="282" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">DRG</text>
+  <text x="490" y="302" text-anchor="middle" font-size="10.5" font-family="monospace" fill="#dbeafe">advnet-drg-iad</text>
+
+  <!-- Spoke-1 VCN -->
+  <rect x="606" y="160" width="240" height="252" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+  <text x="622" y="184" font-size="14" font-weight="700" fill="#1e293b">advnet-spoke1-vcn</text>
+  <text x="622" y="202" font-size="12" font-family="monospace" fill="#475569">10.1.0.0/16</text>
+  <rect x="624" y="216" width="204" height="62" rx="6" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="636" y="236" font-size="12" font-weight="600" fill="#1e3a8a">Private subnet</text>
+  <text x="636" y="253" font-size="11" font-family="monospace" fill="#475569">10.1.0.0/24</text>
+  <text x="636" y="270" font-size="10" fill="#64748b">workload host</text>
+  <rect x="624" y="290" width="204" height="40" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="636" y="307" font-size="10.5" fill="#475569">Route table</text>
+  <text x="636" y="323" font-size="10.5" font-family="monospace" fill="#1e293b">10.0.0.0/16 &#8594; DRG</text>
+
+  <!-- connections -->
+  <line x1="374" y1="290" x2="430" y2="290" stroke="#2563eb" stroke-width="2.5" marker-end="url(#ar)" marker-start="url(#arS)"/>
+  <line x1="550" y1="290" x2="606" y2="290" stroke="#2563eb" stroke-width="2.5" marker-end="url(#ar)" marker-start="url(#arS)"/>
+  <text x="402" y="282" text-anchor="middle" font-size="9.5" fill="#64748b">attach</text>
+  <text x="578" y="282" text-anchor="middle" font-size="9.5" fill="#64748b">attach</text>
+
+  <text x="490" y="406" text-anchor="middle" font-size="11" fill="#475569">Local VCN attachments &#183; the DRG routes between same-region VCNs</text>
+</svg>
