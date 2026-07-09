@@ -120,7 +120,6 @@ This workshop prepared the trusted foundation those tools depend on.
 
 ## Acknowledgements
 
-- **Author:** Oracle AI Data Platform and Autonomous AI Lakehouse Workshop Team
-- **Contributors:** Oracle LiveLabs, database, analytics, and AI data platform teams
-- **Last Updated By/Date:** Workshop development team, July 2026
-
+- **Author:** Eli Schilling, Cloud Architect || Evangelist
+- **Contributors:** Oracle LiveLabs and ONA Lab Experience Teams
+- **Last Updated By / Date:** ONA Lab Experience team, July 2026
