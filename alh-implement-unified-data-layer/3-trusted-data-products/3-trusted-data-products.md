@@ -37,6 +37,7 @@ ALH can implement transformation logic with SQL, visual Data Transforms data flo
 4. Return to the SQL worksheet and review the latest ALH pipeline executions recorded by the workshop setup:
 
     ```sql
+    <copy>
     SELECT pipeline_name,
            execution_engine,
            pipeline_purpose,
@@ -48,6 +49,7 @@ ALH can implement transformation logic with SQL, visual Data Transforms data flo
            records_quarantined
     FROM seer_gold.pipeline_run_summary
     ORDER BY started_at DESC;
+    </copy>
     ```
 
 5. Identify the ALH pipelines responsible for:
@@ -61,6 +63,7 @@ ALH can implement transformation logic with SQL, visual Data Transforms data flo
 6. Inspect failures or warnings without rerunning the pipeline:
 
     ```sql
+    <copy>
     SELECT pipeline_run_id,
            pipeline_name,
            execution_engine,
@@ -71,6 +74,7 @@ ALH can implement transformation logic with SQL, visual Data Transforms data flo
     FROM seer_gold.pipeline_run_events
     WHERE severity IN ('WARNING', 'ERROR')
     ORDER BY recorded_at DESC;
+    </copy>
     ```
 
 7. A production pipeline should be restartable, observable, and idempotent. The ability to reproduce a Gold result matters as much as the result itself.
@@ -82,6 +86,7 @@ ALH can implement transformation logic with SQL, visual Data Transforms data flo
 1. Check stable business keys and duplicates:
 
     ```sql
+    <copy>
     SELECT 'Missing project IDs' AS check_name, COUNT(*) AS failure_count
     FROM seer_gold.project_context
     WHERE project_id IS NULL
@@ -97,22 +102,26 @@ ALH can implement transformation logic with SQL, visual Data Transforms data flo
       GROUP BY project_id, asset_id
       HAVING COUNT(*) > 1
     );
+    </copy>
     ```
 
 2. Check product freshness:
 
     ```sql
+    <copy>
     SELECT product_name,
            last_successful_refresh,
            freshness_sla_minutes,
            freshness_status
     FROM seer_gold.data_product_freshness
     ORDER BY product_name;
+    </copy>
     ```
 
 3. Check document and embedding coverage:
 
     ```sql
+    <copy>
     SELECT document_type,
            COUNT(DISTINCT document_id) AS documents,
            COUNT(*) AS chunks,
@@ -120,29 +129,23 @@ ALH can implement transformation logic with SQL, visual Data Transforms data flo
     FROM seer_gold.document_chunks
     GROUP BY document_type
     ORDER BY document_type;
+    </copy>
     ```
 
 4. Confirm that all required checks pass or have an explained exception. A result should not be labeled agent-ready merely because a query returns rows.
 
 ## Task 3: Review the published contracts
 
-1. Open the product catalog:
+1. In **Data Studio > Catalog**, filter to the `SEER_GOLD` schema and open `DATA_PRODUCT_CATALOG`.
+
+2. Select **Preview** and review each product's business purpose, accountable owner, classification, refresh frequency, quality status, and contract version.
+
+3. Return to the Catalog results and open `SEER_GOLD.PROJECT_CONTEXT`. Use **Describe** to inspect its columns and data types, and use **Lineage** to review any dependencies available for the object.
+
+4. Return to the SQL worksheet and inspect the formal contract columns for the project context product:
 
     ```sql
-    SELECT product_name,
-           business_purpose,
-           product_owner,
-           classification,
-           refresh_frequency,
-           quality_status,
-           contract_version
-    FROM seer_gold.data_product_catalog
-    ORDER BY product_name;
-    ```
-
-2. Inspect the contract columns for the project context product:
-
-    ```sql
+    <copy>
     SELECT column_sequence,
            column_name,
            business_definition,
@@ -152,9 +155,10 @@ ALH can implement transformation logic with SQL, visual Data Transforms data flo
     FROM seer_gold.data_product_columns
     WHERE product_name = 'PROJECT_CONTEXT'
     ORDER BY column_sequence;
+    </copy>
     ```
 
-3. Verify that the product describes:
+5. Verify that the product describes:
 
     - Its business purpose and accountable owner
     - Stable keys and business definitions
@@ -162,7 +166,7 @@ ALH can implement transformation logic with SQL, visual Data Transforms data flo
     - Sensitivity and access classification
     - Contract version and intended consumers
 
-4. Cataloging makes a product discoverable. A contract makes it safe to depend on.
+6. Cataloging makes a product discoverable. A contract makes it safe to depend on.
 
 ## Task 4: Map products to downstream consumers
 
@@ -181,6 +185,7 @@ The next workshops begin where this one ends.
 1. Review the consumer mapping stored in the environment:
 
     ```sql
+    <copy>
     SELECT product_name,
            consumer_name,
            access_pattern,
@@ -188,6 +193,7 @@ The next workshops begin where this one ends.
            approval_status
     FROM seer_gold.data_product_consumers
     ORDER BY product_name, consumer_name;
+    </copy>
     ```
 
 2. Identify the four data patterns developers encounter in the AppDev Data Fundamentals lab:
@@ -219,6 +225,7 @@ Use the following checklist for each product intended for an AI application or a
 1. Review the environment's consolidated assessment:
 
     ```sql
+    <copy>
     SELECT product_name,
            identifiers_ready,
            quality_ready,
@@ -229,6 +236,7 @@ Use the following checklist for each product intended for an AI application or a
            overall_readiness
     FROM seer_gold.ai_readiness_assessment
     ORDER BY product_name;
+    </copy>
     ```
 
 2. Identify any product that is not `READY` and review the reason before it is exposed to a downstream consumer.
@@ -241,7 +249,7 @@ In this lab, you:
 
 - Inspected ALH Data Transforms workflows, database jobs, and workshop pipeline-audit records.
 - Validated business keys, freshness, quality, and document coverage.
-- Reviewed product ownership, classifications, and contract versions.
+- Used Data Studio Catalog to review product ownership, classifications, schema details, and contract versions.
 - Mapped Gold products to developer interfaces and agent tools.
 - Completed an application and agent-readiness assessment.
 

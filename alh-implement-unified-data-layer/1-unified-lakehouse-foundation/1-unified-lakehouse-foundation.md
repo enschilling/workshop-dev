@@ -16,7 +16,7 @@ In this lab, you will:
 
 - Verify that the pre-provisioned workshop schemas and data are available.
 - Create a Bronze external table over a CSV in OCI Object Storage using the Data Studio interface.
-- Inspect representative structured feeds and unstructured project documents.
+- Use Data Studio Catalog to inspect representative Bronze, Silver, and Gold entities.
 - Run a representative Bronze-to-Silver transformation inside ALH.
 - Explain what belongs in Bronze, Silver, and Gold.
 - Trace a steel-delivery business event across multiple source extracts.
@@ -42,23 +42,28 @@ The environment was built before the workshop. Begin with a short readiness chec
 2. Run the following query to confirm your connected database user:
 
     ```sql
+    <copy>
     SELECT USER AS connected_user FROM dual;
+    </copy>
     ```
 
 3. Confirm that the three medallion schemas are visible:
 
     ```sql
+    <copy>
     SELECT owner, COUNT(*) AS object_count
     FROM all_objects
     WHERE owner IN ('SEER_BRONZE', 'SEER_SILVER', 'SEER_GOLD')
       AND object_type IN ('TABLE', 'VIEW')
     GROUP BY owner
     ORDER BY owner;
+    </copy>
     ```
 
 4. Confirm that the workshop contains source data, conformed entities, Gold products, and document chunks:
 
     ```sql
+    <copy>
     SELECT 'Bronze source records' AS asset, COUNT(*) AS row_count
     FROM seer_bronze.source_record_inventory
     UNION ALL
@@ -70,6 +75,7 @@ The environment was built before the workshop. Begin with a short readiness chec
     UNION ALL
     SELECT 'Searchable document chunks', COUNT(*)
     FROM seer_gold.document_chunks;
+    </copy>
     ```
 
 5. Verify that every result contains at least one row. If an object is missing, stop and use the **Need Help?** section before continuing.
@@ -133,6 +139,7 @@ The workshop setup uploaded representative source extracts to a private Object S
 15. Return to the SQL worksheet and query the external table you created:
 
     ```sql
+    <copy>
     SELECT source_record_id,
            supplier_name,
            source_status,
@@ -144,11 +151,13 @@ The workshop setup uploaded representative source extracts to a private Object S
            linked_at
     FROM supplier_transform_ext
     ORDER BY source_record_id;
+    </copy>
     ```
 
 16. Review the broader seeded source inventory:
 
     ```sql
+    <copy>
     SELECT source_system,
            source_object,
            storage_format,
@@ -157,6 +166,7 @@ The workshop setup uploaded representative source extracts to a private Object S
            ingestion_batch_id
     FROM seer_bronze.source_record_inventory
     ORDER BY source_system, source_object;
+    </copy>
     ```
 
 17. The other representative feeds include Fusion ERP-style purchasing and financial data, Primavera-style milestones, on-premises-style inspection findings, and PDF project evidence in the same Object Storage bucket. Bronze preserves what arrived, including source identifiers and provenance; it is not the stable contract applications should consume.
@@ -171,47 +181,24 @@ The medallion layers answer different questions.
 | Silver | What enterprise entity does it represent? | Standardization, validation, deduplication, reconciliation |
 | Gold | What trusted product does a consumer need? | Business definitions, stable schema, quality and freshness expectations |
 
-1. Inspect the Silver asset representation:
+1. Return to the Database Actions Launchpad, select **Data Studio**, and then select **Catalog**.
 
-    ```sql
-    SELECT asset_id,
-           canonical_asset_name,
-           project_id,
-           asset_type,
-           normalized_status,
-           source_system_count,
-           reconciliation_status
-    FROM seer_silver.assets
-    ORDER BY project_id, canonical_asset_name;
-    ```
+2. Confirm that the local Autonomous AI Database catalog is selected. Use the schema filter to select `SEER_BRONZE`, and search for `SOURCE_RECORD_INVENTORY`.
 
-2. Compare supplier names and statuses after standardization:
+3. Open `SEER_BRONZE.SOURCE_RECORD_INVENTORY`. Use the available entity-detail tabs to:
 
-    ```sql
-    SELECT supplier_id,
-           canonical_supplier_name,
-           qualification_status,
-           compliance_status,
-           matched_source_count
-    FROM seer_silver.suppliers
-    ORDER BY canonical_supplier_name;
-    ```
+    - Preview the source inventory rows.
+    - Inspect the columns and data types.
+    - Review statistics when available.
+    - Notice the source object, storage format, extraction time, and ingestion batch metadata retained in Bronze.
 
-3. Inspect the Gold project context product:
+4. Change the schema filter to `SEER_SILVER`, search for `ASSETS`, and open `SEER_SILVER.ASSETS`. Preview the data and locate `CANONICAL_ASSET_NAME`, `NORMALIZED_STATUS`, `SOURCE_SYSTEM_COUNT`, and `RECONCILIATION_STATUS`.
 
-    ```sql
-    SELECT project_name,
-           asset_name,
-           current_milestone,
-           committed_cost,
-           inspection_status,
-           primary_supplier,
-           data_freshness_at
-    FROM seer_gold.project_context
-    ORDER BY project_name, asset_name;
-    ```
+5. Search for and open `SEER_SILVER.SUPPLIERS`. Preview the standardized supplier names, qualification statuses, compliance statuses, and matched-source counts. These fields show how Silver resolves source differences into conformed enterprise entities.
 
-4. Observe that the Gold result presents business concepts rather than source-system mechanics. Consumers do not need to know which record came from which source to use the product, but provenance remains available for audit and explanation.
+6. Change the schema filter to `SEER_GOLD`, search for `PROJECT_CONTEXT`, and open `SEER_GOLD.PROJECT_CONTEXT`. Preview the product and inspect its columns. Locate the project, asset, milestone, committed cost, inspection, supplier, and freshness fields.
+
+7. Compare the three entity-detail pages. Bronze emphasizes what arrived and where it came from, Silver emphasizes reconciliation and standardization, and Gold presents stable business concepts for consumers. Provenance remains available even though consumers no longer need to understand every source-system field.
 
 ## Task 4: Run an ALH-native Bronze-to-Silver transformation
 
@@ -220,6 +207,7 @@ The complete production-style medallion architecture is seeded, but the external
 1. Inspect the sample Bronze records:
 
     ```sql
+    <copy>
     SELECT source_record_id,
            supplier_name,
            source_status,
@@ -229,6 +217,7 @@ The complete production-style medallion architecture is seeded, but the external
            ingestion_batch_id
     FROM supplier_transform_ext
     ORDER BY source_record_id;
+    </copy>
     ```
 
 2. Identify differences such as extra spaces, abbreviations, inconsistent case, status codes, and missing certifications.
@@ -236,6 +225,7 @@ The complete production-style medallion architecture is seeded, but the external
 3. Create a standardized view in your assigned workshop schema:
 
     ```sql
+    <copy>
     CREATE OR REPLACE VIEW supplier_standardized_demo AS
     SELECT source_record_id,
            CASE
@@ -267,19 +257,23 @@ The complete production-style medallion architecture is seeded, but the external
            source_file_name,
            linked_at
     FROM supplier_transform_ext;
+    </copy>
     ```
 
 4. Query your transformed result:
 
     ```sql
+    <copy>
     SELECT *
     FROM supplier_standardized_demo
     ORDER BY canonical_supplier_name, source_record_id;
+    </copy>
     ```
 
 5. Compare the standardized name, status, certification, and location with the seeded Silver mapping:
 
     ```sql
+    <copy>
     SELECT demo.source_record_id,
            demo.canonical_supplier_name AS attendee_result,
            silver.canonical_supplier_name AS seeded_silver_result,
@@ -295,6 +289,7 @@ The complete production-style medallion architecture is seeded, but the external
     JOIN seer_silver.supplier_source_mappings silver
       ON silver.source_record_id = demo.source_record_id
     ORDER BY demo.source_record_id;
+    </copy>
     ```
 
 6. Confirm that the expected rows return `MATCH`. Notice that the view retains the source record, ingestion batch, source file, and link timestamp needed for provenance.
@@ -310,6 +305,7 @@ The reinforced-steel framework for Seer's Austin bank project appears differentl
 1. Locate the source records associated with the Austin steel delivery:
 
     ```sql
+    <copy>
     SELECT source_system,
            source_object,
            source_record_id,
@@ -321,6 +317,7 @@ The reinforced-steel framework for Seer's Austin bank project appears differentl
     WHERE UPPER(canonical_business_term) = 'STEEL DELIVERY'
       AND UPPER(project_name) LIKE '%AUSTIN%'
     ORDER BY source_system, source_object;
+    </copy>
     ```
 
 2. Confirm that the mapping includes financial, schedule, supplier, and inspection context.
@@ -328,6 +325,7 @@ The reinforced-steel framework for Seer's Austin bank project appears differentl
 3. Open the canonical event:
 
     ```sql
+    <copy>
     SELECT event_id,
            project_name,
            asset_name,
@@ -345,11 +343,13 @@ The reinforced-steel framework for Seer's Austin bank project appears differentl
         AND UPPER(project_name) LIKE '%AUSTIN%'
       FETCH FIRST 1 ROW ONLY
     );
+    </copy>
     ```
 
 4. Review the corresponding Gold record:
 
     ```sql
+    <copy>
     SELECT project_name,
            asset_name,
            supplier_name,
@@ -360,6 +360,7 @@ The reinforced-steel framework for Seer's Austin bank project appears differentl
     FROM seer_gold.project_context
     WHERE UPPER(project_name) LIKE '%AUSTIN%'
       AND UPPER(asset_name) LIKE '%STEEL%';
+    </copy>
     ```
 
 5. The Gold product does not erase source differences. It resolves them into a stable business object while preserving the mappings needed to explain the result.
@@ -371,6 +372,7 @@ Data should advance only when it satisfies the contract for the next layer.
 1. Review the latest quality-rule results:
 
     ```sql
+    <copy>
     SELECT layer_name,
            rule_name,
            rule_dimension,
@@ -380,11 +382,13 @@ Data should advance only when it satisfies the contract for the next layer.
            evaluated_at
     FROM seer_gold.data_quality_results
     ORDER BY evaluated_at DESC, layer_name, rule_name;
+    </copy>
     ```
 
 2. Review quarantined records without changing them:
 
     ```sql
+    <copy>
     SELECT source_system,
            source_record_id,
            failed_rule,
@@ -392,11 +396,17 @@ Data should advance only when it satisfies the contract for the next layer.
            quarantine_status
     FROM seer_silver.quarantined_records
     ORDER BY source_system, source_record_id;
+    </copy>
     ```
 
-3. Inspect the lineage for the Austin project context product:
+3. Return to **Data Studio > Catalog** and search your workshop schema for `SUPPLIER_STANDARDIZED_DEMO`.
+
+4. Open the view and select **Lineage**. Follow the upstream dependency to `SUPPLIER_TRANSFORM_EXT`, the Bronze external table you linked to Object Storage. This visually confirms that your Silver demonstration remains traceable to its source.
+
+5. Return to the SQL worksheet and inspect the workshop's recorded lineage for the seeded Gold project context product:
 
     ```sql
+    <copy>
     SELECT target_object,
            source_object,
            transformation_name,
@@ -405,9 +415,10 @@ Data should advance only when it satisfies the contract for the next layer.
     FROM seer_gold.lineage_summary
     WHERE target_object = 'SEER_GOLD.PROJECT_CONTEXT'
     ORDER BY completed_at DESC, source_object;
+    </copy>
     ```
 
-4. Confirm that the Gold product can be traced to its Silver entities, Bronze records, and original documents or files.
+6. Confirm that the Gold product can be traced to its Silver entities, Bronze records, and original documents or files. Catalog provides interactive lineage for supported database objects, while `SEER_GOLD.LINEAGE_SUMMARY` preserves the workshop's complete seeded pipeline lineage.
 
 ## Lab 1 Recap
 
@@ -415,7 +426,7 @@ In this lab, you:
 
 - Verified the pre-provisioned lakehouse environment.
 - Used Data Studio to link an Object Storage CSV as the attendee-created Bronze external table `SUPPLIER_TRANSFORM_EXT`.
-- Explored simulated enterprise feeds and actual Object Storage document metadata.
+- Used Data Studio Catalog to compare Bronze, Silver, and Gold entities and inspect lineage.
 - Created the Silver demonstration view `SUPPLIER_STANDARDIZED_DEMO` directly in ALH.
 - Compared the responsibilities of Bronze, Silver, and Gold.
 - Traced the Austin steel-delivery event across source systems.
@@ -427,6 +438,7 @@ The key takeaway is that connecting sources is only the beginning. Trusted AI co
 
 - [Use external tables with Autonomous Database](https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/query-external-data.html)
 - [Link to objects in cloud storage with Data Studio](https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/link-to-cloud.html)
+- [Discover and Manage Data with Catalog in Autonomous AI Database](https://docs.oracle.com/en-us/iaas/autonomous-database-serverless/doc/catalog-entities.html)
 - [Transform Data with Data Transforms in Autonomous AI Database](https://docs.oracle.com/en-us/iaas/autonomous-database-serverless/doc/autonomous-data-transforms.html)
 - [OCI Object Storage documentation](https://docs.oracle.com/en-us/iaas/Content/Object/home.htm)
 

@@ -23,11 +23,11 @@ In this recap, you will:
 
 ### Lab 1: Explore the Unified Lakehouse Foundation
 
-You inspected representative Fusion ERP-, Primavera-, CRM-, and on-premises-style source extracts, together with actual project documents in OCI Object Storage. In Data Studio, you created the `SEER_LAKE_SOURCE` cloud-store location with the database resource principal and linked `source-data/suppliers/supplier_extract.csv` as the Bronze external table `SUPPLIER_TRANSFORM_EXT`. You retained `SOURCE_FILE_NAME` and `LINKED_AT` as provenance, then used ALH SQL to create `SUPPLIER_STANDARDIZED_DEMO`, standardizing supplier names, qualification statuses, certifications, and locations. You compared all four standardized fields with the seeded Silver supplier mapping and traced the Austin steel-delivery event from source-specific records to a canonical Silver entity and consumer-ready Gold product.
+You inspected representative Fusion ERP-, Primavera-, CRM-, and on-premises-style source extracts, together with actual project documents in OCI Object Storage. In Data Studio, you created the `SEER_LAKE_SOURCE` cloud-store location with the database resource principal and linked `source-data/suppliers/supplier_extract.csv` as the Bronze external table `SUPPLIER_TRANSFORM_EXT`. You used Catalog to compare Bronze, Silver, and Gold entities and visually inspect the lineage of your demonstration flow. You retained `SOURCE_FILE_NAME` and `LINKED_AT` as provenance, then used ALH SQL to create `SUPPLIER_STANDARDIZED_DEMO`, standardizing supplier names, qualification statuses, certifications, and locations. You compared all four standardized fields with the seeded Silver supplier mapping and traced the Austin steel-delivery event from source-specific records to a canonical Silver entity and consumer-ready Gold product.
 
 ### Lab 2: Unify Data for AI Applications
 
-You explored relational, JSON, relationship, and vector representations of the governed data. You searched for Austin structural specifications by meaning and combined the retrieved passage with purchasing, schedule, supplier, and inspection context.
+You used Data Studio Catalog to explore application-ready Gold products and document entities, then compared relational, JSON, relationship, and vector representations of the governed data. You searched for Austin structural specifications by meaning and combined the retrieved passage with purchasing, schedule, supplier, and inspection context.
 
 ### Lab 3: Deliver Trusted Data Products
 

@@ -12,7 +12,7 @@ The attendee environment is expected to be pre-provisioned. Representative Fusio
 
 ## Transformation approach
 
-This workshop demonstrates an Autonomous AI Lakehouse-native implementation. Bronze, Silver, and Gold are created and maintained with ALH Data Studio, SQL, Data Transforms, and database-native jobs. AIDP remains part of the broader solution story, but AIDP notebooks do not execute this workshop's seeded transformations.
+This workshop demonstrates an Autonomous AI Lakehouse-native implementation. Attendees use Data Studio to link Object Storage data and Catalog to explore entities, metadata, and lineage; focused SQL exercises cover transformation, validation, reconciliation, and vector retrieval. Bronze, Silver, and Gold are created and maintained with ALH Data Studio, SQL, Data Transforms, and database-native jobs. AIDP remains part of the broader solution story, but AIDP notebooks do not execute this workshop's seeded transformations.
 
 The complementary AIDP pattern is documented in the workshop: teams can use Spark-powered AIDP notebooks and workflows for distributed or notebook-centric processing, then publish selected products to ALH. The workshop presents the choice as workload-driven rather than positioning either approach as universally preferred.
 

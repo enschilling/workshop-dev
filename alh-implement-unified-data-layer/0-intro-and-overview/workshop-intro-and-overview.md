@@ -110,11 +110,11 @@ You will inspect and validate these assets. You will not run the long medallion 
 
 ### Lab 1: Explore the Unified Lakehouse Foundation
 
-Discover Seer's representative source feeds and build a small ALH-native Bronze-to-Silver path. Using **Data Studio > Data Load > Link Data**, you will create `SUPPLIER_TRANSFORM_EXT`, an external Bronze table over `supplier_extract.csv` in Object Storage. You will include the source file and link timestamp as provenance, then use SQL to create `SUPPLIER_STANDARDIZED_DEMO`, standardizing supplier names, qualification statuses, certifications, and locations. Finally, you will compare your result with the seeded Silver supplier mapping and trace the Austin steel-delivery example through the layers.
+Discover Seer's representative source feeds and build a small ALH-native Bronze-to-Silver path. Using **Data Studio > Data Load > Link Data**, you will create `SUPPLIER_TRANSFORM_EXT`, an external Bronze table over `supplier_extract.csv` in Object Storage. You will include the source file and link timestamp as provenance, use **Data Studio > Catalog** to compare the medallion layers and inspect lineage, then use SQL to create `SUPPLIER_STANDARDIZED_DEMO`, standardizing supplier names, qualification statuses, certifications, and locations. Finally, you will compare your result with the seeded Silver supplier mapping and trace the Austin steel-delivery example through the layers.
 
 ### Lab 2: Unify Data for AI Applications
 
-Explore the Gold products and multiple data shapes, search for Austin structural specifications, and combine document evidence with structured project context.
+Use Data Studio Catalog to explore Gold products and document entities, compare multiple data shapes, search for Austin structural specifications, and combine document evidence with structured project context.
 
 ### Lab 3: Deliver Trusted Data Products
 
