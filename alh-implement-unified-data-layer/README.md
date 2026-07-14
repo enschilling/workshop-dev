@@ -2,13 +2,13 @@
 
 This repository contains the first-draft Oracle LiveLabs workshop **Unify the Data Layer with Oracle Autonomous AI Lakehouse**.
 
-The workshop follows a 75-minute, three-lab structure:
+The workshop follows an 80-minute, three-lab structure:
 
 1. Explore the Unified Lakehouse Foundation
 2. Unify Data for AI Applications
 3. Deliver Trusted Data Products
 
-The attendee environment is expected to be pre-provisioned. Representative Fusion ERP, Primavera, CRM, and on-premises data is supplied as simulated source extracts. Contracts, engineering specifications, and inspection documents are stored in OCI Object Storage. The workshop does not require access to the source enterprise applications.
+The attendee environment is expected to be pre-provisioned. Representative Fusion ERP, Primavera, CRM, and on-premises data is supplied as simulated CSV source extracts. Contracts, engineering specifications, and inspection reports are supplied as PDF documents in OCI Object Storage. The workshop does not require access to the source enterprise applications.
 
 ## Transformation approach
 
@@ -20,12 +20,19 @@ The complementary AIDP pattern is documented in the workshop: teams can use Spar
 
 Open `workshops/tenancy/index.html` through the LiveLabs publishing workflow. The adjacent `manifest.json` defines the tutorial order and points to the shared Markdown files at the repository root.
 
+## Test environment package
+
+Use `files/setup/alh-unified-data-layer-stack.zip` to create an OCI Resource Manager stack. The archive places the Terraform configuration at its root and includes all CSV, PDF, and SQL bootstrap assets. The editable Terraform source is under `files/setup/terraform`, and `files/setup/package-stack.ps1` regenerates the archive after seed or provisioning changes.
+
+The stack intentionally displays `database_admin_password`, `workshop_username`, and `workshop_user_password` as plain-text Terraform outputs for ephemeral testing. The Autonomous AI Lakehouse ADMIN username is the fixed value `ADMIN`.
+
 ## Draft data contracts
 
 The first draft assumes these schemas and products:
 
 - `SEER_BRONZE`: faithful source extracts and ingestion metadata
-- `SEER_BRONZE.SUPPLIER_TRANSFORM_SAMPLE`: small hands-on transformation source
+- `SUPPLIER_TRANSFORM_EXT`: attendee-created Bronze external table linked to `source-data/suppliers/supplier_extract.csv` with Data Studio
+- `SUPPLIER_STANDARDIZED_DEMO`: attendee-created Silver demonstration view retaining `SOURCE_FILE_NAME` and `LINKED_AT` provenance
 - `SEER_SILVER`: standardized and reconciled enterprise entities
 - `SEER_SILVER.SUPPLIER_SOURCE_MAPPINGS`: seeded comparison result for the transformation exercise
 - `SEER_GOLD`: governed, consumer-ready data products
@@ -36,7 +43,7 @@ The first draft assumes these schemas and products:
 - `SEER_GOLD.PIPELINE_RUN_SUMMARY` and `SEER_GOLD.PIPELINE_RUN_EVENTS`: workshop audit records for ALH pipeline execution
 - `SEER_MEDALLION_PIPELINES`: prepared ALH Data Transforms project
 
-The names are design contracts for the sample-data and environment build. They must be verified during implementation and end-to-end validation.
+The names are design contracts for the sample-data and environment build. Terraform, seed CSVs, PDF documents, SQL bootstrap scripts, and an OCI Resource Manager-ready packaging workflow are under `files`. They must be verified during end-to-end deployment and attendee-path validation.
 
 ## Content status
 

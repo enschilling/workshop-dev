@@ -23,7 +23,7 @@ In this recap, you will:
 
 ### Lab 1: Explore the Unified Lakehouse Foundation
 
-You inspected representative Fusion ERP-, Primavera-, CRM-, and on-premises-style source extracts, together with actual project documents registered from OCI Object Storage. You ran a Bronze-to-Silver standardization directly in ALH and traced the Austin steel-delivery event from source-specific records to a canonical Silver entity and a consumer-ready Gold product.
+You inspected representative Fusion ERP-, Primavera-, CRM-, and on-premises-style source extracts, together with actual project documents in OCI Object Storage. In Data Studio, you created the `SEER_LAKE_SOURCE` cloud-store location with the database resource principal and linked `source-data/suppliers/supplier_extract.csv` as the Bronze external table `SUPPLIER_TRANSFORM_EXT`. You retained `SOURCE_FILE_NAME` and `LINKED_AT` as provenance, then used ALH SQL to create `SUPPLIER_STANDARDIZED_DEMO`, standardizing supplier names, qualification statuses, certifications, and locations. You compared all four standardized fields with the seeded Silver supplier mapping and traced the Austin steel-delivery event from source-specific records to a canonical Silver entity and consumer-ready Gold product.
 
 ### Lab 2: Unify Data for AI Applications
 
@@ -36,9 +36,9 @@ You reviewed ALH Data Transforms and database-job evidence, validated quality an
 ## The completed data journey
 
 ```text
-Simulated source feeds and real project documents
+CSV source feeds and PDF project documents in Object Storage
                        |
-     Catalog, classifications, and provenance
+ Data Studio link, catalog, classifications, provenance
                        |
         Bronze: faithful source capture
                        |
@@ -54,6 +54,8 @@ Simulated source feeds and real project documents
 ## Key takeaways
 
 - AI readiness begins with data-engineering discipline.
+- Data Studio can expose Object Storage data as an external Bronze table without copying the source file into the database.
+- File name, ingestion or link time, source identifiers, and batch identifiers should survive the Bronze-to-Silver transition.
 - Bronze, Silver, and Gold represent different contracts and responsibilities.
 - Structured facts and unstructured evidence can share one governed foundation.
 - Semantic retrieval depends on chunking, metadata, provenance, and evaluation quality.

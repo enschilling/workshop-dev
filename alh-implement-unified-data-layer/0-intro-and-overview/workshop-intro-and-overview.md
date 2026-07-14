@@ -4,9 +4,9 @@
 
 Seer Construction Group manages complex projects through a technology estate that includes financial systems, project schedules, supplier records, inspection databases, and thousands of project documents. Each system describes the same physical assets and business events in a different way. A steel delivery might appear as a purchase order in a financial system, a milestone in a project schedule, a supplier commitment in a CRM extract, and an inspection result in a field-quality database.
 
-In the experience immediately before this workshop, Alex used Oracle AI Data Platform (AIDP) to catalog these sources and approve an ontology that connects their shared business meaning. This workshop moves beneath that ontology and into Oracle Autonomous AI Lakehouse (ALH). You will see how representative source extracts and unstructured documents become governed, trustworthy data products through a Bronze, Silver, and Gold medallion architecture.
+To unify this estate, Seer uses Oracle Autonomous AI Lakehouse (ALH) as a shared, governed data foundation. Representative source extracts and unstructured project documents are loaded or linked into ALH while retaining their source identity, ingestion metadata, and original evidence. The data pattern begins with a Bronze layer that preserves source-aligned records and documents, advances through a Silver layer that standardizes formats and reconciles projects, assets, suppliers, milestones, and inspections, and culminates in Gold products designed for reliable consumption. By building these layers directly in ALH, Seer can bring structured facts, flexible JSON attributes, business relationships, document content, and vector representations together within the same governed environment for analytics, applications, and AI agents.
 
-The workshop environment is pre-provisioned so you can focus on the design decisions and outcomes instead of waiting for a complete medallion build. The seeded transformations in this workshop were implemented with ALH-native SQL, Data Studio, Data Transforms, and database jobs. AIDP notebooks did not execute these transformations.
+The workshop environment is pre-provisioned so you can focus on the design decisions and outcomes instead of waiting for a complete medallion build. The seeded transformations in this workshop were implemented with ALH-native SQL, Data Studio, Data Transforms, and database jobs. AIDP notebooks did not execute these transformations. You will still build part of the flow yourself: Data Studio will link a supplier CSV in Object Storage as your Bronze external table, and SQL will standardize it into your Silver demonstration view.
 
 **Estimated Time:** 5 minutes
 
@@ -16,6 +16,8 @@ In this workshop, you will:
 
 - Explain the responsibilities of Bronze, Silver, and Gold data layers.
 - Distinguish an AIDP notebook implementation from an ALH-native implementation.
+- Link an Object Storage CSV as a Bronze external table through the Data Studio interface.
+- Standardize the linked supplier data into a Silver demonstration view while retaining file provenance.
 - Trace a shared construction business object across simulated source feeds.
 - Explore relational, JSON, graph, document, and vector representations of project data.
 - Retrieve an engineering specification by meaning and combine it with structured context.
@@ -62,7 +64,7 @@ Representative enterprise extracts       Contracts and engineering documents
            Applications and Construction Evaluation Agent
 ```
 
-The approved ontology provides shared meaning. The medallion architecture provides the governed data implementation that makes that meaning reliable and consumable.
+A shared business vocabulary provides consistent meaning across the source estate. The medallion architecture turns that meaning into a governed data implementation that applications and AI systems can reliably consume.
 
 ## Two valid transformation approaches
 
@@ -85,15 +87,16 @@ This workshop uses the ALH-native approach for four reasons:
 - The final relational, JSON, relationship, document, and vector products reside in ALH.
 - The sample transformations are SQL-centric and do not require distributed Spark processing.
 - Object Storage data can be loaded or linked directly from ALH Data Studio.
-- A self-contained ALH flow makes the path from source evidence to application-ready products clear within the 75-minute workshop.
+- A self-contained ALH flow makes the path from source evidence to application-ready products clear within the 80-minute workshop.
 
-The decision is architectural, not a statement that one product replaces the other. The **Getting Started with Oracle AI Data Platform Workbench - Data Engineering** workshop demonstrates the complementary AIDP pattern by running notebooks on AIDP compute, orchestrating them with AIDP workflows, and publishing selected Gold data to ALH through an external catalog.
+The decision is architectural, not a statement that one product replaces the other. For a deeper dive into organizing and transforming data with Oracle AI Data Platform Workbench, check out [Getting Started with Oracle AI Data Platform Workbench - Data Engineering](https://livelabs.oracle.com/ords/r/dbpm/livelabs/view-workshop?wid=4295&clear=RR,180). That workshop demonstrates the complementary AIDP pattern by using Spark-powered notebooks to build medallion layers, coordinating notebook execution with AIDP workflows, and publishing selected Gold data to ALH through an external catalog.
 
 ## What is already prepared
 
 The ALH workshop setup process has already:
 
-- Loaded representative source extracts into the Bronze layer.
+- Uploaded representative purchasing, asset, schedule, supplier, and inspection CSV extracts to a private OCI Object Storage bucket.
+- Seeded the reference Bronze, Silver, and Gold products used throughout the workshop while intentionally leaving the supplier CSV external table for you to create.
 - Registered project documents stored in OCI Object Storage.
 - Built Silver entities for projects, assets, suppliers, orders, milestones, and inspections with ALH SQL and Data Transforms.
 - Created Gold project and supplier products inside ALH.
@@ -107,7 +110,7 @@ You will inspect and validate these assets. You will not run the long medallion 
 
 ### Lab 1: Explore the Unified Lakehouse Foundation
 
-Discover Seer's representative source feeds, run a small ALH-native transformation, compare Bronze, Silver, and Gold, and trace the Austin steel-delivery example through the data layers.
+Discover Seer's representative source feeds and build a small ALH-native Bronze-to-Silver path. Using **Data Studio > Data Load > Link Data**, you will create `SUPPLIER_TRANSFORM_EXT`, an external Bronze table over `supplier_extract.csv` in Object Storage. You will include the source file and link timestamp as provenance, then use SQL to create `SUPPLIER_STANDARDIZED_DEMO`, standardizing supplier names, qualification statuses, certifications, and locations. Finally, you will compare your result with the seeded Silver supplier mapping and trace the Austin steel-delivery example through the layers.
 
 ### Lab 2: Unify Data for AI Applications
 
@@ -132,6 +135,7 @@ Inspect ALH Data Transforms and database-job evidence, validate readiness, and m
 - [Oracle AI Data Platform Workbench overview](https://docs.oracle.com/en/cloud/paas/ai-data-platform/aidug/overview-oracle-ai-data-platform.html)
 - [Oracle AI Vector Search](https://docs.oracle.com/en/database/oracle/oracle-database/26/vecse/)
 - [Query external data in Autonomous Database](https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/query-external-data.html)
+- [Link to objects in cloud storage with Data Studio](https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/link-to-cloud.html)
 
 ## Acknowledgements
 
