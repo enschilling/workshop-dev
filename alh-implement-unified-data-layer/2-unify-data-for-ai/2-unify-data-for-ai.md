@@ -4,7 +4,7 @@
 
 Gold data products make structured project facts easier to consume, but AI applications also need the detailed evidence stored in contracts, specifications, inspection reports, and compliance documents. In this lab, you will explore how Oracle Autonomous AI Lakehouse keeps structured and unstructured context together, then use vector search to find the section of an engineering specification that is relevant to the Austin structure.
 
-The graph, chunks, embeddings, and vector index are already built. Your task is to understand and use them, not wait for them to be created.
+The relationship projection, chunks, embeddings, and vector index were built inside ALH during workshop setup. Your task is to understand and use them, not wait for them to be created.
 
 **Estimated Time:** 20 minutes
 

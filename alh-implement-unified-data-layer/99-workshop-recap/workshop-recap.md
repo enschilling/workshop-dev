@@ -23,7 +23,7 @@ In this recap, you will:
 
 ### Lab 1: Explore the Unified Lakehouse Foundation
 
-You inspected representative Fusion ERP-, Primavera-, CRM-, and on-premises-style source extracts, together with actual project documents registered from OCI Object Storage. You traced the Austin steel-delivery event from source-specific records to a canonical Silver entity and a consumer-ready Gold product.
+You inspected representative Fusion ERP-, Primavera-, CRM-, and on-premises-style source extracts, together with actual project documents registered from OCI Object Storage. You ran a Bronze-to-Silver standardization directly in ALH and traced the Austin steel-delivery event from source-specific records to a canonical Silver entity and a consumer-ready Gold product.
 
 ### Lab 2: Unify Data for AI Applications
 
@@ -31,7 +31,7 @@ You explored relational, JSON, relationship, and vector representations of the g
 
 ### Lab 3: Deliver Trusted Data Products
 
-You reviewed workflow execution evidence, validated quality and freshness, inspected product contracts, and mapped the Gold products to developer interfaces and the downstream Construction Evaluation Agent.
+You reviewed ALH Data Transforms and database-job evidence, validated quality and freshness, inspected product contracts, and mapped the Gold products to developer interfaces and the downstream Construction Evaluation Agent.
 
 ## The completed data journey
 
@@ -60,6 +60,18 @@ Simulated source feeds and real project documents
 - Gold products establish the interface between data engineers and developers.
 - Agents should consume governed products instead of raw source data.
 
+## Choose the transformation approach for the workload
+
+You implemented a small transformation directly in ALH, but the medallion architecture does not require one specific execution engine.
+
+| Choose this pattern | When it is a strong fit |
+| --- | --- |
+| AIDP notebooks and workflows | Distributed Spark processing, open lakehouse tables, Python or Scala libraries, notebook collaboration, and broad data-lake orchestration |
+| ALH SQL and Data Transforms | Database-centric transformations, data already in or reachable from ALH, governed database serving, and relational, JSON, relationship, or vector consumers |
+| Combined AIDP and ALH | AIDP performs large-scale upstream processing and publishes selected products to ALH for governed database and AI application access |
+
+The choice is workload-driven. The AIDP Data Engineering workshop demonstrates the notebook-and-workflow pattern. This workshop demonstrates the self-contained ALH-native pattern. Neither approach invalidates the other, and many production solutions use both.
+
 ## Business value for Seer
 
 ### Faster project and supplier decisions
@@ -83,6 +95,7 @@ Lineage, classifications, ownership, and source-document references remain part 
 The workshop uses a compact, pre-provisioned environment. A production implementation should also address:
 
 - Pipeline monitoring, restart, and incident response
+- Selection and governance of AIDP versus ALH execution responsibilities
 - Quality and freshness service-level objectives
 - Schema and data-product contract evolution
 - Partitioning, caching, and workload optimization
@@ -114,6 +127,8 @@ This workshop prepared the trusted foundation those tools depend on.
 ## Learn More
 
 - [Oracle Autonomous AI Lakehouse](https://www.oracle.com/autonomous-database/autonomous-data-warehouse/)
+- [Oracle AI Data Platform Workbench overview](https://docs.oracle.com/en/cloud/paas/ai-data-platform/aidug/overview-oracle-ai-data-platform.html)
+- [Transform Data with Data Transforms in Autonomous AI Database](https://docs.oracle.com/en-us/iaas/autonomous-database-serverless/doc/autonomous-data-transforms.html)
 - [Oracle AI Vector Search](https://docs.oracle.com/en/database/oracle/oracle-database/26/vecse/)
 - [OCI Object Storage](https://docs.oracle.com/en-us/iaas/Content/Object/home.htm)
 - [OCI Data Catalog](https://docs.oracle.com/en-us/iaas/data-catalog/home.htm)

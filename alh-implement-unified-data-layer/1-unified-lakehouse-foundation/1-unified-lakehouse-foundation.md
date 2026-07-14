@@ -2,9 +2,11 @@
 
 ## Introduction
 
-Alex has an approved business ontology, but an ontology alone does not make source data trustworthy. The underlying records still arrive with different identifiers, formats, quality levels, and update schedules. In this lab, you will inspect the representative source feeds prepared for Seer Construction Group and follow them through a prebuilt Bronze, Silver, and Gold medallion architecture.
+Alex has an approved business ontology, but an ontology alone does not make source data trustworthy. The underlying records still arrive with different identifiers, formats, quality levels, and update schedules. In this lab, you will inspect the representative source feeds prepared for Seer Construction Group and follow them through a prebuilt Bronze, Silver, and Gold medallion architecture implemented inside ALH.
 
 The workshop uses simulated extracts from enterprise systems because the LiveLabs environment does not connect to live Fusion ERP, Primavera, CRM, or on-premises applications. OCI Object Storage and Oracle Autonomous AI Lakehouse are the real services used to store, organize, and query the workshop data.
+
+AIDP could perform equivalent transformations with Spark notebooks and workflows. In this workshop, ALH is both the transformation environment and the serving layer. You will prove that boundary by running a small Bronze-to-Silver SQL transformation directly in ALH.
 
 **Estimated Time:** 20 minutes
 
@@ -14,6 +16,7 @@ In this lab, you will:
 
 - Verify that the pre-provisioned workshop schemas and data are available.
 - Inspect representative structured feeds and unstructured project documents.
+- Run a representative Bronze-to-Silver transformation inside ALH.
 - Explain what belongs in Bronze, Silver, and Gold.
 - Trace a steel-delivery business event across multiple source extracts.
 - Review data quality, reconciliation, and lineage evidence.
@@ -24,6 +27,7 @@ In this lab, you will:
 - Access to Database Actions or the SQL worksheet supplied with the environment
 - Read access to `SEER_BRONZE`, `SEER_SILVER`, and `SEER_GOLD`
 - Read access to the workshop Object Storage bucket or its registered catalog entries
+- Permission to create a view in your assigned workshop schema
 
 > **Note:** Object names in this first draft establish the environment contract. The setup package and final guide must be validated together before publication.
 
@@ -176,7 +180,93 @@ The medallion layers answer different questions.
 
 4. Observe that the Gold result presents business concepts rather than source-system mechanics. Consumers do not need to know which record came from which source to use the product, but provenance remains available for audit and explanation.
 
-## Task 4: Trace the Austin steel-delivery event
+## Task 4: Run an ALH-native Bronze-to-Silver transformation
+
+The complete medallion architecture is seeded, but this small exercise lets you execute one representative transformation yourself. You will standardize a deliberately inconsistent supplier extract with database-native SQL and compare your result with the production-style Silver mapping.
+
+1. Inspect the sample Bronze records:
+
+    ```sql
+    SELECT source_record_id,
+           supplier_name,
+           source_status,
+           certification,
+           location,
+           source_system,
+           ingestion_batch_id
+    FROM seer_bronze.supplier_transform_sample
+    ORDER BY source_record_id;
+    ```
+
+2. Identify differences such as extra spaces, abbreviations, inconsistent case, status codes, and missing certifications.
+
+3. Create a standardized view in your assigned workshop schema:
+
+    ```sql
+    CREATE OR REPLACE VIEW supplier_standardized_demo AS
+    SELECT source_record_id,
+           CASE
+             WHEN UPPER(TRIM(supplier_name)) IN (
+                    'ATLAS STRUCTURAL FAB.',
+                    'ATLAS STRUCTURAL FABRICATION'
+                  )
+             THEN 'Atlas Structural Fabrication'
+             ELSE INITCAP(TRIM(supplier_name))
+           END AS canonical_supplier_name,
+           CASE UPPER(TRIM(source_status))
+             WHEN 'A' THEN 'APPROVED'
+             WHEN 'APPROVED' THEN 'APPROVED'
+             WHEN 'PENDING_INFO' THEN 'REQUEST_INFORMATION'
+             ELSE 'REVIEW_REQUIRED'
+           END AS qualification_status,
+           CASE
+             WHEN certification IS NULL THEN 'MISSING'
+             WHEN UPPER(certification) LIKE '%AISC%' THEN 'AISC'
+             ELSE UPPER(TRIM(certification))
+           END AS normalized_certification,
+           REPLACE(
+             UPPER(TRIM(location)),
+             ', TEXAS',
+             ', TX'
+           ) AS normalized_location,
+           source_system,
+           ingestion_batch_id
+    FROM seer_bronze.supplier_transform_sample;
+    ```
+
+4. Query your transformed result:
+
+    ```sql
+    SELECT *
+    FROM supplier_standardized_demo
+    ORDER BY canonical_supplier_name, source_record_id;
+    ```
+
+5. Compare your standardized names with the seeded Silver mapping:
+
+    ```sql
+    SELECT demo.source_record_id,
+           demo.canonical_supplier_name AS attendee_result,
+           silver.canonical_supplier_name AS seeded_silver_result,
+           CASE
+             WHEN demo.canonical_supplier_name =
+                  silver.canonical_supplier_name
+             THEN 'MATCH'
+             ELSE 'REVIEW'
+           END AS validation_status
+    FROM supplier_standardized_demo demo
+    JOIN seer_silver.supplier_source_mappings silver
+      ON silver.source_record_id = demo.source_record_id
+    ORDER BY demo.source_record_id;
+    ```
+
+6. Confirm that the expected rows return `MATCH`. Notice that the view retains the source record and ingestion batch needed for provenance.
+
+7. Your SQL standardized individual records. The seeded Silver pipeline also performs cross-source entity matching, survivorship, validation, and quarantine. Standardization is an important transformation step, but it is not the entire reconciliation process.
+
+> **ALH Data Transforms alternative:** You used SQL because this rule is concise and easy to validate. ALH Data Transforms can represent the same pattern visually with source, expression, mapping, validation, and target components. It also provides reusable connections, workflows, scheduling, and job monitoring. The full seeded pipeline may use SQL, Data Transforms, or both according to the needs of each step.
+
+## Task 5: Trace the Austin steel-delivery event
 
 The reinforced-steel framework for Seer's Austin bank project appears differently in each source. Use the cross-source mapping to follow the shared business event.
 
@@ -237,7 +327,7 @@ The reinforced-steel framework for Seer's Austin bank project appears differentl
 
 5. The Gold product does not erase source differences. It resolves them into a stable business object while preserving the mappings needed to explain the result.
 
-## Task 5: Review quality and lineage evidence
+## Task 6: Review quality and lineage evidence
 
 Data should advance only when it satisfies the contract for the next layer.
 
@@ -273,7 +363,7 @@ Data should advance only when it satisfies the contract for the next layer.
     SELECT target_object,
            source_object,
            transformation_name,
-           workflow_run_id,
+           pipeline_run_id,
            completed_at
     FROM seer_gold.lineage_summary
     WHERE target_object = 'SEER_GOLD.PROJECT_CONTEXT'
@@ -288,6 +378,7 @@ In this lab, you:
 
 - Verified the pre-provisioned lakehouse environment.
 - Explored simulated enterprise feeds and actual Object Storage document metadata.
+- Ran a Bronze-to-Silver transformation directly in ALH.
 - Compared the responsibilities of Bronze, Silver, and Gold.
 - Traced the Austin steel-delivery event across source systems.
 - Reviewed quality, quarantine, reconciliation, and lineage evidence.
@@ -297,6 +388,7 @@ The key takeaway is that connecting sources is only the beginning. Trusted AI co
 ## Learn More
 
 - [Use external tables with Autonomous Database](https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/query-external-data.html)
+- [Transform Data with Data Transforms in Autonomous AI Database](https://docs.oracle.com/en-us/iaas/autonomous-database-serverless/doc/autonomous-data-transforms.html)
 - [OCI Object Storage documentation](https://docs.oracle.com/en-us/iaas/Content/Object/home.htm)
 
 ## Acknowledgements

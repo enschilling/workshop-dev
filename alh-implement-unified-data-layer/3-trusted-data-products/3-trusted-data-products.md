@@ -4,7 +4,7 @@
 
 Reliable applications need more than a successful query. They need named products with clear owners, stable contracts, quality expectations, refresh schedules, lineage, and access controls. In this lab, Alex performs a final readiness review before Seer's data is handed to application developers and the team building the Construction Evaluation Agent.
 
-You will inspect prebuilt workflow evidence and run short validation queries. You will not start a long ingestion or medallion rebuild.
+You will inspect prebuilt ALH Data Transforms and database-job evidence and run short validation queries. You will not start a long ingestion or medallion rebuild. The workshop setup records selected job outcomes in `SEER_GOLD` audit tables so you can review the complete pipeline consistently; those audit tables are workshop assets, not built-in Oracle dictionary views.
 
 **Estimated Time:** 20 minutes
 
@@ -12,7 +12,7 @@ You will inspect prebuilt workflow evidence and run short validation queries. Yo
 
 In this lab, you will:
 
-- Inspect the workflows that maintain the medallion layers.
+- Inspect the ALH Data Transforms workflows and database jobs that maintain the medallion layers.
 - Validate quality, freshness, and document coverage.
 - Review published data-product contracts.
 - Map Gold products to developer and agent consumers.
@@ -21,27 +21,36 @@ In this lab, you will:
 ### Prerequisites
 
 - Completion of Labs 1 and 2
-- Read access to workflow, quality, catalog, and product metadata
+- Read access to ALH pipeline, quality, catalog, and product metadata
 - No permission to modify production-like workshop pipelines is required
 
-## Task 1: Inspect the operational workflows
+## Task 1: Inspect ALH-native operational pipelines
 
-1. Review the latest workflow executions:
+ALH can implement transformation logic with SQL, visual Data Transforms data flows, or a combination of both. Data Transforms workflows sequence data loads, data flows, variables, and other steps. Database jobs are useful when the transformation is most naturally expressed as SQL or PL/SQL.
+
+1. In Database Actions, select **Data Studio**, and then select **Data Transforms**.
+
+2. Open the prepared `SEER_MEDALLION_PIPELINES` project. Inspect the source, transformation, and target components without starting a full rebuild.
+
+3. Locate the prepared Bronze-to-Silver and Silver-to-Gold flows. Identify where the design performs mappings, filters, joins, expressions, and target writes.
+
+4. Return to the SQL worksheet and review the latest ALH pipeline executions recorded by the workshop setup:
 
     ```sql
-    SELECT workflow_name,
-           workflow_purpose,
+    SELECT pipeline_name,
+           execution_engine,
+           pipeline_purpose,
            started_at,
            completed_at,
            run_status,
            records_read,
            records_written,
            records_quarantined
-    FROM seer_gold.workflow_run_summary
+    FROM seer_gold.pipeline_run_summary
     ORDER BY started_at DESC;
     ```
 
-2. Identify the workflows responsible for:
+5. Identify the ALH pipelines responsible for:
 
     - Ingesting representative source extracts
     - Registering Object Storage documents
@@ -49,21 +58,24 @@ In this lab, you will:
     - Publishing Gold products
     - Refreshing chunks, embeddings, and vector indexes
 
-3. Inspect failures or warnings without rerunning the workflow:
+6. Inspect failures or warnings without rerunning the pipeline:
 
     ```sql
-    SELECT workflow_run_id,
-           workflow_name,
+    SELECT pipeline_run_id,
+           pipeline_name,
+           execution_engine,
            step_name,
            severity,
            message,
            recorded_at
-    FROM seer_gold.workflow_run_events
+    FROM seer_gold.pipeline_run_events
     WHERE severity IN ('WARNING', 'ERROR')
     ORDER BY recorded_at DESC;
     ```
 
-4. A production pipeline should be restartable, observable, and idempotent. The ability to reproduce a Gold result matters as much as the result itself.
+7. A production pipeline should be restartable, observable, and idempotent. The ability to reproduce a Gold result matters as much as the result itself.
+
+> **Where AIDP fits:** An AIDP implementation would expose notebook jobs and AIDP workflow runs instead. The operational responsibilities remain similar, but the execution engine and monitoring surface differ. This workshop inspects ALH-native execution because the transformations and target products are contained in ALH.
 
 ## Task 2: Validate the Gold products
 
@@ -227,7 +239,7 @@ Use the following checklist for each product intended for an AI application or a
 
 In this lab, you:
 
-- Inspected the workflows that maintain the lakehouse.
+- Inspected ALH Data Transforms workflows, database jobs, and workshop pipeline-audit records.
 - Validated business keys, freshness, quality, and document coverage.
 - Reviewed product ownership, classifications, and contract versions.
 - Mapped Gold products to developer interfaces and agent tools.
@@ -237,7 +249,8 @@ The key takeaway is that Gold is not simply the last transformation step. It is 
 
 ## Learn More
 
-- [OCI Data Catalog documentation](https://docs.oracle.com/en-us/iaas/data-catalog/home.htm)
+- [Discover and Manage Data with Catalog in Autonomous AI Database](https://docs.oracle.com/en-us/iaas/autonomous-database-serverless/doc/catalog-entities.html)
+- [Transform Data with Data Transforms in Autonomous AI Database](https://docs.oracle.com/en-us/iaas/autonomous-database-serverless/doc/autonomous-data-transforms.html)
 - [Oracle Autonomous Database security](https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/security-autonomous-database.html)
 
 ## Acknowledgements
