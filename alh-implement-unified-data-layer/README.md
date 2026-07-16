@@ -18,7 +18,7 @@ The complementary AIDP pattern is documented in the workshop: teams can use Spar
 
 ## Workshop entry point
 
-Open `workshops/tenancy/index.html` through the LiveLabs publishing workflow. The adjacent `manifest.json` defines the tutorial order and points to the shared Markdown files at the repository root.
+Open `workshops/sandbox/index.html` through the LiveLabs publishing workflow. The adjacent `manifest.json` defines the tutorial order and points to the shared Markdown files at the repository root.
 
 ## Test environment package
 
@@ -32,7 +32,7 @@ The first draft assumes these schemas and products:
 
 - `SEER_BRONZE`: faithful source extracts and ingestion metadata
 - `SUPPLIER_TRANSFORM_EXT`: attendee-created Bronze external table linked to `source-data/suppliers/supplier_extract.csv` with Data Studio
-- `SUPPLIER_STANDARDIZED_DEMO`: attendee-created Silver demonstration view retaining `SOURCE_FILE_NAME` and `LINKED_AT` provenance
+- `SUPPLIER_STANDARDIZED_DEMO`: attendee-created Silver demonstration view retaining source-system and ingestion-batch context, with Object Storage lineage visible in Catalog
 - `SEER_SILVER`: standardized and reconciled enterprise entities
 - `SEER_SILVER.SUPPLIER_SOURCE_MAPPINGS`: seeded comparison result for the transformation exercise
 - `SEER_GOLD`: governed, consumer-ready data products
@@ -41,7 +41,7 @@ The first draft assumes these schemas and products:
 - `SEER_GOLD.SUPPLIER_PROFILE`
 - `SEER_GOLD.DOCUMENT_CHUNKS`
 - `SEER_GOLD.PIPELINE_RUN_SUMMARY` and `SEER_GOLD.PIPELINE_RUN_EVENTS`: workshop audit records for ALH pipeline execution
-- `SEER_MEDALLION_PIPELINES`: prepared ALH Data Transforms project
+- Seeded pipeline audit tables that illustrate outcomes from SQL, Data Transforms, and database-job execution
 
 The names are design contracts for the sample-data and environment build. Terraform, seed CSVs, PDF documents, SQL bootstrap scripts, and an OCI Resource Manager-ready packaging workflow are under `files`. They must be verified during end-to-end deployment and attendee-path validation.
 

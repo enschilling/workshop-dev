@@ -17,7 +17,7 @@ In this workshop, you will:
 - Explain the responsibilities of Bronze, Silver, and Gold data layers.
 - Distinguish an AIDP notebook implementation from an ALH-native implementation.
 - Link an Object Storage CSV as a Bronze external table through the Data Studio interface.
-- Standardize the linked supplier data into a Silver demonstration view while retaining file provenance.
+- Standardize the linked supplier data into a Silver demonstration view while retaining source-system and ingestion-batch context and verifying Object Storage lineage.
 - Trace a shared construction business object across simulated source feeds.
 - Explore relational, JSON, graph, document, and vector representations of project data.
 - Retrieve an engineering specification by meaning and combine it with structured context.
@@ -49,6 +49,7 @@ The enterprise-system feeds in this workshop are realistic source extracts, not 
 The workshop follows this data journey:
 
 ```text
+<copy>
 Representative enterprise extracts       Contracts and engineering documents
                   \                         /
                    Catalog, metadata, and governed ingestion
@@ -62,6 +63,7 @@ Representative enterprise extracts       Contracts and engineering documents
            SQL | JSON | Graph | Vector | RAG consumers
                                    |
            Applications and Construction Evaluation Agent
+</copy>
 ```
 
 A shared business vocabulary provides consistent meaning across the source estate. The medallion architecture turns that meaning into a governed data implementation that applications and AI systems can reliably consume.
@@ -110,7 +112,7 @@ You will inspect and validate these assets. You will not run the long medallion 
 
 ### Lab 1: Explore the Unified Lakehouse Foundation
 
-Discover Seer's representative source feeds and build a small ALH-native Bronze-to-Silver path. Using **Data Studio > Data Load > Link Data**, you will create `SUPPLIER_TRANSFORM_EXT`, an external Bronze table over `supplier_extract.csv` in Object Storage. You will include the source file and link timestamp as provenance, use **Data Studio > Catalog** to compare the medallion layers and inspect lineage, then use SQL to create `SUPPLIER_STANDARDIZED_DEMO`, standardizing supplier names, qualification statuses, certifications, and locations. Finally, you will compare your result with the seeded Silver supplier mapping and trace the Austin steel-delivery example through the layers.
+Discover Seer's representative source feeds and build a small ALH-native Bronze-to-Silver path. Using **Data Studio > Data Load > Link Data**, you will create `SUPPLIER_TRANSFORM_EXT`, an external Bronze table over `supplier_extract.csv` in Object Storage. You will retain source-system and ingestion-batch context, use **Data Studio > Catalog** to compare the medallion layers and visually verify the Object Storage lineage, then use SQL to create `SUPPLIER_STANDARDIZED_DEMO`, standardizing supplier names, qualification statuses, certifications, and locations. Finally, you will compare your result with the seeded Silver supplier mapping and trace the Austin steel-delivery example through the layers.
 
 ### Lab 2: Unify Data for AI Applications
 

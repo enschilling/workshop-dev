@@ -4,7 +4,7 @@
 
 Reliable applications need more than a successful query. They need named products with clear owners, stable contracts, quality expectations, refresh schedules, lineage, and access controls. In this lab, Alex performs a final readiness review before Seer's data is handed to application developers and the team building the Construction Evaluation Agent.
 
-You will inspect prebuilt ALH Data Transforms and database-job evidence and run short validation queries. You will not start a long ingestion or medallion rebuild. The workshop setup records selected job outcomes in `SEER_GOLD` audit tables so you can review the complete pipeline consistently; those audit tables are workshop assets, not built-in Oracle dictionary views.
+You will inspect ALH transformation options and prebuilt pipeline evidence, then run short validation queries. You will not start a long ingestion or medallion rebuild. The workshop setup records selected SQL, Data Transforms, and database-job outcomes in `SEER_GOLD` audit tables so you can review the complete pipeline consistently; those audit tables are workshop assets, not built-in Oracle dictionary views.
 
 **Estimated Time:** 20 minutes
 
@@ -12,7 +12,7 @@ You will inspect prebuilt ALH Data Transforms and database-job evidence and run 
 
 In this lab, you will:
 
-- Inspect the ALH Data Transforms workflows and database jobs that maintain the medallion layers.
+- Understand where ALH Data Transforms workflows and database jobs fit, and inspect the seeded evidence that represents their pipeline outcomes.
 - Validate quality, freshness, and document coverage.
 - Review published data-product contracts.
 - Map Gold products to developer and agent consumers.
@@ -28,9 +28,9 @@ In this lab, you will:
 
 ALH can implement transformation logic with SQL, visual Data Transforms data flows, or a combination of both. Data Transforms workflows sequence data loads, data flows, variables, and other steps. Database jobs are useful when the transformation is most naturally expressed as SQL or PL/SQL.
 
-1. In Database Actions, select **Data Studio**, and then select **Data Transforms**.
+1. In Database Actions, select **Data Studio**, and review the available **Data Transforms** capability. Data Transforms is the visual option for building reusable data flows and workflows in ALH.
 
-2. Open the prepared `SEER_MEDALLION_PIPELINES` project. Inspect the source, transformation, and target components without starting a full rebuild.
+2. Do not create or run a project in this workshop. The environment intentionally seeds the resulting pipeline evidence so the activity remains predictable and fast. In the next steps, you will inspect that evidence in SQL.
 
 3. Locate the prepared Bronze-to-Silver and Silver-to-Gold flows. Identify where the design performs mappings, filters, joins, expressions, and target writes.
 
@@ -136,11 +136,11 @@ ALH can implement transformation logic with SQL, visual Data Transforms data flo
 
 ## Task 3: Review the published contracts
 
-1. In **Data Studio > Catalog**, filter to the `SEER_GOLD` schema and open `DATA_PRODUCT_CATALOG`.
+1. In **Data Studio > Catalog**, select the `LOCAL` schema selector, choose `SEER_GOLD`, select **Apply**, and open `DATA_PRODUCT_CATALOG`.
 
 2. Select **Preview** and review each product's business purpose, accountable owner, classification, refresh frequency, quality status, and contract version.
 
-3. Return to the Catalog results and open `SEER_GOLD.PROJECT_CONTEXT`. Use **Describe** to inspect its columns and data types, and use **Lineage** to review any dependencies available for the object.
+3. Return to the Catalog results and open `SEER_GOLD.PROJECT_CONTEXT`. Use **Columns** to inspect its columns and data types, and use **Lineage** to review any dependencies available for the object.
 
 4. Return to the SQL worksheet and inspect the formal contract columns for the project context product:
 
@@ -247,7 +247,7 @@ Use the following checklist for each product intended for an AI application or a
 
 In this lab, you:
 
-- Inspected ALH Data Transforms workflows, database jobs, and workshop pipeline-audit records.
+- Reviewed where ALH Data Transforms and database jobs fit, then inspected the workshop pipeline-audit records that represent their outcomes.
 - Validated business keys, freshness, quality, and document coverage.
 - Used Data Studio Catalog to review product ownership, classifications, schema details, and contract versions.
 - Mapped Gold products to developer interfaces and agent tools.

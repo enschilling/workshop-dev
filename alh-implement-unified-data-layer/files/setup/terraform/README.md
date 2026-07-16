@@ -24,9 +24,11 @@ It creates:
 Copy `terraform.tfvars.example` to `terraform.tfvars`, provide the tenancy, compartment, and region values, and then run:
 
 ```text
+<copy>
 terraform init
 terraform plan
 terraform apply
+</copy>
 ```
 
 For OCI Resource Manager, use the generated `alh-unified-data-layer-stack.zip` package from the parent `setup` directory. Its Terraform files are at the archive root.
@@ -45,11 +47,11 @@ Run `terraform output` after apply. These values are intentionally plain text fo
 
 The stack does not create `SUPPLIER_TRANSFORM_EXT`. Participants create it through Database Actions using **Data Studio > Data Load > Link Data > Cloud Store**. Use the `object_storage_base_uri` output to create the cloud-store location with the `OCI$RESOURCE_PRINCIPAL` credential, then link `source-data/suppliers/supplier_extract.csv`.
 
-The participant should include `FILE$NAME` and `SYSTIMESTAMP` in the Data Studio mapping. The linked table becomes the hands-on Bronze asset; `SUPPLIER_STANDARDIZED_DEMO` becomes the participant-created Silver result.
+The linked CSV already carries source-system and ingestion-batch fields. Data Studio did not expose optional `FILE$NAME` or `SYSTIMESTAMP` mapping rows during validation, so the exercise uses those source fields and Catalog lineage for provenance. The linked table becomes the hands-on Bronze asset; `SUPPLIER_STANDARDIZED_DEMO` becomes the participant-created Silver result.
 
 ## Important implementation notes
 
 - IAM policy propagation can take several minutes. Oracle notes that resource-principal membership and policy changes may be cached longer in some cases.
 - The public ONNX download URL is an Oracle-published PAR URL and can be rotated. Override `embedding_model_download_uri` if the default no longer resolves.
-- Terraform seeds pipeline-audit tables but does not create the visual `SEER_MEDALLION_PIPELINES` Data Transforms project. That project remains a separate environment-build item for the later operational-pipeline walkthrough.
+- Terraform seeds pipeline-audit tables but does not create a visual Data Transforms project. The workshop reviews Data Transforms as an ALH implementation option, then uses the seeded evidence for a fast, predictable operational-pipeline walkthrough.
 - The bucket is private. Attendee access is through the Autonomous AI Lakehouse resource principal, not a user auth token.

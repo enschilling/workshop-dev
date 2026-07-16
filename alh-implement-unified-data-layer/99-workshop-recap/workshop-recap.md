@@ -23,7 +23,7 @@ In this recap, you will:
 
 ### Lab 1: Explore the Unified Lakehouse Foundation
 
-You inspected representative Fusion ERP-, Primavera-, CRM-, and on-premises-style source extracts, together with actual project documents in OCI Object Storage. In Data Studio, you created the `SEER_LAKE_SOURCE` cloud-store location with the database resource principal and linked `source-data/suppliers/supplier_extract.csv` as the Bronze external table `SUPPLIER_TRANSFORM_EXT`. You used Catalog to compare Bronze, Silver, and Gold entities and visually inspect the lineage of your demonstration flow. You retained `SOURCE_FILE_NAME` and `LINKED_AT` as provenance, then used ALH SQL to create `SUPPLIER_STANDARDIZED_DEMO`, standardizing supplier names, qualification statuses, certifications, and locations. You compared all four standardized fields with the seeded Silver supplier mapping and traced the Austin steel-delivery event from source-specific records to a canonical Silver entity and consumer-ready Gold product.
+You inspected representative Fusion ERP-, Primavera-, CRM-, and on-premises-style source extracts, together with actual project documents in OCI Object Storage. In Data Studio, you created the `SEER_LAKE_SOURCE` cloud-store location with the database resource principal and linked `source-data/suppliers/supplier_extract.csv` as the Bronze external table `SUPPLIER_TRANSFORM_EXT`. You retained source-system and ingestion-batch context, used Catalog to compare Bronze, Silver, and Gold entities, and visually verified the Object Storage lineage of your demonstration flow. You then used ALH SQL to create `SUPPLIER_STANDARDIZED_DEMO`, standardizing supplier names, qualification statuses, certifications, and locations. You compared all four standardized fields with the seeded Silver supplier mapping and traced the Austin steel-delivery event from source-specific records to a canonical Silver entity and consumer-ready Gold product.
 
 ### Lab 2: Unify Data for AI Applications
 
@@ -36,6 +36,7 @@ You reviewed ALH Data Transforms and database-job evidence, validated quality an
 ## The completed data journey
 
 ```text
+<copy>
 CSV source feeds and PDF project documents in Object Storage
                        |
  Data Studio link, catalog, classifications, provenance
@@ -49,13 +50,14 @@ CSV source feeds and PDF project documents in Object Storage
  SQL | JSON | relationships | vectors | RAG
                        |
      Applications and governed AI agents
+</copy>
 ```
 
 ## Key takeaways
 
 - AI readiness begins with data-engineering discipline.
 - Data Studio can expose Object Storage data as an external Bronze table without copying the source file into the database.
-- File name, ingestion or link time, source identifiers, and batch identifiers should survive the Bronze-to-Silver transition.
+- Source identifiers and ingestion-batch context should survive the Bronze-to-Silver transition, with source-object lineage visible through Catalog.
 - Bronze, Silver, and Gold represent different contracts and responsibilities.
 - Structured facts and unstructured evidence can share one governed foundation.
 - Semantic retrieval depends on chunking, metadata, provenance, and evaluation quality.

@@ -25,21 +25,32 @@ In this lab, you will:
 ### Prerequisites
 
 - Completion of the **Get Started** section
-- The `workshop_username` and `workshop_user_password` values from the Terraform outputs
-- Access to Database Actions and Data Studio for the Autonomous AI Lakehouse
+- Authenticated OCI Console access to the Autonomous AI Lakehouse
+- The `object_storage_base_uri` value from the Terraform outputs
+- Access to Database Actions and Data Studio
 - Read access to `SEER_BRONZE`, `SEER_SILVER`, and `SEER_GOLD`
 - A database resource principal with read access to the workshop Object Storage bucket
-- `DWROLE` and permission to create a table and view in your assigned workshop schema
+- Permission to create a table and view in the connected database schema
 
-> **Note:** Object names in this first draft establish the environment contract. The setup package and final guide must be validated together before publication.
+> **Note:** The screenshots use the ADMIN Database Actions session opened from the OCI Console. If your instructor assigns a different database user, the connected schema label will show that user instead.
 
 ## Task 1: Verify the workshop environment
 
 The environment was built before the workshop. Begin with a short readiness check so later exercises fail early and clearly if a required asset is missing.
 
-1. Open the SQL worksheet provided for your Autonomous AI Lakehouse instance.
+1. In the OCI Console, open the **Navigation menu**, select **Oracle AI Database**, and then select **Autonomous AI Database**.
 
-2. Run the following query to confirm your connected database user:
+2. Confirm that you are in the region assigned to your workshop environment. Open the Autonomous AI Database identified by your instructor.
+
+3. On the database details page, select **Database actions**, and then select **SQL**. Database Actions opens in a new browser tab.
+
+    ![Open SQL from Database actions](images/open-sql-from-database-actions.png "Open SQL from Database actions")
+
+4. Wait for the SQL worksheet to finish loading. First-time users may see a short **Run Statement** tour, an ADMIN-user warning, a dark-theme announcement, or other informational notices. Select **X**, **Close**, or **Done** when those controls are available. An informational ORDS version notice may remain briefly and can be ignored for this workshop.
+
+    ![Dismiss first-run SQL prompts](images/dismiss-sql-first-run-prompts.png "Dismiss first-run SQL prompts")
+
+5. Run the following query to confirm your connected database user:
 
     ```sql
     <copy>
@@ -47,7 +58,7 @@ The environment was built before the workshop. Begin with a short readiness chec
     </copy>
     ```
 
-3. Confirm that the three medallion schemas are visible:
+6. Confirm that the three medallion schemas are visible:
 
     ```sql
     <copy>
@@ -60,7 +71,7 @@ The environment was built before the workshop. Begin with a short readiness chec
     </copy>
     ```
 
-4. Confirm that the workshop contains source data, conformed entities, Gold products, and document chunks:
+7. Confirm that the workshop contains source data, conformed entities, Gold products, and document chunks:
 
     ```sql
     <copy>
@@ -78,83 +89,81 @@ The environment was built before the workshop. Begin with a short readiness chec
     </copy>
     ```
 
-5. Verify that every result contains at least one row. If an object is missing, stop and use the **Need Help?** section before continuing.
+8. Verify that every result contains at least one row. If an object is missing, stop and use the **Need Help?** section before continuing.
 
 ## Task 2: Link an Object Storage CSV as a Bronze external table
 
 The workshop setup uploaded representative source extracts to a private Object Storage bucket. In this task, you will use the Autonomous AI Database Data Studio interface to link one CSV without copying it into a managed database table. The resulting external table is the Bronze source for your hands-on transformation.
 
-1. Return to the Database Actions Launchpad, select **Data Studio**, and then select **Data Load**.
+1. In the SQL worksheet header, select **Database Actions** to return to the Launchpad. If the **Introducing Dark Theme** notice appears, select **Done**. Select the **Data Studio** category, and then select **Data Load**.
 
-2. In the Data Load navigation, select **Connections**.
+    ![Open Data Studio and Data Load](images/open-data-studio.png "Open Data Studio and Data Load")
+
+2. On the Data Load home page, select **Connections**.
+
+    ![Open Data Load Connections](images/open-data-load-connections.png "Open Data Load Connections")
 
 3. Select **Create**, and then select **New Cloud Store Location**.
 
-4. Configure the cloud store location:
+    ![Create a cloud store location](images/create-cloud-store-location.png "Create a cloud store location")
+
+4. On **Storage Settings**, configure the cloud store location:
 
     - **Name:** `SEER_LAKE_SOURCE`
-    - **Credential:** `OCI$RESOURCE_PRINCIPAL`
-    - **Cloud Store:** Oracle Cloud Infrastructure Object Storage
-    - **Bucket URI:** Use the `object_storage_base_uri` value from the Terraform outputs.
+    - **Select Credential:** Keep the preselected `OCI$RESOURCE_PRINCIPAL` credential for the connected user.
+    - **Bucket URI:** Keep **Bucket URI** selected and paste the `object_storage_base_uri` value from the Terraform outputs.
 
-    The environment setup has already enabled the resource principal for your database user and granted it read access to this private bucket. You do not need an OCI username, auth token, or signing key.
+    ![Configure the cloud store location](images/configure-cloud-store-location.png "Configure the cloud store location")
 
-5. Select **Next**, confirm that the cloud data location is reachable, and select **Create**.
+    The environment setup has already enabled the resource principal and granted it read access to this private bucket. You do not need an OCI username, auth token, or signing key.
 
-6. From the Data Load navigation, select **Link Data**, and then select **Cloud Store**.
+5. Select **Next**. On **Cloud Data**, confirm that the preview lists folders such as `documents`, `models`, and `source-data`. This confirms that the database can reach the private bucket. Select **Create**.
+
+6. Select the **Data Load** breadcrumb to return to the Data Load home page, and then select **Link Data**. **Cloud Store** is selected by default.
+
+    ![Open Link Data](images/open-link-data.png "Open Link Data")
 
     > **Link rather than load:** **Link Data** leaves the CSV in Object Storage and creates an external table. **Load Data** would copy the rows into a managed database table.
 
-7. Select `SEER_LAKE_SOURCE`, browse to `source-data/suppliers`, and drag `supplier_extract.csv` into the data link cart.
+7. Confirm that `SEER_LAKE_SOURCE` is selected. Expand `SEER_LAKE_SOURCE`, `source-data`, and `suppliers`. Double-click `supplier_extract.csv`, or drag it into the data link cart.
+
+    ![Select the supplier CSV](images/select-supplier-csv.png "Select the supplier CSV")
 
 8. On the file card, select **Settings** and configure the link:
 
+    - **Option:** Create External Table
     - **Table name:** `SUPPLIER_TRANSFORM_EXT`
     - **Validation Type:** Full
-    - **Encoding:** UTF-8
+    - **Encoding:** AL32UTF8 - Unicode UTF-8 encoding scheme
     - **Text enclosure:** Double quote
     - **Field delimiter:** Comma
-    - **Start processing data at row:** `0`
-    - **Column header row:** Selected
+    - **Column header row:** Selected, row `1`
+    - **Start processing data at row:** `2` (set automatically when the header row is selected)
     - **Partition column:** None
-    - **Use Wildcard:** Not selected
 
 9. In **Mapping**, retain the source-aligned columns. This is a Bronze asset, so do not standardize names, statuses, certifications, or locations yet.
 
-10. Select **Include** for the optional `FILE$NAME` and `SYSTIMESTAMP` source columns. Rename the corresponding target columns:
-
-    - `FILE$NAME` to `SOURCE_FILE_NAME`
-    - `SYSTIMESTAMP` to `LINKED_AT`
-
-    These columns preserve file-level provenance and the time at which the external data was linked.
+10. Confirm that Mapping contains the seven CSV columns: source record ID, supplier name, source status, certification, location, source system, and ingestion batch ID. Data Studio does not add separate file-name or link-timestamp mapping rows in this flow. Object Storage lineage, the cloud-store connection, and `INGESTION_BATCH_ID` preserve the source context needed for this exercise.
 
 11. Review **Preview** to confirm the header and CSV fields were interpreted correctly. Review **Table** to inspect the proposed external-table shape.
 
-12. Open **SQL** and review the database commands Data Studio will generate. You do not need to copy or run them manually.
+12. Open **SQL** and review the database commands Data Studio will generate. Notice that Data Studio uses `DBMS_CLOUD.CREATE_EXTERNAL_TABLE`; you do not need to copy or run this SQL manually.
 
-13. Select **Close**, select **Start** in the data link cart, and wait for the job to complete.
+13. Select **Close**, and then select **Start** in the data link cart. In **Start Link From Cloud Store**, select **Run**.
 
-14. Open the completed job and review **Job Report**. Confirm that the rows were processed successfully and no rows were rejected.
+    ![Confirm the Link Data run](images/confirm-link-run.png "Confirm the Link Data run")
 
-15. Return to the SQL worksheet and query the external table you created:
+14. Wait for Data Studio to return to the Data Load home page. Confirm that `SUPPLIER_TRANSFORM_EXT` shows **8 rows loaded**.
 
-    ```sql
-    <copy>
-    SELECT source_record_id,
-           supplier_name,
-           source_status,
-           certification,
-           location,
-           source_system,
-           ingestion_batch_id,
-           source_file_name,
-           linked_at
-    FROM supplier_transform_ext
-    ORDER BY source_record_id;
-    </copy>
-    ```
+    ![External table link succeeded](images/external-table-link-success.png "External table link succeeded")
 
-16. Review the broader seeded source inventory:
+15. Select **Report**. Confirm that the Job Report shows **8 rows validated**, **8 rows processed successfully**, and **0 rows rejected**. Select **Close**.
+
+    ![External table job report](images/external-table-job-report.png "External table job report")
+
+16. On the completed external-table card, select **Query**. Data Studio opens **Analysis** and displays the seven external-table columns and eight rows. If the **Selected Schema** tour prompt appears, select **X**.
+
+17. Return to the Database Actions Launchpad, open **SQL**, and review the broader seeded source inventory:
 
     ```sql
     <copy>
@@ -169,7 +178,7 @@ The workshop setup uploaded representative source extracts to a private Object S
     </copy>
     ```
 
-17. The other representative feeds include Fusion ERP-style purchasing and financial data, Primavera-style milestones, on-premises-style inspection findings, and PDF project evidence in the same Object Storage bucket. Bronze preserves what arrived, including source identifiers and provenance; it is not the stable contract applications should consume.
+18. The other representative feeds include Fusion ERP-style purchasing and financial data, Primavera-style milestones, on-premises-style inspection findings, and PDF project evidence in the same Object Storage bucket. Bronze preserves what arrived, including source identifiers and provenance; it is not the stable contract applications should consume.
 
 ## Task 3: Compare Bronze, Silver, and Gold
 
@@ -183,7 +192,7 @@ The medallion layers answer different questions.
 
 1. Return to the Database Actions Launchpad, select **Data Studio**, and then select **Catalog**.
 
-2. Confirm that the local Autonomous AI Database catalog is selected. Use the schema filter to select `SEER_BRONZE`, and search for `SOURCE_RECORD_INVENTORY`.
+2. Confirm that `LOCAL` is the selected catalog. Select the `LOCAL` schema selector, remove the current schema, select `SEER_BRONZE`, and select **Apply**. Search for `SOURCE_RECORD_INVENTORY`.
 
 3. Open `SEER_BRONZE.SOURCE_RECORD_INVENTORY`. Use the available entity-detail tabs to:
 
@@ -192,11 +201,11 @@ The medallion layers answer different questions.
     - Review statistics when available.
     - Notice the source object, storage format, extraction time, and ingestion batch metadata retained in Bronze.
 
-4. Change the schema filter to `SEER_SILVER`, search for `ASSETS`, and open `SEER_SILVER.ASSETS`. Preview the data and locate `CANONICAL_ASSET_NAME`, `NORMALIZED_STATUS`, `SOURCE_SYSTEM_COUNT`, and `RECONCILIATION_STATUS`.
+4. Select the `LOCAL` schema selector, replace `SEER_BRONZE` with `SEER_SILVER`, and select **Apply**. Search for `ASSETS`, and open `SEER_SILVER.ASSETS`. Preview the data and locate `CANONICAL_ASSET_NAME`, `NORMALIZED_STATUS`, `SOURCE_SYSTEM_COUNT`, and `RECONCILIATION_STATUS`.
 
 5. Search for and open `SEER_SILVER.SUPPLIERS`. Preview the standardized supplier names, qualification statuses, compliance statuses, and matched-source counts. These fields show how Silver resolves source differences into conformed enterprise entities.
 
-6. Change the schema filter to `SEER_GOLD`, search for `PROJECT_CONTEXT`, and open `SEER_GOLD.PROJECT_CONTEXT`. Preview the product and inspect its columns. Locate the project, asset, milestone, committed cost, inspection, supplier, and freshness fields.
+6. Select the `LOCAL` schema selector, replace `SEER_SILVER` with `SEER_GOLD`, and select **Apply**. Search for `PROJECT_CONTEXT`, and open `SEER_GOLD.PROJECT_CONTEXT`. Preview the product and inspect its columns. Locate the project, asset, milestone, committed cost, inspection, supplier, and freshness fields.
 
 7. Compare the three entity-detail pages. Bronze emphasizes what arrived and where it came from, Silver emphasizes reconciliation and standardization, and Gold presents stable business concepts for consumers. Provenance remains available even though consumers no longer need to understand every source-system field.
 
@@ -222,7 +231,7 @@ The complete production-style medallion architecture is seeded, but the external
 
 2. Identify differences such as extra spaces, abbreviations, inconsistent case, status codes, and missing certifications.
 
-3. Create a standardized view in your assigned workshop schema:
+3. Create a standardized view in your connected schema:
 
     ```sql
     <copy>
@@ -253,9 +262,7 @@ The complete production-style medallion architecture is seeded, but the external
              ', TX'
            ) AS normalized_location,
            source_system,
-           ingestion_batch_id,
-           source_file_name,
-           linked_at
+           ingestion_batch_id
     FROM supplier_transform_ext;
     </copy>
     ```
@@ -292,7 +299,7 @@ The complete production-style medallion architecture is seeded, but the external
     </copy>
     ```
 
-6. Confirm that the expected rows return `MATCH`. Notice that the view retains the source record, ingestion batch, source file, and link timestamp needed for provenance.
+6. Confirm that all eight rows return `MATCH`. Notice that the view retains the source record, source system, and ingestion batch needed for provenance; Catalog lineage supplies the file and Object Storage path.
 
 7. Your SQL standardized individual records. The seeded Silver pipeline also performs cross-source entity matching, survivorship, validation, and quarantine. Standardization is an important transformation step, but it is not the entire reconciliation process.
 
@@ -399,9 +406,11 @@ Data should advance only when it satisfies the contract for the next layer.
     </copy>
     ```
 
-3. Return to **Data Studio > Catalog** and search your workshop schema for `SUPPLIER_STANDARDIZED_DEMO`.
+3. Return to **Data Studio > Catalog**. Select the `LOCAL` schema selector, choose the schema shown by `SELECT USER` in Task 1, and select **Apply**.
 
-4. Open the view and select **Lineage**. Follow the upstream dependency to `SUPPLIER_TRANSFORM_EXT`, the Bronze external table you linked to Object Storage. This visually confirms that your Silver demonstration remains traceable to its source.
+4. In **Entity type**, include **View**. Search for `SUPPLIER_STANDARDIZED_DEMO`, open the view, and select **Lineage**. Confirm the visual chain from the Object Storage URI and cloud-store link to `SUPPLIER_TRANSFORM_EXT`, and then to `SUPPLIER_STANDARDIZED_DEMO`.
+
+    ![Supplier view lineage](images/supplier-view-lineage.png "Supplier view lineage")
 
 5. Return to the SQL worksheet and inspect the workshop's recorded lineage for the seeded Gold project context product:
 

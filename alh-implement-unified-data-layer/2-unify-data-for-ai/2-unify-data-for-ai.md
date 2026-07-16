@@ -22,14 +22,14 @@ In this lab, you will:
 
 - Completion of Lab 1
 - Read access to `SEER_GOLD`
-- The `ALL_MINILM_L12_V2` embedding model or the final workshop model loaded in the database
+- The `SEER_WORKSHOP.ALL_MINILM_L12_V2` embedding model loaded in the database
 - Precomputed embeddings and a valid vector index on `SEER_GOLD.DOCUMENT_CHUNKS`
 
 ## Task 1: Inspect the consumer-ready Gold products
 
 1. From the Database Actions Launchpad, select **Data Studio**, and then select **Catalog**.
 
-2. Select the local Autonomous AI Database catalog, filter to the `SEER_GOLD` schema, and search for `DATA_PRODUCT_CATALOG`.
+2. Confirm that `LOCAL` is selected. Select the `LOCAL` schema selector, replace the current schema with `SEER_GOLD`, and select **Apply**. Search for `DATA_PRODUCT_CATALOG`.
 
 3. Open `SEER_GOLD.DATA_PRODUCT_CATALOG` and select **Preview**. Review each product's business purpose, owner, refresh frequency, quality status, and intended consumers.
 
@@ -41,7 +41,7 @@ In this lab, you will:
 
 5. Return to the Catalog results, search for `SUPPLIER_RECOMMENDATIONS`, and open `SEER_GOLD.SUPPLIER_RECOMMENDATIONS`.
 
-6. Use **Preview** to inspect the project, supplier, fit score, risk level, recommendation status, and missing-information fields. Use **Describe** to review the entity's columns and data types.
+6. Use **Preview** to inspect the project, supplier, fit score, risk level, recommendation status, and missing-information fields. Use **Columns** to review the entity's columns and data types.
 
 7. Notice that the product exposes a stable decision-support contract. It does not expose raw ingestion fields or require the consumer to reconstruct the source joins.
 
@@ -64,9 +64,12 @@ Oracle Database can project the same governed entities through several data mode
     ```sql
     <copy>
     SELECT asset_name,
-           specifications.material_grade AS material_grade,
-           specifications.design_standard AS design_standard,
-           specifications.fire_rating_minutes AS fire_rating_minutes
+           JSON_VALUE(specifications, '$.material_grade') AS material_grade,
+           JSON_VALUE(specifications, '$.design_standard') AS design_standard,
+           JSON_VALUE(
+             specifications,
+             '$.fire_rating_minutes' RETURNING NUMBER
+           ) AS fire_rating_minutes
     FROM seer_gold.asset_profiles
     WHERE UPPER(project_name) LIKE '%AUSTIN%';
     </copy>
@@ -91,9 +94,9 @@ Oracle Database can project the same governed entities through several data mode
 
 ## Task 3: Inspect the document preparation pipeline
 
-1. Return to **Data Studio > Catalog**, filter to the `SEER_GOLD` schema, and search for `DOCUMENT_CATALOG`.
+1. Return to **Data Studio > Catalog**. Select the `LOCAL` schema selector, choose `SEER_GOLD`, and select **Apply**. Search for `DOCUMENT_CATALOG`.
 
-2. Open `SEER_GOLD.DOCUMENT_CATALOG` and select **Preview**. Locate each document's name, type, project, asset, version, Object Storage URI, and classification. Use **Describe** to inspect the registered metadata contract.
+2. Open `SEER_GOLD.DOCUMENT_CATALOG` and select **Preview**. Locate each document's name, type, project, asset, version, Object Storage URI, and classification. Use **Columns** to inspect the registered metadata contract.
 
 3. Return to the Catalog results, search for `DOCUMENT_CHUNKS`, and open `SEER_GOLD.DOCUMENT_CHUNKS`. Preview the entity and inspect its column definitions and statistics. Locate the chunk sequence, page and section metadata, embedding model, embedding status, and source identifiers.
 
@@ -137,7 +140,7 @@ Oracle Database can project the same governed entities through several data mode
            VECTOR_DISTANCE(
              embedding,
              VECTOR_EMBEDDING(
-               ALL_MINILM_L12_V2
+               SEER_WORKSHOP.ALL_MINILM_L12_V2
                USING 'Austin structural specifications' AS DATA
              ),
              COSINE
@@ -182,7 +185,7 @@ Oracle Database can project the same governed entities through several data mode
              VECTOR_DISTANCE(
                embedding,
                VECTOR_EMBEDDING(
-                 ALL_MINILM_L12_V2
+                 SEER_WORKSHOP.ALL_MINILM_L12_V2
                  USING 'Austin structural specifications' AS DATA
                ),
                COSINE

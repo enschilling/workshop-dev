@@ -53,7 +53,8 @@ resource "oci_database_autonomous_database" "lakehouse" {
   data_storage_size_in_tbs = var.data_storage_size_in_tbs
   admin_password           = random_password.database_admin.result
   is_auto_scaling_enabled  = false
-  is_mtls_connection_required = false
+  # Public endpoints without an ACL must require wallet-based mTLS connections.
+  is_mtls_connection_required = true
   license_model            = var.license_model
 
   freeform_tags = {
