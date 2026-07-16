@@ -20,6 +20,8 @@ The complementary AIDP pattern is documented in the workshop: teams can use Spar
 
 Open `workshops/sandbox/index.html` through the LiveLabs publishing workflow. The adjacent `manifest.json` defines the tutorial order and points to the shared Markdown files at the repository root.
 
+The expanded customer-tenancy variant begins at `workshops/tenancy/index.html`. Its manifest adds manual ALH provisioning, staged setup automation, Excel, AWS Glue, Iceberg, remote relational data, optional Delta Sharing, and explicit cleanup while preserving the tested sandbox path.
+
 ## Test environment package
 
 Use `files/setup/alh-unified-data-layer-stack.zip` to create an OCI Resource Manager stack. The archive places the Terraform configuration at its root and includes all CSV, PDF, and SQL bootstrap assets. The editable Terraform source is under `files/setup/terraform`, and `files/setup/package-stack.ps1` regenerates the archive after seed or provisioning changes.

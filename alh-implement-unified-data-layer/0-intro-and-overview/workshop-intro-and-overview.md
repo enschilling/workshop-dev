@@ -27,7 +27,6 @@ In this workshop, you will:
 
 - Basic familiarity with SQL, data integration, and object storage concepts
 - Access to the pre-provisioned Oracle LiveLabs environment
-- Completion of the **Get Started** section
 - No access to Fusion ERP, Primavera, CRM, or an on-premises database is required
 
 ## The Seer data challenge

@@ -1,8 +1,8 @@
-# Lab 1: Explore the Unified Lakehouse Foundation
+# Lab 2: Explore the Unified Lakehouse Foundation
 
 ## Introduction
 
-Alex has an approved business ontology, but an ontology alone does not make source data trustworthy. The underlying records still arrive with different identifiers, formats, quality levels, and update schedules. In this lab, you will inspect the representative source feeds prepared for Seer Construction Group and follow them through a prebuilt Bronze, Silver, and Gold medallion architecture implemented inside ALH.
+Alex has an approved business ontology, but an ontology alone does not make source data trustworthy. The underlying records still arrive with different identifiers, formats, quality levels, and update schedules. In this lab, you will inspect the representative source feeds prepared for Seer Construction Group and follow them through the Bronze, Silver, and Gold medallion architecture you built in Lab 1.
 
 The workshop uses simulated extracts that emulate data from Fusion ERP, Primavera, CRM, and on-premises applications. OCI Object Storage and Oracle Autonomous AI Lakehouse are the real services used to store, organize, and query the workshop data.
 
@@ -14,7 +14,7 @@ AIDP could perform equivalent transformations with Spark notebooks and workflows
 
 In this lab, you will:
 
-- Verify that the pre-provisioned workshop schemas and data are available.
+- Verify the workshop schemas and data products created in Lab 1.
 - Create a Bronze external table over a CSV in OCI Object Storage using the Data Studio interface.
 - Use Data Studio Catalog to inspect representative Bronze, Silver, and Gold entities.
 - Run a representative Bronze-to-Silver transformation inside ALH.
@@ -24,8 +24,9 @@ In this lab, you will:
 
 ### Prerequisites
 
+- Completion of Lab 1
 - Authenticated OCI Console access to the Autonomous AI Lakehouse
-- The `object_storage_base_uri` value from the Terraform outputs
+- The Object Storage base URI recorded in Lab 1
 - Access to Database Actions and Data Studio
 - Read access to `SEER_BRONZE`, `SEER_SILVER`, and `SEER_GOLD`
 - A database resource principal with read access to the workshop Object Storage bucket
@@ -35,7 +36,7 @@ In this lab, you will:
 
 ## Task 1: Verify the workshop environment
 
-The environment was built before the workshop. Begin with a short readiness check so later exercises fail early and clearly if a required asset is missing.
+You built the environment in Lab 1. Begin with a short readiness check so later exercises fail early and clearly if a required asset is missing.
 
 1. In the OCI Console, open the **Navigation menu**, select **Oracle AI Database**, and then select **Autonomous AI Database**.
 
@@ -92,7 +93,7 @@ The environment was built before the workshop. Begin with a short readiness chec
 
 ## Task 2: Link an Object Storage CSV as a Bronze external table
 
-The workshop setup uploaded representative source extracts to a private Object Storage bucket. In this task, you will use the Autonomous AI Database Data Studio interface to link one CSV without copying it into a managed database table. The resulting external table is the Bronze source for your hands-on transformation.
+In Lab 1, you uploaded representative source extracts to a private Object Storage bucket and loaded managed staging copies. In this task, you will link the supplier CSV without copying it again. The resulting external table lets you compare a live link with the managed-load pattern.
 
 1. In the SQL worksheet header, select **Database Actions** to return to the Launchpad. If the **Introducing Dark Theme** notice appears, select **Done**. Select the **Data Studio** category, and then select **Data Load**.
 
@@ -110,7 +111,7 @@ The workshop setup uploaded representative source extracts to a private Object S
 
     - **Name:** `SEER_LAKE_SOURCE`
     - **Select Credential:** Keep the preselected `OCI$RESOURCE_PRINCIPAL` credential for the connected user.
-    - **Bucket URI:** Keep **Bucket URI** selected and paste the `object_storage_base_uri` value from the Terraform outputs.
+    - **Bucket URI:** Keep **Bucket URI** selected and paste the Object Storage base URI recorded in Lab 1.
 
     ![Configure the cloud store location](images/configure-cloud-store-location.png "Configure the cloud store location")
 
@@ -428,11 +429,11 @@ Data should advance only when it satisfies the contract for the next layer.
 
 6. Confirm that the Gold product can be traced to its Silver entities, Bronze records, and original documents or files. Catalog provides interactive lineage for supported database objects, while `SEER_GOLD.LINEAGE_SUMMARY` preserves the workshop's complete seeded pipeline lineage.
 
-## Lab 1 Recap
+## Lab 2 Recap
 
 In this lab, you:
 
-- Verified the pre-provisioned lakehouse environment.
+- Verified the lakehouse environment built in Lab 1.
 - Used Data Studio to link an Object Storage CSV as the attendee-created Bronze external table `SUPPLIER_TRANSFORM_EXT`.
 - Used Data Studio Catalog to compare Bronze, Silver, and Gold entities and inspect lineage.
 - Created the Silver demonstration view `SUPPLIER_STANDARDIZED_DEMO` directly in ALH.
