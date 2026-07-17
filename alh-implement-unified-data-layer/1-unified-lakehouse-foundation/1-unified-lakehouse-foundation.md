@@ -45,7 +45,7 @@ The environment was built before the workshop. Begin with a short readiness chec
 
     ![Open SQL from Database actions](images/open-sql-from-database-actions.png "Open SQL from Database actions")
 
-4. Wait for the SQL worksheet to finish loading. First-time users may see a short **Run Statement** tour, an ADMIN-user warning, a dark-theme announcement, or other informational notices. Select **X**, **Close**, or **Done** when those controls are available. An informational ORDS version notice may remain briefly and can be ignored for this workshop.
+4. Wait for the SQL worksheet to finish loading. First-time users may see a short **Run Statement** tour, an ADMIN-user warning, a dark-theme announcement, or other informational notices. Select **X**, **Close**, or **Done** when those controls are available.
 
     ![Dismiss first-run SQL prompts](images/dismiss-sql-first-run-prompts.png "Dismiss first-run SQL prompts")
 
