@@ -133,7 +133,7 @@ In this lab, you will:
 
 5. Create the database and wait until its lifecycle state is **Available**. Provisioning can take several minutes.
 
-6. Open the database details and copy its OCID. You will use it to restrict the Object Storage policy.
+6. Record the OCID of the compartment that contains the workshop bucket. You will use it to scope the Object Storage policy.
 
 ## Task 4: Configure governed Object Storage access
 
@@ -143,18 +143,17 @@ ALH uses its resource principal to read the private bucket. No OCI user auth tok
 
 2. Select the root compartment and create a policy named `seer-unified-lakehouse-object-access`.
 
-3. Replace `<autonomous-database-ocid>` in these statements with the OCID you recorded:
+3. Replace `<compartment-ocid>` with the OCID of the compartment that contains the workshop bucket:
 
     ```text
     <copy>
-    Allow any-user to inspect buckets in tenancy where all {request.principal.type = 'autonomousdatabase', request.principal.id = '<autonomous-database-ocid>'}
-    Allow any-user to read objects in tenancy where all {request.principal.type = 'autonomousdatabase', request.principal.id = '<autonomous-database-ocid>'}
+    Allow any-user to use object-family in compartment id <compartment-ocid> where ALL {request.principal.type = 'autonomousdatabase'}
     </copy>
     ```
 
 4. Create the policy. IAM changes can require several minutes to propagate.
 
-> **Security note:** The policy is tenancy-visible but is restricted to the single ALH resource OCID. Production policies should use the narrowest resource and location scope that satisfies the workload.
+> **Security note:** This tenancy-level policy applies to Autonomous AI Database resource principals across the tenancy, including Autonomous AI Lakehouse. It is limited to Object Storage resources in the specified compartment, but it is not restricted to one database. Use a separate, more restrictive policy if your organization requires per-database access.
 
 ## Task 5: Run the administrative bootstrap
 
