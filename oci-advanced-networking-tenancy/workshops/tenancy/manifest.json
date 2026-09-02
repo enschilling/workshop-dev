@@ -1,0 +1,14 @@
+{
+  "workshoptitle": "OCI Advanced Networking: Build, Peer, and Load Balance",
+  "help": "livelabs-help-oci_us@oracle.com",
+  "tutorials": [
+    { "title": "Introduction", "filename": "../../introduction/introduction.md" },
+    { "title": "Lab 1: Networking Recap", "filename": "../../lab1-networking-recap/lab1-networking-recap.md" },
+    { "title": "Lab 2: Local Peering with a DRG", "filename": "../../lab2-local-peering/lab2-local-peering.md" },
+    { "title": "Lab 3: Remote Peering", "filename": "../../lab3-remote-peering/lab3-remote-peering.md" },
+    { "title": "Lab 4: Transit Routing", "filename": "../../lab4-transit-routing/lab4-transit-routing.md" },
+    { "title": "Lab 5: Load Balancer Ingress", "filename": "../../lab5-load-balancer/lab5-load-balancer.md" },
+    { "title": "Lab 6: VPN, FastConnect, and Multicloud", "filename": "../../lab6-connectivity-theory/lab6-connectivity-theory.md" },
+    { "title": "Cleanup", "filename": "../../cleanup/cleanup.md" }
+  ]
+}
