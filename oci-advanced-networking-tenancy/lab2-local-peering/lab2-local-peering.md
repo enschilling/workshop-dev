@@ -8,9 +8,9 @@ Connect the Client and Hub VCNs through a single DRG. Although a local peering g
 
 ## Task 1: Create the DRG and VCN attachments
 
-In Region A, create `advnet-<initials>-drg-a`. Attach Hub VCN to the DRG and select `hub-private-rt` as the VCN route-table association. In `hub-private-rt`, add route `10.10.0.0/16 → Dynamic Routing Gateway`.
+In Region A, create `advnet-<initials>-drg-a`. Attach both the Client and Hub VCNs to the DRG. In `client-private-rt`, add `10.20.0.0/16 → Dynamic Routing Gateway`; in `hub-private-rt`, add `10.10.0.0/16 → Dynamic Routing Gateway`.
 
-For this lab, use the Client VCN as the client-side test network but do not attach it to the DRG until Lab 4. Instead, create `client-1` in the Client VCN and `hub-1` in the Hub VCN; validate each app locally. This preserves the central lesson of Lab 4: a hub attachment does not automatically make an unrelated spoke a transit participant.
+Open the DRG route-table and attachment views and confirm that the Client attachment imports the Hub CIDR and the Hub attachment imports the Client CIDR. An attachment must not import its own CIDR. This establishes the local DRG path that Lab 4 will later extend to the remote VCN.
 
 ## Task 2: Deploy the metadata app to both instances
 
@@ -26,8 +26,14 @@ From each host, run:
 curl --connect-timeout 5 http://127.0.0.1:8080/
 ```
 
-Confirm that the page identifies the local host. From `client-1`, a request to `hub-1` on TCP 8080 should fail now: there is intentionally no Client-to-Hub network path. This is a useful baseline; do not “fix” it until Lab 4.
+Confirm that the page identifies the local host. Then, from `client-1`, request `hub-1` on TCP 8080:
 
-> A DRG attachment and a VCN route are both required for the Hub side. Security still applies after routing succeeds. If you later add a Client attachment, also verify imported routes in the DRG route tables.
+```bash
+curl --connect-timeout 10 http://HUB_1_PRIVATE_IP:8080/
+```
 
-**Checkpoint:** Record the two private IP addresses and a successful local `curl` response from each host.
+The response must identify `hub-1`.
+
+> A DRG attachment and a VCN route are required on both sides. Security still applies after routing succeeds. Verify the imported routes in the DRG route tables before diagnosing the application.
+
+**Checkpoint:** Record the two private IP addresses, successful local responses, and one successful Client-to-Hub response.
