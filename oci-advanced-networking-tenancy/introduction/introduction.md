@@ -27,7 +27,8 @@ Three small Oracle Linux instances run the metadata app: `client-1` in Client VC
 | 3 | Cross-region remote peering and a third app instance | 35 min |
 | 4 | Hub-and-spoke transit routing | 40 min |
 | 5 | Private load balancer with local and remote backends | 35 min |
-| 6 | VPN, FastConnect, and multicloud design discussion | 25 min |
+| 6 (Optional) | Same-region cross-tenancy local peering for a shared-services VCN | 45 min |
+| 7 | VPN, FastConnect, and multicloud design discussion | 25 min |
 | Cleanup | Remove all workshop resources | 20 min |
 
 ## Prerequisites

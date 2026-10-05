@@ -8,7 +8,8 @@
     { "title": "Lab 3: Remote Peering", "filename": "../../lab3-remote-peering/lab3-remote-peering.md" },
     { "title": "Lab 4: Transit Routing", "filename": "../../lab4-transit-routing/lab4-transit-routing.md" },
     { "title": "Lab 5: Load Balancer Ingress", "filename": "../../lab5-load-balancer/lab5-load-balancer.md" },
-    { "title": "Lab 6: VPN, FastConnect, and Multicloud", "filename": "../../lab6-connectivity-theory/lab6-connectivity-theory.md" },
+    { "title": "Lab 6: Cross-Tenancy Local Peering (Optional)", "filename": "../../lab6-cross-tenancy-local-peering/lab6-cross-tenancy-local-peering.md" },
+    { "title": "Lab 7: VPN, FastConnect, and Multicloud", "filename": "../../lab6-connectivity-theory/lab6-connectivity-theory.md" },
     { "title": "Cleanup", "filename": "../../cleanup/cleanup.md" }
   ]
 }

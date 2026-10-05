@@ -1,4 +1,4 @@
-# Lab 6: VPN, FastConnect, and Multicloud
+# Lab 7: VPN, FastConnect, and Multicloud
 
 ## Introduction
 

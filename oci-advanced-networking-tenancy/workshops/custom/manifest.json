@@ -1,0 +1,12 @@
+{
+  "workshoptitle": "OCI Advanced Networking: Shared Services and Cross-Tenancy Peering",
+  "help": "livelabs-help-oci_us@oracle.com",
+  "tutorials": [
+    { "title": "Introduction", "filename": "../../introduction/introduction-custom.md" },
+    { "title": "Lab 1: Networking Recap", "filename": "../../lab1-networking-recap/lab1-networking-recap.md" },
+    { "title": "Lab 2: Transit Routing", "filename": "../../lab4-transit-routing/lab2-custom-transit-routing.md" },
+    { "title": "Lab 3: Load Balancer Ingress", "filename": "../../lab5-load-balancer/lab3-custom-load-balancer.md" },
+    { "title": "Optional Lab 4: Cross-Tenancy Local Peering", "filename": "../../lab6-cross-tenancy-local-peering/lab6-cross-tenancy-local-peering.md" },
+    { "title": "Cleanup", "filename": "../../cleanup/cleanup.md" }
+  ]
+}
