@@ -2,287 +2,251 @@
 
 ## Introduction
 
-In this lab you build the foundation that every later lab extends: a three-VCN, two-region backbone connected entirely through **Dynamic Routing Gateways (DRG v2)**. You create a Hub VCN and a Spoke VCN in Ashburn, connect them *locally* through a single DRG, then stand up a Remote-Spoke VCN in Phoenix and join it *across regions* through a **Remote Peering Connection (RPC)** between the two regions' DRGs.
+Build the foundation for the customer scenario: a three-VCN, two-region network connected through **Dynamic Routing Gateways (DRGs)**. A Hub VCN and Spoke-1 VCN in **Ashburn** attach to one DRG. A Remote-Spoke VCN in **Phoenix** attaches to a second DRG. A **Remote Peering Connection (RPC)** joins the regional routers over Oracle's private backbone.
 
-This DRG-based hub-and-spoke is the Oracle-recommended pattern for connecting more than two VCNs. Unlike a Local Peering Gateway (LPG), which is point-to-point and non-transitive, the DRG acts as a regional router that scales to many attachments and — crucially for Lab 3 — lets you insert a central firewall later with no re-architecture.
+The hub is a place to host shared services; the DRG is the router. In this lab the DRG routes directly between its attachments. Traffic does **not** automatically pass through a host or firewall in the Hub VCN. Centralized inspection would require a separate routing and security design, explored in Optional Lab 6.
 
-*Estimated Time:* 50 minutes
+**Estimated time:** 60–75 minutes, plus compute provisioning and package installation.
 
 ### About Dynamic Routing Gateways
 
-A DRG is a virtual router that lives at the tenancy/region level. VCNs connect to it through **DRG attachments**; the DRG then routes between those attachments using **DRG route tables** and **route distributions**. Same-region VCN-to-VCN traffic flows through a single DRG. Cross-region traffic flows over an **RPC**, a private Oracle-backbone link between two DRGs in different regions — no public internet, no VPN.
+A DRG routes traffic between attached networks. A **VCN subnet route table** sends off-VCN traffic to the DRG. A **DRG route table**, associated with the attachment on which traffic enters the DRG, selects the outgoing attachment. Import route distributions populate DRG route tables with learned routes. These are separate routing decisions; security lists and NSGs then determine whether the traffic is permitted.
 
-![Lab 1 end state: local hub-and-spoke in Ashburn plus a cross-region RPC to Phoenix](images/lab1-architecture-cross-region-rpc.svg)
+![Local hub-and-spoke in Ashburn and a cross-region RPC to Phoenix](images/lab1-architecture-cross-region-rpc.svg)
 
 ### Objectives
 
-In this lab, you will:
-
-* Create three VCNs across two regions with non-overlapping CIDRs
-* Create a DRG in each region and attach the local VCNs
-* Establish **local** connectivity (Hub ⇄ Spoke-1) through the Ashburn DRG
-* Establish **remote** connectivity (Ashburn ⇄ Phoenix) through an RPC
-* Configure route tables and security lists for end-to-end reachability
-* Launch a test VM that later labs will inspect, secure, and troubleshoot
+* Plan three non-overlapping VCNs and use the VCN Wizard to create their foundations.
+* Create one DRG per region and attach each VCN.
+* Configure reciprocal subnet routes and application security controls.
+* Establish local DRG connectivity and remote RPC peering.
+* Deploy three private Oracle Linux hosts with a diagnostic application on TCP 8080.
+* Record the topology and prepare the endpoints for Bastion access and troubleshooting.
 
 ### Prerequisites
 
-This lab assumes you have:
+* The Introduction's tenancy, regional subscriptions, IAM, compute capacity, and SSH-key prerequisites.
+* A working compartment, shown as **`advnet-workshop`** in the examples. Substitute your assigned compartment consistently.
+* A workstation on which you can save the application bootstrap file and your SSH private key.
 
-* An Oracle Cloud account subscribed to **both** the **US East (Ashburn)** and **US West (Phoenix)** regions
-* Permissions equivalent to `manage virtual-network-family`, `manage drgs`, `manage remote-peering-connections`, and `manage instance-family` in your working compartment
-* A dedicated compartment for the workshop (this lab uses one named **`advnet-workshop`**)
+> **Naming and ownership:** use `advnet-` names and `workshop = adv-networking` tags. In a shared compartment, include your initials in names and add your attendee tag. Tag supported wizard-created resources after creation, and keep an inventory. The wizard's `VCN` tag is not the workshop tag.
 
-> **Naming & tagging convention:** every resource you create carries the prefix `advnet-` and the free-form tag `workshop = adv-networking`. This is what makes the Lab 6 cleanup safe — nothing is deleted unless it carries this tag.
+## Task 1: Plan the address space
 
-> **CIDR plan (non-overlapping by design):**
->
-> | Network | Region | CIDR | Private subnet |
-> |---------|--------|------|----------------|
-> | Hub VCN | Ashburn | `10.0.0.0/16` | `10.0.1.0/24` (public `10.0.0.0/24`) |
-> | Spoke-1 VCN | Ashburn | `10.1.0.0/16` | `10.1.0.0/24` |
-> | Remote-Spoke VCN | Phoenix | `10.2.0.0/16` | `10.2.0.0/24` |
->
-> The supernet `10.0.0.0/14` covers all three OCI VCNs and is used as a convenient source range in security rules.
+Reserve these **non-overlapping** networks in your worksheet. Check for overlap with existing VCNs, on-premises networks, and any Azure VNet you intend to connect. Use the same CIDRs consistently in subnet routes, DRG route checks, and security rules.
 
-## Task 1: Create the Hub VCN in Ashburn
+| Network | Region | CIDR | Purpose |
+| --- | --- | --- | --- |
+| Hub VCN | A — US East (Ashburn) | `10.0.0.0/16` | Shared services and Hub test instance |
+| Spoke-1 VCN | A — US East (Ashburn) | `10.1.0.0/16` | Local application and Bastion test instance |
+| Remote-Spoke VCN | B — US West (Phoenix) | `10.2.0.0/16` | Remote application and cross-region test instance |
 
-The Hub VCN is the center of the topology. It will eventually host the NAT gateway, the internet gateway, and (in Lab 3) the Network Firewall.
+1. Record the working compartment and your name prefix.
+2. Reserve the subnet ranges below. Every subnet is **regional**; workload subnets are **private**.
 
-1. Confirm the region selector at the top right reads **US East (Ashburn)**.
+   | VCN | Public subnet | Private workload subnet | Instance name |
+   | --- | --- | --- | --- |
+   | `advnet-hub-vcn` | `10.0.0.0/24` | `10.0.1.0/24` | `advnet-hub-vm` |
+   | `advnet-spoke1-vcn` | `10.1.1.0/24` | `10.1.0.0/24` | `advnet-spoke1-vm` |
+   | `advnet-remotespoke-vcn` | `10.2.1.0/24` | `10.2.0.0/24` | `advnet-remotespoke-vm` |
 
-2. Open the navigation menu and choose **Networking → Virtual Cloud Networks**. Select your **`advnet-workshop`** compartment in the list scope on the left.
+3. Leave Azure `10.10.0.0/16` unused in OCI if you plan Optional Lab 5. The challenge in Optional Lab 4 uses another non-overlapping range.
+4. Create columns for each VCN, subnet, gateway, route-table and instance OCID, plus instance private IPs. Do not invent IPs for your commands; use the addresses assigned when the hosts launch.
 
-   ![Networking menu with Virtual Cloud Networks selected](images/lab1-01-networking-menu.png)
+**Expected result:** no overlapping network prefixes, and a worksheet that can be used to verify each route's destination and next hop.
 
-3. Click **Start VCN Wizard**, choose **Create VCN with Internet Connectivity**, and click **Start VCN Wizard**.
+## Task 2: Create the Hub VCN in Ashburn
 
-4. Complete the wizard:
+The Hub VCN represents centrally managed shared services. The wizard also creates the gateways needed for outbound package installation without assigning public IPs to the workload hosts.
 
-   * **VCN Name:** `advnet-hub-vcn`
-   * **Compartment:** `advnet-workshop`
-   * **VCN CIDR Block:** `10.0.0.0/16`
-   * **Public Subnet CIDR Block:** `10.0.0.0/24`
-   * **Private Subnet CIDR Block:** `10.0.1.0/24`
+1. Confirm the region selector shows **US East (Ashburn)**.
+2. Open **Networking → Virtual Cloud Networks** and select your working compartment.
+3. Select **Start VCN Wizard**. In console layouts that group actions, use **Actions → Start VCN Wizard**. Choose **Create VCN with Internet Connectivity**, then start that wizard.
 
-   ![Create VCN wizard configuration fields](images/lab1-02-hub-vcn-wizard.png)
+   ![VCN Wizard choice: Create VCN with Internet Connectivity](images/lab1-vcn-wizard.png)
 
-5. Click **Next**, review, then click **Create**. The wizard provisions the VCN, both subnets, an internet gateway, a NAT gateway, a service gateway, and default route tables and security lists.
+4. Enter the following values:
 
-6. When the wizard finishes, click **View VCN**. Confirm you see the public and private subnets and all three gateways.
+   | Field | Value |
+   | --- | --- |
+   | VCN name | `advnet-hub-vcn` |
+   | Compartment | Your working compartment |
+   | VCN CIDR | `10.0.0.0/16` |
+   | Public subnet CIDR | `10.0.0.0/24` |
+   | Private subnet CIDR | `10.0.1.0/24` |
+   | DNS hostnames | Enabled |
 
-   ![Completed Hub VCN resource list](images/lab1-03-hub-vcn-created.png)
+5. Select **Next**, review the address ranges and generated resources, then select **Create**. Wait for the wizard to complete before retrying an operation.
+6. Select **View VCN**. Confirm the VCN and regional public/private subnets exist, together with an Internet Gateway, NAT Gateway, Service Gateway, route tables, and security lists.
+7. Record which route table and security list are associated with the **private** subnet. Add the ownership tags to supported resources.
 
-## Task 2: Create the Spoke-1 VCN in Ashburn
+**Verify:** the private route table contains `0.0.0.0/0 → NAT Gateway` and a service-CIDR route to the Service Gateway. The public subnet's internet route is not the private subnet's route. The public subnet is available for future use; this lab launches all workloads in private subnets.
 
-Spoke-1 holds a private workload and (in Lab 4) the Bastion. It needs only a private subnet.
+## Task 3: Create Spoke-1 in Ashburn
 
-1. Still in **Ashburn**, go to **Networking → Virtual Cloud Networks** and click **Create VCN** (the simple, non-wizard option).
+Use the same wizard so the private Spoke-1 host has its own outbound package and Cloud Agent service access. This avoids making bootstrap depend on later transit configuration.
 
-2. Configure:
+1. Remain in **Ashburn**, reopen the VCN Wizard, and choose **Create VCN with Internet Connectivity**.
+2. Create `advnet-spoke1-vcn` with VCN `10.1.0.0/16`, public subnet `10.1.1.0/24`, and private subnet `10.1.0.0/24`.
+3. Review and create the network. Record the private subnet and its associated route table and security list.
+4. Confirm the private subnet has the NAT default route and **All Ashburn Services in Oracle Services Network → Service Gateway** route.
+5. Add ownership tags. Refer to this private subnet as **Spoke-1 private** throughout the guide; use the actual wizard-generated subnet name in the console.
 
-   * **Name:** `advnet-spoke1-vcn`
-   * **Compartment:** `advnet-workshop`
-   * **IPv4 CIDR Block:** `10.1.0.0/16`
+**Expected result:** a second VCN with independent outbound connectivity. There is no VCN-to-VCN route yet.
 
-   Click **Create VCN**.
+## Task 4: Create the Remote-Spoke in Phoenix
 
-3. Open `advnet-spoke1-vcn`, choose **Subnets → Create Subnet**:
+1. Switch to **US West (Phoenix)** and confirm the same working compartment.
+2. Run the VCN Wizard with name `advnet-remotespoke-vcn`, VCN `10.2.0.0/16`, public subnet `10.2.1.0/24`, and private subnet `10.2.0.0/24`.
+3. Confirm the generated resources are available. Record the Remote-Spoke private subnet, route table, security list, and gateway OCIDs.
+4. Verify NAT and **Phoenix** service-gateway routes on the private subnet's table. Service CIDRs are regional; do not copy the Ashburn service destination into Phoenix.
 
-   * **Name:** `advnet-spoke1-private`
-   * **CIDR Block:** `10.1.0.0/24`
-   * **Subnet Access:** **Private Subnet**
-   * Leave the default route table and security list for now (you adjust them in Task 5).
+**Checkpoint:** all three VCNs exist with the correct CIDRs and private subnets. If a resource list looks empty, verify both the region and compartment before creating a duplicate.
 
-   ![Create private subnet for Spoke-1](images/lab1-04-spoke1-subnet.png)
+## Task 5: Create the Ashburn DRG and attach the local VCNs
 
-4. *(Optional but recommended)* Add a **Service Gateway** to this VCN so the private host can reach Oracle Services (YUM, Object Storage) without internet egress. **Networking → Service Gateway → Create Service Gateway**, select **All <region> Services in Oracle Services Network**.
+1. Switch back to **Ashburn**. Open **Networking → Dynamic Routing Gateways** and create `advnet-drg-iad` in the working compartment.
+2. Wait for the DRG to become **Available**, then open it.
+3. Under its VCN attachments, select **Create Virtual Cloud Network Attachment**:
 
-## Task 3: Create the Remote-Spoke VCN in Phoenix
+   | Attachment name | VCN |
+   | --- | --- |
+   | `advnet-hub-attach` | `advnet-hub-vcn` |
+   | `advnet-spoke1-attach` | `advnet-spoke1-vcn` |
 
-This VCN lives in a *different region*, which is what makes the remote-peering step real.
+4. Create each attachment and wait for **Attached**. Keep the autogenerated DRG route table for VCN attachments. Do not associate a custom VCN ingress route table for this direct-peering exercise.
+5. Inspect the DRG route table associated with the VCN attachments. Record its OCID and the import route distribution. Confirm routes for the attached networks or their private subnet prefixes point to the correct attachments. The console's attachment route-type setting determines whether VCN or subnet CIDRs are imported.
 
-1. Switch the region selector to **US West (Phoenix)**.
+![Local DRG routing between the Hub and Spoke-1 VCNs](images/lab1-architecture-local-hub-spoke.svg)
 
-2. Create the VCN exactly as in Task 2:
+**Observe:** attachments connect the networks to the DRG, but the subnet route tables must still send off-VCN traffic there. A learned route in the DRG is not a substitute for the subnet route you add next.
 
-   * **Name:** `advnet-remotespoke-vcn`
-   * **IPv4 CIDR Block:** `10.2.0.0/16`
+## Task 6: Configure local routing and application security
 
-3. Add a private subnet:
+### Subnet routes
 
-   * **Name:** `advnet-remotespoke-private`
-   * **CIDR Block:** `10.2.0.0/24`
-   * **Subnet Access:** **Private Subnet**
+1. Open the **Hub private subnet** and follow its associated route table. Add these rules:
 
-   ![Remote-Spoke VCN in Phoenix](images/lab1-05-remotespoke-vcn.png)
+   | Destination | Target type | Target |
+   | --- | --- | --- |
+   | `10.1.0.0/16` | Dynamic Routing Gateway | `advnet-drg-iad` |
+   | `10.2.0.0/16` | Dynamic Routing Gateway | `advnet-drg-iad` |
 
-## Task 4: Create the Ashburn DRG and attach the local VCNs
+2. On the **Spoke-1 private subnet's** route table, add:
 
-1. Switch back to **US East (Ashburn)**.
+   | Destination | Target type | Target |
+   | --- | --- | --- |
+   | `10.0.0.0/16` | Dynamic Routing Gateway | `advnet-drg-iad` |
+   | `10.2.0.0/16` | Dynamic Routing Gateway | `advnet-drg-iad` |
 
-2. Go to **Networking → Dynamic Routing Gateways → Create Dynamic Routing Gateway**:
+3. Preserve the wizard-created NAT default and Service Gateway rules. The more-specific remote VCN prefixes select the DRG; the default route continues to serve outbound package access. The `10.2.0.0/16` routes prepare for remote peering.
 
-   * **Name:** `advnet-drg-iad`
-   * **Compartment:** `advnet-workshop`
+### Security lists and NSGs
 
-   Click **Create Dynamic Routing Gateway** and wait for the state to become **Available**.
+4. In each Ashburn VCN, open **Network Security Groups** and create an application NSG: `advnet-hub-app-nsg` and `advnet-spoke1-app-nsg`.
+5. Add the stateful rules below to each NSG. Add one ingress rule per source CIDR.
 
-   ![Create DRG in Ashburn](images/lab1-06-create-drg-iad.png)
+   | Direction | Protocol / destination port | Source or destination | Purpose |
+   | --- | --- | --- | --- |
+   | Ingress | TCP / 8080 | `10.0.0.0/16`, `10.1.0.0/16`, `10.2.0.0/16` | Diagnostic application from the three lab networks |
+   | Egress | All protocols | `0.0.0.0/0` | Package access and lab traffic |
 
-3. Open `advnet-drg-iad`. Under **Resources**, choose **Virtual Cloud Network Attachments → Create Virtual Cloud Network Attachment**:
+6. Inspect the security list associated with each private subnet. Remove a default SSH ingress rule from `0.0.0.0/0` if present; Bastion access will use its private endpoint `/32` in Lab 2. Keep required ICMP path-MTU/error rules and outbound access. Do not add a broad all-protocols ingress rule for the lab supernet.
+7. Record the NSG OCIDs. Attach each application NSG to its corresponding compute VNIC when launching the instances in Task 9.
 
-   * **Name:** `advnet-hub-attach`
-   * **Virtual Cloud Network:** `advnet-hub-vcn`
+**Observe:** security-list and NSG allow rules are additive. An NSG does not override a permissive security list. Subnet routes choose the path; security rules and the host firewall decide whether the request is accepted.
 
-   Click **Create**. Repeat to attach the spoke:
+## Task 7: Create the Phoenix DRG and attach the Remote-Spoke
 
-   * **Name:** `advnet-spoke1-attach`
-   * **Virtual Cloud Network:** `advnet-spoke1-vcn`
+1. Switch to **Phoenix**. Create `advnet-drg-phx` in the working compartment and wait for **Available**.
+2. Create VCN attachment `advnet-remotespoke-attach` for `advnet-remotespoke-vcn`. Keep the autogenerated VCN-attachment DRG route table and wait for **Attached**.
+3. On the **Remote-Spoke private subnet's** route table, preserve NAT and Service Gateway rules and add:
 
-   ![DRG with Hub and Spoke-1 attachments](images/lab1-07-drg-attachments.png)
+   | Destination | Target type | Target |
+   | --- | --- | --- |
+   | `10.0.0.0/16` | Dynamic Routing Gateway | `advnet-drg-phx` |
+   | `10.1.0.0/16` | Dynamic Routing Gateway | `advnet-drg-phx` |
 
-   > Each VCN attachment automatically gets an entry in the DRG's autogenerated route distribution, so the DRG already knows how to reach both VCNs' CIDRs. The piece you still owe is telling each **VCN** to send cross-VCN traffic *to the DRG* — that's Task 5.
+4. Create `advnet-remotespoke-app-nsg` and add the same TCP 8080 ingress rules and outbound rule from Task 6. Inspect the Remote-Spoke private security list as you did for Ashburn.
+5. Record the DRG, attachment, associated DRG route table, and NSG OCIDs.
 
-## Task 5: Configure local routing and security (Hub ⇄ Spoke-1)
+## Task 8: Establish remote peering — Ashburn ↔ Phoenix
 
-A DRG attachment alone does not move traffic — each subnet's route table must point the *other* VCN's CIDR at the DRG, and the security lists must permit it.
+An RPC exists on **each** DRG. One side initiates the connection using the peer's region and RPC OCID. Create one pair and establish it once.
 
-![Local DRG attachments route traffic between the Hub and Spoke-1 VCNs](images/lab1-architecture-local-hub-spoke.svg)
+1. In **Phoenix**, open `advnet-drg-phx → Remote Peering Connections`. Create `advnet-rpc-phx` and copy its OCID.
+2. Switch to **Ashburn**. On `advnet-drg-iad`, create `advnet-rpc-iad`.
+3. Open `advnet-rpc-iad`, select **Establish Connection**, choose **US West (Phoenix)**, and paste the **Phoenix RPC OCID**, not the Phoenix DRG OCID.
+4. Submit and allow the asynchronous connection to settle. Refresh the existing details pages and confirm **Peered** on both sides before proceeding. Do not create another RPC to work around a stale status display.
 
-1. **Hub private subnet route table.** Open `advnet-hub-vcn → Route Tables → the private subnet's route table`. Click **Add Route Rules** and add:
+   ![RPC details showing the Peered state](images/lab1-rpc-peered.png)
 
-   | Target Type | Destination CIDR | Target |
-   |-------------|------------------|--------|
-   | Dynamic Routing Gateway | `10.1.0.0/16` | `advnet-drg-iad` |
-   | Dynamic Routing Gateway | `10.2.0.0/16` | `advnet-drg-iad` |
+5. Verify the peer RPC OCID and region using your worksheet. The screenshot illustrates the status field only; its blank peer-region field is not the expected topology evidence.
+6. Inspect the DRG route tables used by **both VCN and RPC attachments**. Confirm the VCN-attachment table can reach the peer region's private subnet prefixes through the RPC attachment, and the RPC-attachment table can reach its own region's private subnet prefixes through the local VCN attachments.
 
-   (The `10.2.0.0/16` rule prepares for the remote spoke in Task 7. The NAT and Service Gateway rules created by the wizard remain in place.)
+   | Region | Table used by incoming attachment | Required destination | Expected next hop |
+   | --- | --- | --- | --- |
+   | Ashburn | VCN attachment table | Remote-Spoke `10.2.0.0/24` or covering prefix | Ashburn RPC attachment |
+   | Ashburn | RPC attachment table | Hub `10.0.1.0/24` and Spoke-1 `10.1.0.0/24` or covering prefixes | Their local VCN attachments |
+   | Phoenix | VCN attachment table | Hub and Spoke-1 private prefixes | Phoenix RPC attachment |
+   | Phoenix | RPC attachment table | Remote-Spoke private prefix | Remote-Spoke VCN attachment |
 
-   ![Add DRG route rules to the hub private route table](images/lab1-08-hub-route-rules.png)
+   If a route is missing, inspect the associated import distribution and attachment route-type settings before adding static routes. See [DRG routing documentation](https://docs.oracle.com/en-us/iaas/Content/Network/Tasks/managingDRGs.htm).
 
-2. **Spoke-1 route table.** Open the Spoke-1 private subnet's route table and add:
+7. Optionally check the Ashburn RPC from Cloud Shell. Replace the placeholder with the recorded RPC OCID and use the correct region:
 
-   | Target Type | Destination CIDR | Target |
-   |-------------|------------------|--------|
-   | Dynamic Routing Gateway | `10.0.0.0/16` | `advnet-drg-iad` |
-   | Dynamic Routing Gateway | `10.2.0.0/16` | `advnet-drg-iad` |
+   ```bash
+   oci network remote-peering-connection get \
+     --region us-ashburn-1 \
+     --remote-peering-connection-id <ashburn-rpc-ocid> \
+     --query 'data."peering-status"' --raw-output
+   ```
 
-3. **Security lists.** On both the Hub private and Spoke-1 security lists, add a stateful **ingress** rule permitting the workshop supernet so the test VMs can reach each other:
+**Expected result:** `PEERED`, reciprocal VCN routes, and usable DRG routes on both sides. These establish the configuration baseline. Live cross-region HTTP tests follow in Lab 2; Network Path Analyzer is used for same-region analysis in Lab 3.
 
-   * **Source Type:** CIDR
-   * **Source CIDR:** `10.0.0.0/14`
-   * **IP Protocol:** All Protocols
+## Task 9: Launch three private diagnostic hosts
 
-   ![Add ingress rule for the lab supernet](images/lab1-09-security-list.png)
+1. Save [install-metadata-app.sh](../assets/metadata-app/install-metadata-app.sh) to your workstation. Open the link and save the raw script, retaining its `.sh` extension. The script installs a Python HTTP app, creates a systemd service, opens the host's TCP 8080 port if firewalld is active, and checks local readiness. It requires the outbound NAT routes created by the wizard.
+2. In **Compute → Instances → Create Instance**, create one host in each private subnet:
 
-   > **Security note:** an "all protocols from `10.0.0.0/14`" rule is a *lab simplification*. In production you would scope ingress to specific ports (for example, ICMP for reachability tests and TCP 22 for SSH) and tighter source ranges.
+   | Instance | Region | VCN / private subnet | Application NSG |
+   | --- | --- | --- | --- |
+   | `advnet-hub-vm` | Ashburn | Hub / `10.0.1.0/24` | `advnet-hub-app-nsg` |
+   | `advnet-spoke1-vm` | Ashburn | Spoke-1 / `10.1.0.0/24` | `advnet-spoke1-app-nsg` |
+   | `advnet-remotespoke-vm` | Phoenix | Remote-Spoke / `10.2.0.0/24` | `advnet-remotespoke-app-nsg` |
 
-## Task 6: Create the Phoenix DRG and attach the Remote-Spoke
+3. For each instance select **Oracle Linux 9**, a regional private subnet, and **no public IPv4 address**. Use a small available flexible shape such as A1 with 1 OCPU / 6 GB or an approved x86 alternative. Check quota and pricing; do not assume A1 capacity or Always Free eligibility in both regions.
+4. Select the corresponding NSG under the primary VNIC settings. If the launch form does not expose it, assign it through the primary VNIC's **Network Security Groups** after creation.
+5. Paste the public SSH key matching your saved private key. Use the same key on all three hosts. Keep the private key locally; do not upload it as user data.
+6. Under advanced/management settings, upload `install-metadata-app.sh` as the **initialization script / cloud-init user data**. Review the network and user-data settings before selecting **Create**.
+7. Enable the **Bastion** Oracle Cloud Agent plugin on **Spoke-1**. It must be **Running** before Lab 2's Managed SSH session. Leave the host without a public IP.
+8. Wait for each instance to become **Running**, then allow time for cloud-init. Record the assigned private IPs, instance OCIDs, and primary VNIC OCIDs in your worksheet. A Running instance does not by itself prove that cloud-init succeeded.
 
-1. Switch to **US West (Phoenix)**.
+   | Worksheet variable | Your actual address |
+   | --- | --- |
+   | `HUB_IP` | Hub private IP in `10.0.1.0/24` |
+   | `SPOKE_IP` | Spoke-1 private IP in `10.1.0.0/24` |
+   | `REMOTE_IP` | Remote-Spoke private IP in `10.2.0.0/24` |
 
-2. Create the DRG:
+**Expected result:** three private hosts, each with the application NSG and SSH public key. Lab 2 gives you access to verify the application. If bootstrap fails, inspect `/var/log/cloud-init-output.log` over Bastion before relaunching a host.
 
-   * **Name:** `advnet-drg-phx`
+## Lab Recap and checkpoint
 
-3. Attach the remote spoke VCN:
+You have built a private network with three VCNs, two regional DRGs, local attachments, and a peered RPC. Each private workload subnet has explicit routes to the other VCNs. Application traffic is permitted on TCP 8080, and all three hosts have no public IP.
 
-   * **Name:** `advnet-remotespoke-attach`
-   * **Virtual Cloud Network:** `advnet-remotespoke-vcn`
+Save the address worksheet, VCN/subnet routes, attachment/table mapping, two RPC details, and instance/VNIC/NSG inventory. You will prove the live paths through Bastion in Lab 2, then analyze a same-region fault in Lab 3.
 
-   ![Phoenix DRG with remote-spoke attachment](images/lab1-10-drg-phx.png)
-
-4. Add a route rule to the Remote-Spoke private route table pointing the Ashburn CIDRs at the Phoenix DRG:
-
-   | Target Type | Destination CIDR | Target |
-   |-------------|------------------|--------|
-   | Dynamic Routing Gateway | `10.0.0.0/16` | `advnet-drg-phx` |
-   | Dynamic Routing Gateway | `10.1.0.0/16` | `advnet-drg-phx` |
-
-5. Add the same `10.0.0.0/14` all-protocols ingress rule to the Remote-Spoke security list.
-
-## Task 7: Establish remote peering (Ashburn ⇄ Phoenix RPC)
-
-An RPC is created on **each** DRG; one side then initiates the peering handshake using the other side's RPC OCID and region.
-
-1. In **Phoenix**, open `advnet-drg-phx → Remote Peering Connections → Create Remote Peering Connection`:
-
-   * **Name:** `advnet-rpc-phx`
-
-   Copy its **OCID** once it becomes **Available**.
-
-   ![Create Remote Peering Connection in Phoenix](images/lab1-11-rpc-phx.png)
-
-2. Switch to **Ashburn**, open `advnet-drg-iad → Remote Peering Connections → Create Remote Peering Connection`:
-
-   * **Name:** `advnet-rpc-iad`
-
-3. Open `advnet-rpc-iad` and click **Establish Connection**:
-
-   * **Region:** US West (Phoenix)
-   * **Remote Peering Connection OCID:** paste the OCID of `advnet-rpc-phx`
-
-   Click **Establish Connection**. Within a minute both RPCs move to the **Peered** state.
-
-   ![RPC peering handshake reaching the Peered state](images/lab1-12-rpc-peered.png)
-
-   > **Verify in CLI (optional).** From Cloud Shell:
-   > ```
-   > oci network remote-peering-connection get \
-   >   --remote-peering-connection-id <advnet-rpc-iad-OCID> \
-   >   --query 'data."peering-status"' --raw-output
-   > ```
-   > Returns `PEERED`.
-
-4. Confirm the cross-region route rules from Tasks 5 and 6 are in place (`10.2.0.0/16` reachable from Ashburn VCNs; `10.0.0.0/16` and `10.1.0.0/16` reachable from Phoenix). The DRGs exchange these CIDRs automatically across the RPC through their autogenerated route distributions.
-
-## Task 8: Launch a test VM
-
-You launch one VM now; later labs use it as a live endpoint. The steps below create the **Remote-Spoke** VM in Phoenix. **Repeat the same steps to create a Hub VM and a Spoke-1 VM in Ashburn** (changing only the region, VCN, subnet, and name) so every VCN has a reachable host.
-
-1. In **Phoenix**, go to **Compute → Instances → Create Instance**.
-
-2. Configure:
-
-   * **Name:** `advnet-remotespoke-vm`
-   * **Compartment:** `advnet-workshop`
-   * **Image:** Oracle Linux 9
-   * **Shape:** `VM.Standard.A1.Flex` — **1 OCPU / 6 GB** (Always Free eligible)
-   * **Primary VNIC → Virtual Cloud Network:** `advnet-remotespoke-vcn`
-   * **Subnet:** `advnet-remotespoke-private`
-   * **Do not assign a public IPv4 address** (these hosts are reached through the DRG and, later, the Bastion)
-
-   ![Create instance in the remote-spoke private subnet](images/lab1-13-create-vm.png)
-
-3. Under **Add SSH keys**, either generate a new key pair and **download the private key**, or paste your own public key. You reuse this key for Bastion access in Lab 4.
-
-4. Click **Create**. When the instance reaches **Running**, note its **private IP** (for example `10.2.0.x`).
-
-   > Because the host has no public IP, you cannot SSH to it directly yet — that is exactly the problem **Lab 4 (Bastion)** solves. For now, reachability across the backbone is validated in **Lab 5** with Network Path Analyzer.
-
-## Lab Recap
-
-You built a production-shaped backbone:
-
-* Three VCNs across two regions with non-overlapping CIDRs
-* A DRG in each region, with the local VCNs attached
-* **Local** Hub ⇄ Spoke-1 connectivity through the Ashburn DRG
-* **Remote** Ashburn ⇄ Phoenix connectivity through a **Peered** RPC
-* Route tables and security lists for end-to-end reachability
-* A test VM (with the pattern to add the other two)
-
-This DRG hub-and-spoke is the platform the rest of the workshop builds on: Lab 2 extends it to Azure, Lab 3 inserts a firewall in the hub, Lab 4 adds secure access, and Lab 5 troubleshoots it.
+**Discussion:** where is the routing decision made for a packet from Spoke-1 to the Remote-Spoke? Which table controls its return path? Would simply launching a firewall in the Hub VCN cause that packet to be inspected?
 
 ## Learn More
 
-* [Dynamic Routing Gateway (DRG) overview](https://docs.oracle.com/en-us/iaas/Content/Network/Tasks/managingDRGs.htm)
+* [Dynamic Routing Gateways](https://docs.oracle.com/en-us/iaas/Content/Network/Tasks/managingDRGs.htm)
 * [Remote VCN Peering using an RPC](https://docs.oracle.com/en-us/iaas/Content/Network/Tasks/remoteVCNpeering.htm)
-* [Transit routing and DRG route tables](https://docs.oracle.com/en-us/iaas/Content/Network/Tasks/transitrouting.htm)
+* [Transit routing](https://docs.oracle.com/en-us/iaas/Content/Network/Tasks/transitrouting.htm)
 * [Access to Oracle Services: Service Gateway](https://docs.oracle.com/en-us/iaas/Content/Network/Tasks/servicegateway.htm)
 
 ## Acknowledgements
 
 * **Author** — Eli Schilling, Technical Engagement Services, Oracle
 * **Contributors** — Oracle LiveLabs Platform Team
-* **Last Updated By/Date** — Eli Schilling, June 2026
+* **Last Updated By/Date** — Eli Schilling, October 2026

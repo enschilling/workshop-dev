@@ -1,11 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 560" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="560" viewBox="0 0 1040 560" role="img" aria-labelledby="title desc" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <title id="title">Optional Lab 5 OCI and Azure transport choices</title>
+  <desc id="desc">Private interconnect and IPSec VPN connect the Ashburn DRG to Azure. Path preference and failover require routing design.</desc>
   <defs>
     <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#2563eb"/></marker>
     <marker id="arS" markerWidth="9" markerHeight="9" refX="2" refY="3" orient="auto"><path d="M7,0 L0,3 L7,6 Z" fill="#2563eb"/></marker>
   </defs>
   <rect width="1040" height="560" fill="#ffffff"/>
-  <text x="520" y="40" text-anchor="middle" font-size="22" font-weight="700" fill="#0f172a">Lab 2 &#183; Multi-Cloud OCI &#8596; Azure</text>
-  <text x="520" y="62" text-anchor="middle" font-size="13" fill="#64748b">Two transports onto the same DRG: dedicated interconnect (primary) + IPSec VPN (backup)</text>
+  <text x="520" y="40" text-anchor="middle" font-size="22" font-weight="700" fill="#0f172a">Optional Lab 5 &#183; Multicloud OCI &#8596; Azure</text>
+  <text x="520" y="62" text-anchor="middle" font-size="13" fill="#64748b">Choose a transport; deploying both requires explicit route preference and failover testing</text>
 
   <!-- OCI region -->
   <rect x="30" y="86" width="360" height="436" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
@@ -41,7 +43,7 @@
   <rect x="666" y="334" width="150" height="56" rx="8" fill="#eef2ff" stroke="#6366f1" stroke-width="1.5"/>
   <text x="741" y="353" text-anchor="middle" font-size="11" font-weight="700" fill="#3730a3">VPN Gateway</text>
   <text x="741" y="368" text-anchor="middle" font-size="8.5" font-family="monospace" fill="#475569">advnet-azure-vpngw</text>
-  <text x="741" y="382" text-anchor="middle" font-size="8.5" font-family="monospace" fill="#475569">20.127.255.224</text>
+  <text x="741" y="382" text-anchor="middle" font-size="8.5" font-family="monospace" fill="#475569">AZURE_VPN_IP</text>
 
   <!-- Azure VNet -->
   <rect x="846" y="150" width="150" height="300" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
@@ -52,7 +54,7 @@
   <text x="868" y="239" font-size="10" font-family="monospace" fill="#475569">10.10.0.0/24</text>
   <rect x="868" y="250" width="106" height="38" rx="4" fill="#ffffff" stroke="#64748b"/>
   <text x="921" y="268" text-anchor="middle" font-size="9.5" font-weight="600" fill="#1e293b">advnet-azure-vm</text>
-  <text x="921" y="281" text-anchor="middle" font-size="9" font-family="monospace" fill="#64748b">10.10.0.4</text>
+  <text x="921" y="281" text-anchor="middle" font-size="9" fill="#64748b">Assigned private IP</text>
   <rect x="858" y="306" width="126" height="48" rx="5" fill="#f8fafc" stroke="#cbd5e1"/>
   <text x="868" y="324" font-size="10" font-weight="600" fill="#334155">GatewaySubnet</text>
   <text x="868" y="340" font-size="10" font-family="monospace" fill="#475569">10.10.255.0/27</text>
@@ -64,7 +66,7 @@
   <line x1="376" y1="262" x2="666" y2="221" stroke="#2563eb" stroke-width="3.5" marker-end="url(#ar)" marker-start="url(#arS)"/>
   <rect x="430" y="150" width="200" height="44" rx="8" fill="#eff6ff" stroke="#2563eb"/>
   <text x="530" y="168" text-anchor="middle" font-size="11" font-weight="700" fill="#1e3a8a">FastConnect &#8596; ExpressRoute</text>
-  <text x="530" y="184" text-anchor="middle" font-size="9" fill="#475569">Dedicated &#183; private &#183; ~2 ms RTT</text>
+  <text x="530" y="184" text-anchor="middle" font-size="9" fill="#475569">Private &#183; supported location pair</text>
   <rect x="486" y="232" width="74" height="20" rx="10" fill="#2563eb"/>
   <text x="523" y="246" text-anchor="middle" font-size="10" font-weight="700" fill="#ffffff">PRIMARY</text>
 

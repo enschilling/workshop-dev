@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 560" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="560" viewBox="0 0 1040 560" role="img" aria-labelledby="title desc" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <title id="title">Lab 1 remote peering between Ashburn and Phoenix</title>
+  <desc id="desc">The Ashburn DRG connects Hub and Spoke-1. A peered RPC joins it to Phoenix's DRG and Remote-Spoke.</desc>
   <defs>
     <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#2563eb"/></marker>
     <marker id="arS" markerWidth="9" markerHeight="9" refX="2" refY="3" orient="auto"><path d="M7,0 L0,3 L7,6 Z" fill="#2563eb"/></marker>
@@ -61,7 +63,7 @@
   <text x="808" y="296" font-size="10.5" font-family="monospace" fill="#475569">10.2.0.0/24</text>
   <rect x="808" y="306" width="158" height="38" rx="5" fill="#ffffff" stroke="#64748b"/>
   <text x="887" y="324" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e293b">advnet-remotespoke-vm</text>
-  <text x="887" y="338" text-anchor="middle" font-size="9" fill="#64748b">Always-Free A1.Flex &#183; no public IP</text>
+  <text x="887" y="338" text-anchor="middle" font-size="9" fill="#64748b">Private diagnostic host &#183; TCP 8080</text>
 
   <line x1="610" y1="287" x2="630" y2="287" stroke="#7c3aed" stroke-width="2"/>
   <line x1="740" y1="287" x2="784" y2="287" stroke="#2563eb" stroke-width="2.5" marker-end="url(#ar)" marker-start="url(#arS)"/>

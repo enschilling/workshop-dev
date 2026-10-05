@@ -1,0 +1,25 @@
+#cloud-config
+# Ubuntu platform images with Python 3 already installed.
+write_files:
+  - path: /opt/advnet-web/index.html
+    permissions: '0644'
+    content: |
+      <!doctype html><html lang="en"><head><meta charset="utf-8">
+      <title>Azure networking test</title></head>
+      <body><h1>advnet-azure-vm</h1><p>Microsoft Azure — East US</p></body></html>
+  - path: /etc/systemd/system/advnet-web.service
+    permissions: '0644'
+    content: |
+      [Unit]
+      Description=Advanced networking Azure test endpoint
+      After=network-online.target
+      Wants=network-online.target
+      [Service]
+      ExecStart=/usr/bin/python3 -m http.server 8080 --directory /opt/advnet-web
+      User=nobody
+      Restart=on-failure
+      [Install]
+      WantedBy=multi-user.target
+runcmd:
+  - [systemctl, daemon-reload]
+  - [systemctl, enable, --now, advnet-web]
