@@ -1,0 +1,10 @@
+{
+  "region": "",
+  "compartment_id": "",
+  "model_id": "",
+  "auth_mode": "cloud_shell",
+  "oci_config_file": "~/.oci/config",
+  "oci_profile": "DEFAULT",
+  "max_tokens": 8192,
+  "temperature": 0.1
+}

@@ -1,0 +1,15 @@
+{
+  "workshoptitle": "Prompt Engineering: Build an OCI Operations Command Center",
+  "help": "livelabs-help-oci_us@oracle.com",
+  "tutorials": [
+    {"title": "Introduction", "filename": "../../0-introduction/introduction.md"},
+    {"title": "Get Started", "filename": "https://oracle-livelabs.github.io/common/labs/cloud-login/cloud-login-livelabs2.md"},
+    {"title": "Lab 1: Prepare and Test Model Access", "filename": "../../1-prepare/prepare.md"},
+    {"title": "Lab 2: Generate and Refine the Application", "filename": "../../2-generate-application/generate-application.md"},
+    {"title": "Lab 3: Package and Deploy", "filename": "../../3-package-and-deploy/package-and-deploy.md"},
+    {"title": "Lab 4: Validate the Application and Memory", "filename": "../../4-validate-application/validate-application.md"},
+    {"title": "Lab 5: Operate Resources", "filename": "../../5-operate-resources/operate-resources.md"},
+    {"title": "Lab 6: Clean Up and Recap", "filename": "../../6-clean-up/clean-up.md"},
+    {"title": "Need Help?", "filename": "https://oracle-livelabs.github.io/common/labs/need-help/need-help-freetier.md"}
+  ]
+}

@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+files/starter/config.json
+files/starter/deployment.json
+files/starter/.generated/
+files/starter/.runs/
+files/starter/.offline-demo/
+files/starter/container-instance.json
+files/starter/container-instance-result.json
+files/starter/container-instance-delete.json
+files/starter/app-url.txt

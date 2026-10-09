@@ -1,0 +1,11 @@
+{
+  "stages": {
+    "plan": ["architecture.json"],
+    "api": ["app/__init__.py", "app/config.py", "app/main.py", "app/planner.py"],
+    "tools": ["app/oci_tools.py", "app/memory.py", "app/store.py", "requirements.txt"],
+    "ui": ["app/templates/index.html", "app/static/app.js", "app/static/style.css"],
+    "package": ["Dockerfile", ".dockerignore"]
+  },
+  "max_response_bytes": 1000000,
+  "max_file_bytes": 250000
+}

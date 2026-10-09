@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "record_type": "assessment",
+  "assessment_id": "a9577e45-659a-47eb-86e6-3427deaf8d7e",
+  "created_at": "2026-10-09T14:23:55.426289+00:00",
+  "mode": "preflight",
+  "workshop": {
+    "name": "oci-prompt-engineering-operations",
+    "fingerprint": "67a6aa781cd15715",
+    "manifest": "workshops\\sandbox\\manifest.json"
+  },
+  "features": {
+    "markdown_files": 7,
+    "steps": 68,
+    "tasks": 24,
+    "code_blocks": 24,
+    "images": 0,
+    "broken_local_links": [],
+    "placeholders": 0,
+    "prerequisite_items": 25,
+    "cloud_intensity": 59,
+    "admin_intensity": 11,
+    "recovery_signals": 75,
+    "learning_signals": 33,
+    "has_objectives": true,
+    "has_recap": true,
+    "has_cleanup": true,
+    "stated_minutes": 120.0,
+    "fingerprint": "67a6aa781cd15715"
+  },
+  "timing": {
+    "stated_minutes": 120.0,
+    "human_p50_minutes": 144,
+    "human_p90_minutes": 192,
+    "range_minutes": [
+      96,
+      192
+    ],
+    "source": "static heuristics"
+  },
+  "dimensions": {
+    "reliability": {
+      "score": 58,
+      "range": [
+        40,
+        76
+      ],
+      "weight": 25,
+      "calibration_records": 0
+    },
+    "time_fit": {
+      "score": 55,
+      "range": [
+        37,
+        73
+      ],
+      "weight": 20,
+      "calibration_records": 0
+    },
+    "prerequisites": {
+      "score": 28,
+      "range": [
+        13,
+        43
+      ],
+      "weight": 15,
+      "calibration_records": 0
+    },
+    "instruction_accuracy": {
+      "score": 85,
+      "range": [
+        70,
+        100
+      ],
+      "weight": 15,
+      "calibration_records": 0
+    },
+    "recovery": {
+      "score": 80,
+      "range": [
+        65,
+        95
+      ],
+      "weight": 10,
+      "calibration_records": 0
+    },
+    "facilitator_burden": {
+      "score": 42,
+      "range": [
+        27,
+        57
+      ],
+      "weight": 5,
+      "calibration_records": 0
+    },
+    "cost_risk": {
+      "score": 70,
+      "range": [
+        55,
+        85
+      ],
+      "weight": 5,
+      "calibration_records": 0
+    },
+    "learning_value": {
+      "score": 96,
+      "range": [
+        81,
+        100
+      ],
+      "weight": 5,
+      "calibration_records": 0
+    }
+  },
+  "overall": {
+    "score": 61,
+    "range": [
+      44,
+      77
+    ]
+  },
+  "hard_gates": [
+    "Workshop appears to require elevated cloud/IAM access; confirm event tenancy permissions"
+  ],
+  "event_suitability": {
+    "conference_60": {
+      "label": "Conference session (60 min)",
+      "usable_minutes": 45,
+      "status": "Not recommended"
+    },
+    "conference_90": {
+      "label": "Conference lab (90 min)",
+      "usable_minutes": 70,
+      "status": "Not recommended"
+    },
+    "two_hour": {
+      "label": "Two-hour workshop",
+      "usable_minutes": 100,
+      "status": "Not recommended"
+    },
+    "half_day": {
+      "label": "Half-day workshop",
+      "usable_minutes": 180,
+      "status": "Possible with changes"
+    },
+    "full_day": {
+      "label": "Full-day workshop",
+      "usable_minutes": 360,
+      "status": "Possible with changes"
+    },
+    "self_guided": {
+      "label": "Self-guided workshop",
+      "usable_minutes": null,
+      "status": "Not recommended"
+    }
+  },
+  "confidence": {
+    "label": "low",
+    "evidence_level": 0,
+    "comparable_records": 0
+  }
+}

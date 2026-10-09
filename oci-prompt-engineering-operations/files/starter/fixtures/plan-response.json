@@ -1,0 +1,8 @@
+{
+  "files": [
+    {
+      "path": "architecture.json",
+      "content": "{\n  \"fixture\": true,\n  \"purpose\": \"Offline file-writing demonstration only\",\n  \"interfaces\": [\"Settings\", \"Planner\", \"OciTools\", \"MemoryService\", \"Store\"]\n}\n"
+    }
+  ]
+}
